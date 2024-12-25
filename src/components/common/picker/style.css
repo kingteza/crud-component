@@ -1,0 +1,4 @@
+
+.hide-upload div.ant-upload-select {
+    display: none!important;
+}

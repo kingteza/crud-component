@@ -1,0 +1,10 @@
+
+.show-more-less-clickable {
+    color: rgb(32, 155, 255);
+    cursor: pointer;
+}
+
+
+.show-more-less-clickable:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,60 @@
+/* *****************************************************************************
+ Copyright (c) 2020-2022 Kingteza and/or its affiliates. All rights reserved.
+ KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+***************************************************************************** */
+
+import { Breakpoint } from 'antd';
+import DescList, { DescPropsNullable } from 'components/common/description/DescList';
+import { translations } from 'config/localization/translations';
+import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { CrudFieldProps } from '../CrudComponent';
+import { getRendererValueCrudViewer } from './CrudViewer';
+
+export type DescListColumn = number | Partial<Record<Breakpoint, number>> | undefined;
+export interface CrudDecListViewProps<T> {
+  fields: CrudFieldProps<T>[];
+  data: T | undefined;
+  className?: string;
+  descListColumn?: DescListColumn;
+  layout?: 'horizontal' | 'vertical';
+  action?: React.JSX.Element;
+  keepEmptyValues?: boolean;
+}
+
+export function CrudDecListView<T>({
+  className,
+  fields,
+  data,
+  descListColumn = { xs: 1, md: 3, sm: 2, lg: 4 },
+  layout,
+  action,
+  keepEmptyValues
+}: CrudDecListViewProps<T>) {
+  const { t } = useTranslation();
+
+  const _fields: DescPropsNullable[] = useMemo(() => {
+    const list: DescPropsNullable[] = fields
+      .filter(({ hidden, hideInDescList }) => !hidden && !hideInDescList)
+      .map((e, i) => ({
+        label: e.label,
+        noFormatting: true,
+        value: getRendererValueCrudViewer(e)(data?.[e.name as any], data as any, i),
+      }));
+    if (action) list.push({ label: t(translations.str.action), value: action });
+    return list;
+  }, [action, data, fields, t]);
+
+  if (!data) return <></>;
+  return (
+    <DescList
+      keepEmptyValues={keepEmptyValues}
+      bordered
+      column={descListColumn}
+      className={className}
+      layout={layout}
+      list={_fields}
+    />
+  );
+}

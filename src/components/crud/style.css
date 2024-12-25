@@ -1,0 +1,8 @@
+.ant-avatar-string {
+  left: 0 !important;
+  position: relative !important;
+}
+
+.hide-upload div.ant-upload-select {
+  display: none !important;
+}
