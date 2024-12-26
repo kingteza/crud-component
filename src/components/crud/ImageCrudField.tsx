@@ -16,7 +16,7 @@ import ValidationUtil from "util/ValidationUtil";
 import { v4 as uuidV4 } from "uuid";
 
 import { InitialCrudField } from "./CrudComponent";
-import ImagePicker from "components/common/picker/ImagePicker";
+import { ImagePicker } from "components/common";
 
 export interface _ImageCrudField<T> extends InitialCrudField<T> {
   provider: FileUploadProvider;

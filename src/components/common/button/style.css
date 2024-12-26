@@ -1,0 +1,9 @@
+.ant-btn:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.ant-btn:active {
+  outline: none !important;
+  border-color: inherit !important;
+} 

@@ -5,7 +5,6 @@
 
 import { ArrowLeftOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Result, Spin } from 'antd';
-import { translations } from 'config/localization/translations';
 import { t } from 'i18next';
 import React, { FC, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -40,15 +39,15 @@ const WizardResult: FC<
   success,
   loading,
   error,
-  successTitle = t(translations.str.success),
+  successTitle = t('str.success'),
   successMessage,
-  errorMessage = t(translations.err.save),
-  errorTitle = t(translations.str.error),
+  errorMessage = t('err.save'),
+  errorTitle = t('str.error'),
 
-  loadingTitle = t(translations.message.loading.saving),
+  loadingTitle = t('message.loading.saving'),
   loadingMessage,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
 
   return (
     <Result
@@ -76,8 +75,8 @@ const WizardResult: FC<
           ? successMessage
           : error
           ? typeof errorMessage === 'function'
-            ? errorMessage() ?? t(translations.err.save)
-            : errorMessage ?? t(translations.err.save)
+            ? errorMessage() ?? t('err.save')
+            : errorMessage ?? t('err.save')
           : undefined
       }
       extra={[
@@ -93,7 +92,7 @@ const WizardResult: FC<
                 type="primary"
                 icon={<ArrowLeftOutlined />}
               >
-                {t(translations.str.previous)}
+                {t('str.previous')}
               </ButtonComponent>
             )}
             {Boolean(onRetry) && (
@@ -102,7 +101,7 @@ const WizardResult: FC<
                 key="retry"
                 onClick={() => onRetry!(undefined, undefined, true)}
               >
-                {t(translations.str.retry)}
+                {t('str.retry')}
               </ButtonComponent>
             )}
             {errorChildren}

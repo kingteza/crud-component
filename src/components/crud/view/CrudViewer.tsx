@@ -3,47 +3,48 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import { Avatar, Modal, Tooltip } from 'antd';
-import { SizeType } from 'antd/es/config-provider/SizeContext';
-import { ExpandableConfig } from 'antd/es/table/interface';
-import { TableProps } from 'antd/lib';
-import CloneButtonTable from 'components/common/button/CloneButtonTable';
-import DeleteButtonTable from 'components/common/button/DeleteButtonTable';
-import { ExportButton } from 'components/common/button/ExportButton';
-import HideButtonTable from 'components/common/button/HideButtonTable';
-import { RefreshButton } from 'components/common/button/RefreshButton';
-import UpdateButtonTable from 'components/common/button/UpdateButtonTable';
-import ViewButtonTable from 'components/common/button/ViewButtonTable';
-import VerticalSpace from 'components/common/layout/VerticalSpace';
-import ShowMore from 'components/common/show-more';
-import TableComponent, { TableComponentColumnProp } from 'components/common/table/table';
-import { translations } from 'config/localization/translations';
-import { t } from 'i18next';
-import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import IdProps from 'types/Id';
-import DateUtil from 'util/DateUtil';
-import NumberUtil from 'util/NumberUtil';
+import { Modal } from "antd";
+import { SizeType } from "antd/es/config-provider/SizeContext";
+import { ExpandableConfig } from "antd/es/table/interface";
+import { TableProps } from "antd/lib";
+import {
+  VerticalSpace,
+  CloneButtonTable,
+  DeleteButtonTable,
+  ExportButton,
+  HideButtonTable,
+  RefreshButton,
+  UpdateButtonTable,
+  ViewButtonTable,
+} from "components/common";
+
+import TableComponent, {
+  TableComponentColumnProp,
+} from "components/common/table/table";
+import React, {
+  ReactElement,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { useTranslation } from "react-i18next";
+import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
+import IdProps from "types/Id";
 
 import {
   CrudFieldProps,
   CrudPaginateProps,
-  DateBasedFieldProps,
-  EnumCrudField,
-  NumberBasedFieldProps,
-  SelectCrudField,
-  TextAreaBasedFieldProps,
-  TimeBasedFieldProps,
-} from '../CrudComponent';
-import CrudSearchComponent, { CrudSearchComponentProps } from '../CrudSearchComponent';
-import { FileCrudCellValue } from '../FileCrudField';
-import { ImageCrudCellValue, ImageCrudField } from '../ImageCrudField';
-import { CrudDecListView, DescListColumn } from './CrudDecListView';
+} from "../CrudComponent";
+import CrudSearchComponent, {
+  CrudSearchComponentProps,
+} from "../CrudSearchComponent";
+import { CrudDecListView, DescListColumn } from "./CrudDecListView";
+import { getRendererValueCrudViewer } from "./CrudViewerUtil";
 
 export type CrudViewerProps<T, FormType> = {
   fields: CrudFieldProps<T>[];
-  decListLayout?: 'horizontal' | 'vertical';
+  decListLayout?: "horizontal" | "vertical";
   viewable?: boolean | keyof T;
   paginateProps?: CrudPaginateProps;
   onDelete?: (id: any) => Promise<any>;
@@ -61,7 +62,7 @@ export type CrudViewerProps<T, FormType> = {
   idField?: string;
   loadingData?: boolean;
   minusHeight?: string;
-  scroll?: TableProps<T>['scroll'];
+  scroll?: TableProps<T>["scroll"];
   className?: string;
   bordered?: boolean;
   size?: SizeType;
@@ -71,12 +72,12 @@ export type CrudViewerProps<T, FormType> = {
   descListColumn?: DescListColumn;
   extraView?: (t: T) => React.ReactElement;
   scrollToTop?: boolean;
-  rowClassName?: TableProps<T>['rowClassName'];
+  rowClassName?: TableProps<T>["rowClassName"];
   actionWidth?: string | number;
 } & CrudSearchComponentProps<T, FormType>;
 
 function CrudViewer<T, FormType = T>({
-  idField = 'id',
+  idField = "id",
   loadingData,
   fields,
   isDeleting,
@@ -109,24 +110,27 @@ function CrudViewer<T, FormType = T>({
   actionWidth = 190,
   ...props
 }: CrudViewerProps<T, FormType>) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
 
   const columns = useMemo(
     () =>
-      fields.map(({ hideInTable, hidden, width, name, label, halign, ...props }) => ({
-        title: label,
-        width,
-        key: name,
-        dataIndex: name,
-        hidden: hideInTable || hidden,
-        align: halign ?? (props.type === 'number' ? 'right' : undefined),
-        render: getRendererValueCrudViewer(props as any),
-      })) as TableComponentColumnProp<T>,
-    [fields],
+      fields.map(
+        ({ hideInTable, hidden, width, name, label, halign, ...props }) => ({
+          title: label,
+          width,
+          key: name,
+          dataIndex: name,
+          hidden: hideInTable || hidden,
+          align: halign ?? (props.type === "number" ? "right" : undefined),
+          render: getRendererValueCrudViewer(props as any),
+        })
+      ) as TableComponentColumnProp<T>,
+    [fields]
   );
 
   const [openView, setOpenView] = useState<T>();
-  const [recentUpdateOrDeleteId, setRecentUpdateOrDeleteId] = useState<string>();
+  const [recentUpdateOrDeleteId, setRecentUpdateOrDeleteId] =
+    useState<string>();
 
   useEffect(() => {
     if (data) {
@@ -160,7 +164,10 @@ function CrudViewer<T, FormType = T>({
             <CloneButtonTable value={data} onClick={(e) => onClickClone(e)} />
           )}
           {onExport && (
-            <ExportButton value={data} onClick={async (data) => await onExport(data)} />
+            <ExportButton
+              value={data}
+              onClick={async (data) => await onExport(data)}
+            />
           )}
           {onHide && (
             <HideButtonTable
@@ -204,19 +211,19 @@ function CrudViewer<T, FormType = T>({
       onHide,
       onUpdate,
       recentUpdateOrDeleteId,
-    ],
+    ]
   );
 
   const viewTitleValue = useMemo(() => {
     let tempViewTitleValue =
-      typeof viewable === 'string' ? (openView?.[viewable] as any) : undefined;
+      typeof viewable === "string" ? (openView?.[viewable] as any) : undefined;
 
-    if (typeof tempViewTitleValue === 'object') {
+    if (typeof tempViewTitleValue === "object") {
       const field = fields.find((e) => e.name === viewable);
       tempViewTitleValue = getRendererValueCrudViewer(field!)(
         tempViewTitleValue,
         openView!,
-        0,
+        0
       );
     }
 
@@ -227,7 +234,7 @@ function CrudViewer<T, FormType = T>({
     <div>
       {viewable && (
         <Modal
-          width={'100%'}
+          width={"100%"}
           open={Boolean(openView)}
           title={viewTitleValue ?? <div>&nbsp;</div>}
           footer={<></>}
@@ -283,9 +290,9 @@ function CrudViewer<T, FormType = T>({
               ? [
                   ...columns,
                   {
-                    title: t(translations.str.action),
-                    dataIndex: '',
-                    fixed: 'right',
+                    title: t('str.action'),
+                    dataIndex: "",
+                    fixed: "right",
                     width: actionWidth,
                     render: (_, data: T) => (
                       <>

@@ -3,22 +3,19 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import {
-  DownloadOutlined,
-  WarningTwoTone,
-} from '@ant-design/icons';
-import Papa from 'papaparse';
-import { Modal, Progress, Space, Spin, Tooltip } from 'antd';
-import { saveAs } from 'file-saver';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { DownloadOutlined, WarningTwoTone } from "@ant-design/icons";
+import Papa from "papaparse";
+import { Modal, Progress, Space, Spin, Tooltip } from "antd";
+import { saveAs } from "file-saver";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 
-import { CrudFieldProps } from '../CrudComponent';
-import CrudViewer from '../view/CrudViewer';
-import { DialogProps } from 'types/DialogComponentProp';
-import DateUtil from 'util/DateUtil';
-import ButtonComponent from 'components/common/button/Button';
-import { ImportButton } from 'components/common/button/ImportButton';
+import { CrudFieldProps } from "../CrudComponent";
+import CrudViewer from "../view/CrudViewer";
+import { DialogProps } from "types/DialogComponentProp";
+import DateUtil from "util/DateUtil";
+import { ButtonComponent, ImportButton } from "components/common";
 
 export interface CrudImportComponentProps<T> {
   fields: CrudFieldProps<T>[];
@@ -29,7 +26,7 @@ export interface CrudImportProps<T> {
   name: string;
   onClickImport: (
     data: Array<T | any>,
-    progressCallback: (progress: number) => void,
+    progressCallback: (progress: number) => void
   ) => Promise<{ importJobId: string }>;
 }
 
@@ -56,9 +53,9 @@ function CrudImportComponent<T>({
       new Map(
         fields
           .filter((e) => !e.hidden && !e.importProps?.hidden && !e.readonly)
-          .map((e) => [e.name, e]),
+          .map((e) => [e.name, e])
       ),
-    [fields],
+    [fields]
   );
   const columnNames = useMemo(
     () =>
@@ -66,29 +63,29 @@ function CrudImportComponent<T>({
         e.name,
         ...(e.importProps?.extraFields ?? []),
       ]),
-    [fieldsAvailable],
+    [fieldsAvailable]
   );
 
   const onClickDownloadTemplate = useCallback(
     async function () {
-      const csvContent = `${columnNames.join(',')}\n`;
+      const csvContent = `${columnNames.join(",")}\n`;
 
       // Create a Blob from the CSV content
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
 
       // Use FileSaver to save the file
       saveAs(
         blob,
         importProps?.name +
-          ' - ' +
-          DateUtil.formatDateTimeWithSecond(new Date()).replaceAll(':', '-') +
-          '.csv',
+          " - " +
+          DateUtil.formatDateTimeWithSecond(new Date()).replaceAll(":", "-") +
+          ".csv"
       );
     },
-    [columnNames, importProps?.name],
+    [columnNames, importProps?.name]
   );
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
 
   const onClickImport = useCallback(async (file: File) => {
     const reader = new FileReader();
@@ -110,7 +107,8 @@ function CrudImportComponent<T>({
         if (field.required && !isValueDefined) {
           if (field.importProps?.extraFields?.length) {
             for (const extraField of field.importProps?.extraFields ?? []) {
-              const isValueDefined2 = datum[extraField] || !isNaN(datum[extraField]);
+              const isValueDefined2 =
+                datum[extraField] || !isNaN(datum[extraField]);
               if (isValueDefined2) {
                 hasAnyError = false;
                 break;
@@ -128,19 +126,19 @@ function CrudImportComponent<T>({
       return (value, obj) => {
         const isValueDefined = value || !isNaN(value);
         if (e.required && !isValueDefined) {
-          let message = t('err.validation.required');
+          let message = t("err.validation.required");
           if (e.importProps?.extraFields?.length) {
             const extraFields = e.importProps?.extraFields;
             const hasError = extraFields?.find((f) => !obj[f]);
             if (hasError) {
               message =
-                'Either one of these fields is required: ' +
-                [e.name, ...extraFields].join(', ');
+                "Either one of these fields is required: " +
+                [e.name, ...extraFields].join(", ");
             }
           }
           return (
             <Tooltip className="d-flex" title={message}>
-              <WarningTwoTone twoToneColor={'#ee9702'} />
+              <WarningTwoTone twoToneColor={"#ee9702"} />
               {value}
             </Tooltip>
           );
@@ -148,7 +146,7 @@ function CrudImportComponent<T>({
         return value;
       };
     },
-    [t],
+    [t]
   );
 
   const progressCallback = useCallback(async (progress: number) => {
@@ -168,9 +166,9 @@ function CrudImportComponent<T>({
   const onclickSubmit = useCallback(async () => {
     if (hasAnyError) {
       Modal.warn({
-        title: t('str.warning'),
-        content: t('qus.importWithIssues'),
-        okText: t('str.import'),
+        title: t("str.warning"),
+        content: t("qus.importWithIssues"),
+        okText: t("str.import"),
         onOk: onImport,
         okCancel: true,
         closable: true,
@@ -181,13 +179,13 @@ function CrudImportComponent<T>({
   }, [hasAnyError, onImport, t]);
   return (
     <Modal
-      title={[t('str.import'), importProps?.name].filter(Boolean).join(' ')}
-      width={'100%'}
+      title={[t("str.import"), importProps?.name].filter(Boolean).join(" ")}
+      width={"100%"}
       open={open}
       onOk={onclickSubmit}
       destroyOnClose
       onCancel={() => onCloseMethod(false)}
-      okText={t('str.import')}
+      okText={t("str.import")}
       confirmLoading={loading}
       okButtonProps={{
         disabled: !data?.length,
@@ -199,17 +197,20 @@ function CrudImportComponent<T>({
           {hasAnyError && (
             <Tooltip
               className="d-flex"
-              title={'Some fields have issue. Please review before submit.'}
+              title={"Some fields have issue. Please review before submit."}
             >
-              <WarningTwoTone twoToneColor={'#ee9702'} />
+              <WarningTwoTone twoToneColor={"#ee9702"} />
             </Tooltip>
           )}
         </Space>
       )}
     >
       <Space>
-        <ButtonComponent onClick={onClickDownloadTemplate} icon={<DownloadOutlined />}>
-          {t('str.downloadCsvTemplate')}
+        <ButtonComponent
+          onClick={onClickDownloadTemplate}
+          icon={<DownloadOutlined />}
+        >
+          {t("str.downloadCsvTemplate")}
         </ButtonComponent>
         <ImportButton
           disabled={loading}
@@ -217,7 +218,7 @@ function CrudImportComponent<T>({
           onClick={onClickImport}
           accept=".csv"
         >
-          {t('str.importCsvFile')}
+          {t("str.importCsvFile")}
         </ImportButton>
       </Space>
       <Spin
@@ -238,7 +239,7 @@ function CrudImportComponent<T>({
           bordered
           size="small"
           fields={Array.from(fieldsAvailable.values()).flatMap((e) => {
-            if (e.type === 'text') {
+            if (e.type === "text") {
               return [
                 {
                   ...e,
@@ -252,19 +253,19 @@ function CrudImportComponent<T>({
                   render: renderErrorColumn(e),
                 })) ?? []),
               ];
-            } else if (e.type === 'select') {
+            } else if (e.type === "select") {
               return [
                 {
                   ...e,
                   label: e.name,
-                  type: 'text' as CrudFieldProps<T>['type'],
+                  type: "text" as CrudFieldProps<T>["type"],
                   render: renderErrorColumn(e),
                 },
                 ...(e.importProps?.extraFields?.map((f) => ({
                   ...e,
                   name: f as any,
                   label: f,
-                  type: 'text' as CrudFieldProps<T>['type'],
+                  type: "text" as CrudFieldProps<T>["type"],
                   render: renderErrorColumn(e),
                 })) ?? []),
               ] as any[];

@@ -1,16 +1,16 @@
-import { ImportOutlined } from '@ant-design/icons';
-import { BaseButtonProps } from 'antd/es/button/button';
-import { translations } from 'config/localization/translations';
+import { ImportOutlined } from "@ant-design/icons";
+import { BaseButtonProps } from "antd/es/button/button";
 import React, {
   ElementRef,
   PropsWithChildren,
   useCallback,
   useRef,
   useState,
-} from 'react';
-import { useTranslation } from 'react-i18next';
+} from "react";
+import { useTranslation } from "react-i18next";
+import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 
-import ButtonComponent from './Button';
+import ButtonComponent from "./Button";
 
 export function ImportButton({
   onClick,
@@ -18,18 +18,18 @@ export function ImportButton({
   accept,
   className,
   disabled,
-  type = 'link',
+  type = "link",
 }: PropsWithChildren<{
   className?: string;
   accept?: string;
   disabled?: boolean;
   onClick: (file: File) => Promise<any>;
-  type?: BaseButtonProps['type'];
+  type?: BaseButtonProps["type"];
 }>) {
   const [loading, setLoading] = useState(false);
-  const { t } = useTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
 
-  const fileInputRef = useRef<ElementRef<'input'>>(null);
+  const fileInputRef = useRef<ElementRef<"input">>(null);
   const _click = useCallback(() => {
     setKey((key) => key + 1);
     if (fileInputRef.current) {
@@ -49,14 +49,14 @@ export function ImportButton({
       }
       setLoading(false);
     },
-    [onClick],
+    [onClick]
   );
   return (
     <div>
       <input
         type="file"
         key={key}
-        style={{ display: 'none' }}
+        style={{ display: "none" }}
         ref={fileInputRef}
         onChange={onFileChange}
         accept={accept}
@@ -67,7 +67,7 @@ export function ImportButton({
         disabled={disabled}
         onClick={_click}
         icon={<ImportOutlined />}
-        tooltip={t(translations.str.import)}
+        tooltip={t("str.import")}
       >
         {children}
       </ButtonComponent>

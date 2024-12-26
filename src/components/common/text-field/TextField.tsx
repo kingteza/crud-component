@@ -3,15 +3,15 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import { LoadingOutlined } from '@ant-design/icons';
-import { Form, FormItemProps, Input, Tooltip } from 'antd';
-import { SizeType } from 'antd/es/config-provider/SizeContext';
-import { FormInstance } from 'antd/lib/form/Form';
-import React, { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { LoadingOutlined } from "@ant-design/icons";
+import { Form, FormItemProps, Input, Tooltip } from "antd";
+import { SizeType } from "antd/es/config-provider/SizeContext";
+import { FormInstance } from "antd/lib/form/Form";
+import React, { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 
-import { translations } from '../../../config/localization/translations';
-import TooltipComponent from '../tooltip/TooltipComponent';
+import TooltipComponent from "../tooltip/TooltipComponent";
 
 export interface TextFieldProps extends FormItemProps<any> {
   type?: any;
@@ -38,7 +38,7 @@ export const onEnterInternalTextField = (
   e: React.KeyboardEvent<HTMLInputElement>,
   nextFocus?: string,
   form?: FormInstance<any>,
-  onEnter?: React.KeyboardEventHandler<HTMLInputElement>,
+  onEnter?: React.KeyboardEventHandler<HTMLInputElement>
 ) => {
   if (nextFocus && form) {
     e.preventDefault();
@@ -60,7 +60,7 @@ const TextField: React.FC<TextFieldProps> = ({
   addonAfter,
   addonBefore,
   nextFocus,
-  autoComplete = 'off',
+  autoComplete = "off",
   defaultValue,
   readOnly,
   value,
@@ -73,22 +73,22 @@ const TextField: React.FC<TextFieldProps> = ({
   tooltip,
   ...props
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
 
   const r = useMemo(() => {
     const list = [
       ...rules,
       {
         required,
-        message: `${label ?? placeholder ?? ''} ${t(
-          translations.err.validation.required,
+        message: `${label ?? placeholder ?? ""} ${t(
+          'err.validation.required'
         )}`,
       },
     ];
-    if (type === 'email') {
+    if (type === "email") {
       list.push({
-        type: 'email',
-        message: t(translations.err.validation.invalidEmail),
+        type: "email",
+        message: t('err.validation.invalidEmail'),
       });
     }
     return list;
@@ -111,7 +111,7 @@ const TextField: React.FC<TextFieldProps> = ({
     type: type as any,
     placeholder: placeholder ?? (label as any),
   };
-  const Component = type == 'password' ? Input.Password : Input;
+  const Component = type == "password" ? Input.Password : Input;
   return (
     <TooltipComponent title={tooltip as any}>
       <Form.Item {...props} label={label} rules={r}>

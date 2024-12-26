@@ -1,21 +1,22 @@
+/* eslint-disable prefer-const */
 /* *****************************************************************************
  Copyright (c) 2020-2022 Kingteza and/or its affiliates. All rights reserved.
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import 'cropperjs/dist/cropper.css';
-import './style.css';
+import "cropperjs/dist/cropper.css";
+import "./style.css";
 
 import {
   LoadingOutlined,
   RotateLeftOutlined,
   RotateRightOutlined,
   UploadOutlined,
-} from '@ant-design/icons';
-import { Form, FormItemProps } from 'antd';
-import { Modal } from 'antd';
-import { Upload, UploadProps } from 'antd';
-import { RcFile, UploadFile } from 'antd/lib/upload/interface';
+} from "@ant-design/icons";
+import { Form, FormItemProps } from "antd";
+import { Modal } from "antd";
+import { Upload, UploadProps } from "antd";
+import { RcFile, UploadFile } from "antd/lib/upload/interface";
 import React, {
   FC,
   ReactElement,
@@ -24,15 +25,15 @@ import React, {
   useMemo,
   useRef,
   useState,
-} from 'react';
+} from "react";
 const FormItem = Form.Item;
-import { UploadListType } from 'antd/es/upload/interface';
-import { Cropper, ReactCropperElement } from 'react-cropper';
-import { useTranslation } from 'react-i18next';
+import { UploadListType } from "antd/es/upload/interface";
+import { Cropper, ReactCropperElement } from "react-cropper";
+import { useTranslation } from "react-i18next";
+import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 
-import { translations } from '../../../config/localization/translations';
-import ImageUtil from '../../../util/ImageUtil';
-import ButtonComponent from '../button/Button';
+import ButtonComponent from "../button/Button";
+import ImageUtil from "util/ImageUtil";
 
 function getBase64(file) {
   return new Promise<string>((resolve, reject) => {
@@ -44,7 +45,7 @@ function getBase64(file) {
 }
 
 export function dataURLtoFile({ url, name }) {
-  var arr = url.split(','),
+  let arr = url.split(","),
     mime = arr[0].match(/:(.*?);/)[1],
     bstr = atob(arr[1]),
     n = bstr.length,
@@ -96,7 +97,7 @@ const ImagePicker: FC<Props> = ({
   aspectRatio,
   buttonTitle,
   hidePreview,
-  buttonSize = 'large',
+  buttonSize = "large",
   showButtonText = true,
   showOnlyIcon = false,
   icon = <UploadOutlined />,
@@ -107,14 +108,14 @@ const ImagePicker: FC<Props> = ({
   listType,
   ...props
 }) => {
-  const [previewTitle, setPreviewTitle] = React.useState('');
-  const [previewImage, setPreviewImage] = React.useState('');
+  const [previewTitle, setPreviewTitle] = React.useState("");
+  const [previewImage, setPreviewImage] = React.useState("");
   const [previewVisible, setPreviewVisible] = React.useState(false);
   const fileRef = useRef<RcFile>();
   const cropper = useRef<ReactCropperElement>();
   const [fileList, setFileList] = useState<UploadFile<RcFile>[]>([]);
   const [preview, setPreview] = useState<string>();
-  const beforeUploadRef = useRef<UploadProps['beforeUpload']>();
+  const beforeUploadRef = useRef<UploadProps["beforeUpload"]>();
 
   const handleCancel = () => setPreviewVisible(false);
 
@@ -187,10 +188,10 @@ const ImagePicker: FC<Props> = ({
     if (file) {
       fileRef.current = file;
       const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        if (typeof reader.result === 'string') {
+      reader.addEventListener("load", () => {
+        if (typeof reader.result === "string") {
           setPreview(reader.result);
-          const b = localStorage.getItem('cropper.box');
+          const b = localStorage.getItem("cropper.box");
           const box = b ? JSON.parse(b) : undefined;
           if (box) {
             // cropper?.current?.cropper.
@@ -205,7 +206,7 @@ const ImagePicker: FC<Props> = ({
     }
   }, []);
   useEffect(() => {
-    if (values?.length || typeof values === 'string') {
+    if (values?.length || typeof values === "string") {
       const list = Array.isArray(values)
         ? values.map((url) => {
             return [{ uid: values, url }];
@@ -214,7 +215,7 @@ const ImagePicker: FC<Props> = ({
       setFileList(list as any);
     }
   }, [values]);
-  const { t } = useTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
 
   const validator = useMemo(
     () =>
@@ -223,14 +224,14 @@ const ImagePicker: FC<Props> = ({
             required,
             validator: (_, __, callback) => {
               if (preview || fileList?.length) callback();
-              else callback(`${label ?? ''} ${t(translations.err.validation.required)}`);
+              else callback(`${label ?? ""} ${t("err.validation.required")}`);
             },
           }
         : undefined,
-    [required, preview, fileList?.length, label, t],
+    [required, preview, fileList?.length, label, t]
   );
 
-  const _buttonTitle = buttonTitle ?? t(translations.message.fileUploadMessage2);
+  const _buttonTitle = buttonTitle ?? t("message.fileUploadMessage2");
 
   const uploadComponent = useMemo(
     () => (
@@ -253,6 +254,7 @@ const ImagePicker: FC<Props> = ({
       />
     ),
     [
+      showLoadingIndicator,
       _buttonTitle,
       buttonSize,
       buttonType,
@@ -260,12 +262,12 @@ const ImagePicker: FC<Props> = ({
       hidePreview,
       icon,
       loading,
+      listType,
       maxCount,
-      showLoadingIndicator,
       onChangeFile,
       onRemove,
       showButtonText,
-    ],
+    ]
   );
 
   beforeUploadRef.current = uploadComponent.props.beforeUpload;
@@ -276,7 +278,7 @@ const ImagePicker: FC<Props> = ({
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (croppedBoxData) {
-        localStorage.setItem('cropper.box', JSON.stringify(croppedBoxData));
+        localStorage.setItem("cropper.box", JSON.stringify(croppedBoxData));
       }
     }, 400);
     return () => clearTimeout(timeout);
@@ -326,7 +328,7 @@ const ImagePicker: FC<Props> = ({
           aspectRatio={aspectRatio}
           cropend={() => handleCropChange()}
         />
-        <p className="text-center">{[width, height].join(' ⨉ ')}</p>
+        <p className="text-center">{[width, height].join(" ⨉ ")}</p>
         <div className="mt-2 d-flex justify-content-center">
           <ButtonComponent
             size="large"
@@ -347,7 +349,7 @@ const ImagePicker: FC<Props> = ({
         onCancel={handleCancel}
       >
         <div className="text-center">
-          <img alt="example" style={{ maxWidth: '400px' }} src={previewImage} />
+          <img alt="example" style={{ maxWidth: "400px" }} src={previewImage} />
         </div>
       </Modal>
     </>
@@ -385,7 +387,7 @@ export const UploadComponent: FC<{
   handlePreview,
   setFileList,
   showLoadingIndicator,
-  listType = 'picture',
+  listType = "picture",
 }) => {
   return (
     <>
@@ -397,7 +399,9 @@ export const UploadComponent: FC<{
         onChange={(props) => {
           // setFileList(props.fileList);
         }}
-        className={(fileList.length >= maxCount ? ' hide-upload ' : '') + ' mb-0'}
+        className={
+          (fileList.length >= maxCount ? " hide-upload " : "") + " mb-0"
+        }
         multiple={false}
         onPreview={!hidePreview ? handlePreview : undefined}
         onDrop={(file) => {
@@ -426,7 +430,7 @@ export const UploadComponent: FC<{
         {
           <div className="d-flex flex-column">
             {fileList.length < maxCount &&
-              (listType === 'picture-circle' ? (
+              (listType === "picture-circle" ? (
                 <UploadOutlined />
               ) : (
                 <ButtonComponent
@@ -434,7 +438,7 @@ export const UploadComponent: FC<{
                   tooltip={!showButtonText ? _buttonTitle : undefined}
                   size={buttonSize as any}
                   icon={icon}
-                  type={!showButtonText ? 'text' : (buttonType as any)}
+                  type={!showButtonText ? "text" : (buttonType as any)}
                 >
                   {showButtonText ? _buttonTitle : undefined}
                 </ButtonComponent>

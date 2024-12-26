@@ -11,17 +11,15 @@ import {
   SelectProps,
   Spin,
   Tooltip,
-} from 'antd';
-import { RefSelectProps } from 'antd/lib/select';
-import React, { ReactElement, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
+} from "antd";
+import { RefSelectProps } from "antd/lib/select";
+import React, { ReactElement, useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 
-import { translations } from '../../../config/localization/translations';
-import TooltipComponent from '../tooltip/TooltipComponent';
+import TooltipComponent from "../tooltip/TooltipComponent";
 
-
-
-export type SelectTagRenderProps = SelectProps['tagRender'];
+export type SelectTagRenderProps = SelectProps["tagRender"];
 
 // eslint-disable-next-line no-unused-vars
 interface SelectComponentProps<T> extends SelectProps<any>, FormItemProps<any> {
@@ -36,7 +34,7 @@ interface SelectComponentProps<T> extends SelectProps<any>, FormItemProps<any> {
   itemBuilder?: (t: T) => ReactElement;
   dropdownRender?: (menu: ReactElement) => ReactElement;
   innerRef?: React.Ref<RefSelectProps>;
-  filterOption?: SelectProps['filterOption'];
+  filterOption?: SelectProps["filterOption"];
   tagRender?: SelectTagRenderProps;
 }
 
@@ -53,20 +51,22 @@ function SelectComponent<T = any>({
   itemBuilder,
   loading,
   showLoadingInEmptyIndicator,
-  nameFieldInArray = 'name',
+  nameFieldInArray = "name",
   innerRef,
   tooltip,
   filterOption,
   tagRender,
   ...props
 }: SelectComponentProps<T>) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
   const _itemBuilder = useCallback(
     (value) => {
       const key =
-        typeof value === 'string' || typeof value === 'number' ? value : value?.id;
+        typeof value === "string" || typeof value === "number"
+          ? value
+          : value?.id;
       const val =
-        typeof value === 'string' || typeof value === 'number'
+        typeof value === "string" || typeof value === "number"
           ? value
           : value?.[nameFieldInArray];
       return (
@@ -75,11 +75,13 @@ function SelectComponent<T = any>({
         </option>
       );
     },
-    [nameFieldInArray],
+    [nameFieldInArray]
   );
   return (
     <ConfigProvider
-      renderEmpty={showLoadingInEmptyIndicator && loading ? () => <Spin /> : undefined}
+      renderEmpty={
+        showLoadingInEmptyIndicator && loading ? () => <Spin /> : undefined
+      }
     >
       <TooltipComponent title={tooltip as any}>
         <Form.Item
@@ -91,8 +93,8 @@ function SelectComponent<T = any>({
             ...rules,
             {
               required,
-              message: `${label ?? placeholder ?? ''} ${t(
-                translations.err.validation.required,
+              message: `${label ?? placeholder ?? ""} ${t(
+                "err.validation.required"
               )}`,
             },
           ]}
@@ -104,7 +106,7 @@ function SelectComponent<T = any>({
             onChange={(!readOnly && props.onChange) as any}
             allowClear={!readOnly && props.allowClear}
             showSearch={!notSearch}
-            className={`max-width ${readOnly ? 'readOnly' : ''}`}
+            className={`max-width ${readOnly ? "readOnly" : ""}`}
             {...props}
             tagRender={tagRender}
             placeholder={placeholder ?? (label as any)}
@@ -112,24 +114,30 @@ function SelectComponent<T = any>({
               filterOption ??
               ((input, option) => {
                 try {
-                  const opFromDiv = (option?.children as any)?.props?.dangerouslySetInnerHTML?.__html;
-                  
+                  const opFromDiv = (option?.children as any)?.props
+                    ?.dangerouslySetInnerHTML?.__html;
+
                   // Split the input into terms based on spaces
                   const terms = input.toLowerCase().split(/\s+/);
 
                   // Get the option's children and value as lowercase strings
-                  const text = (option?.children as any as string) ?? '';
-                  const optionText = typeof text === 'string' ? (
-                    text
-                  ).toLowerCase() : typeof opFromDiv === 'string' ? opFromDiv.toLowerCase() : '';
-                  const optionValue = (option?.value?.toString() ?? '').toLowerCase();
+                  const text = (option?.children as any as string) ?? "";
+                  const optionText =
+                    typeof text === "string"
+                      ? text.toLowerCase()
+                      : typeof opFromDiv === "string"
+                      ? opFromDiv.toLowerCase()
+                      : "";
+                  const optionValue = (
+                    option?.value?.toString() ?? ""
+                  ).toLowerCase();
                   // Check if every term matches either the optionText or optionValue
-                  const optionWithoutSpaces = optionText.replace(/\s/g, '');
+                  const optionWithoutSpaces = optionText.replace(/\s/g, "");
                   return terms.every(
                     (term) =>
                       optionText.indexOf(term) >= 0 ||
                       optionValue.indexOf(term) >= 0 ||
-                      optionWithoutSpaces.indexOf(term) >= 0,
+                      optionWithoutSpaces.indexOf(term) >= 0
                   );
                 } catch (err) {
                   console.log(err);
@@ -140,7 +148,9 @@ function SelectComponent<T = any>({
             }
             dropdownRender={dropdownRender}
           >
-            {children === null ? undefined : children ?? (items && items?.map(itemBuilder ?? _itemBuilder))}
+            {children === null
+              ? undefined
+              : children ?? (items && items?.map(itemBuilder ?? _itemBuilder))}
           </Select>
         </Form.Item>
       </TooltipComponent>

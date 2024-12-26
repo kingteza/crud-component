@@ -1,23 +1,23 @@
-import { ColorPickerProps, Form, Modal, Space, Spin } from 'antd';
+import { ColorPickerProps, Form, Modal, Space, Spin } from "antd";
 
-import { Color } from 'antd/es/color-picker';
-import { Rule } from 'antd/es/form';
-import { FormInstance } from 'antd/lib';
-import dayjs, { Dayjs } from 'dayjs';
-import React, { ReactElement, useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import IdProps from 'types/Id';
-import { CrudForm } from './CrudForm';
-import CrudFormWizard from './CrudFormWizard';
-import { CrudSearchComponentProps } from './CrudSearchComponent';
-import { FileCrudField } from './FileCrudField';
-import { ImageCrudField } from './ImageCrudField';
-import CrudImportButton from './import/CrudImportButton';
-import { CrudImportProps } from './import/CrudImportComponent';
-import CrudViewer from './view/CrudViewer';
-import { NewButton } from 'components/common/button/NewButton';
-import { PrintButton } from 'components/common/button/PrintButton';
-import { SelectTagRenderProps } from 'components/common/select/SelectComponent';
+import { Color } from "antd/es/color-picker";
+import { Rule } from "antd/es/form";
+import { FormInstance } from "antd/lib";
+import dayjs, { Dayjs } from "dayjs";
+import React, { ReactElement, useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
+import IdProps from "types/Id";
+import { CrudForm } from "./CrudForm";
+import CrudFormWizard from "./CrudFormWizard";
+import { CrudSearchComponentProps } from "./CrudSearchComponent";
+import { FileCrudField } from "./FileCrudField";
+import { ImageCrudField } from "./ImageCrudField";
+import CrudImportButton from "./import/CrudImportButton";
+import { CrudImportProps } from "./import/CrudImportComponent";
+import CrudViewer from "./view/CrudViewer";
+import { NewButton, PrintButton } from "components/common";
+import { SelectTagRenderProps } from "components/common/select/SelectComponent";
 
 export type SelectFieldItem = {
   key?: string | number;
@@ -37,7 +37,7 @@ export interface InitialCrudField<T> {
   hideInDescList?: boolean;
   readonly?: boolean;
   fieldClassName?: string;
-  halign?: 'right' | 'left';
+  halign?: "right" | "left";
   /**
    * Indicates the fields is visible or not
    */
@@ -49,14 +49,14 @@ export interface InitialCrudField<T> {
   report?: {
     searchable?: boolean;
     sortable?: boolean;
-    defaultSort?: boolean | 'ASC' | 'DESC';
+    defaultSort?: boolean | "ASC" | "DESC";
     lock?: boolean; // Whether the field must be visible in the report view
     alreadySelected?: boolean;
     customRender?: (form: FormInstance<any>) => ReactElement;
   };
   customFormFieldRender?: (
     form: FormInstance<T>,
-    props: InitialCrudField<T>,
+    props: InitialCrudField<T>
   ) => React.ReactElement;
   importProps?: {
     extraFields?: string[];
@@ -74,9 +74,11 @@ export type CrudFieldGrid = {
   xxl?: number;
 };
 
-export interface SelectCrudField<T, ItemType extends SelectFieldItem = SelectFieldItem>
-  extends InitialCrudField<T> {
-  type: 'select';
+export interface SelectCrudField<
+  T,
+  ItemType extends SelectFieldItem = SelectFieldItem
+> extends InitialCrudField<T> {
+  type: "select";
   placeholder?: string;
   /**
    * @default true
@@ -103,21 +105,29 @@ export interface SelectCrudField<T, ItemType extends SelectFieldItem = SelectFie
   /**
    * Used when the type is 'select'
    */
-  onSearch?: (keyword: any, form: FormInstance<T>, record: T | undefined) => void;
+  onSearch?: (
+    keyword: any,
+    form: FormInstance<T>,
+    record: T | undefined
+  ) => void;
   /**
    * Used when the type is 'select'. Wether the result should refresh if the search value is changed.
    */
   searchOnType?: boolean;
   multiple?: boolean;
-  report?: InitialCrudField<T>['report'] & {
+  report?: InitialCrudField<T>["report"] & {
     multiple?: boolean;
   };
   onChange?: (value: any, form: FormInstance<T>) => void;
-  onSet?: (value: any | any[], items: SelectFieldItem[], form: FormInstance<T>) => void;
+  onSet?: (
+    value: any | any[],
+    items: SelectFieldItem[],
+    form: FormInstance<T>
+  ) => void;
 }
 
 export interface EnumCrudField<T> extends InitialCrudField<T> {
-  type: 'enum';
+  type: "enum";
   placeholder?: string;
   enum: object | object[];
   radio?: boolean;
@@ -129,7 +139,7 @@ export interface EnumCrudField<T> extends InitialCrudField<T> {
 }
 
 export interface ObjectCrudField<T> extends InitialCrudField<T> {
-  type: 'object';
+  type: "object";
 
   render: (value: any, obj: T, index: number) => any;
   translation?: object;
@@ -137,13 +147,13 @@ export interface ObjectCrudField<T> extends InitialCrudField<T> {
 
 export interface TextBasedFieldProps<T> extends InitialCrudField<T> {
   placeholder?: string;
-  type: 'text' | 'time' | 'email' | 'password';
+  type: "text" | "time" | "email" | "password";
   onChange?: (value: string, form: FormInstance<T>) => void;
 }
 
 export interface TextAreaBasedFieldProps<T> extends InitialCrudField<T> {
   placeholder?: string;
-  type: 'textarea';
+  type: "textarea";
   rows?: number;
   cols?: number;
   /**
@@ -155,18 +165,18 @@ export interface TextAreaBasedFieldProps<T> extends InitialCrudField<T> {
 }
 
 export interface ColorPickerFieldProps<T>
-  extends Omit<InitialCrudField<T>, 'placeholder'> {
-  type: 'color';
+  extends Omit<InitialCrudField<T>, "placeholder"> {
+  type: "color";
   innerProps?: ColorPickerProps;
 }
 
 export interface CheckboxBasedFieldProps<T> extends InitialCrudField<T> {
-  type: 'checkbox';
+  type: "checkbox";
   onChange?: (value: boolean, form: FormInstance<T>) => void;
 }
 
 export interface NumberBasedFieldProps<T> extends InitialCrudField<T> {
-  type: 'number';
+  type: "number";
   placeholder?: string;
   allowMinus?: boolean;
   /**
@@ -178,7 +188,7 @@ export interface NumberBasedFieldProps<T> extends InitialCrudField<T> {
 }
 
 export interface DateBasedFieldProps<T> extends InitialCrudField<T> {
-  type: 'date';
+  type: "date";
   format?: string;
   placeholder?: string;
   /**
@@ -189,7 +199,7 @@ export interface DateBasedFieldProps<T> extends InitialCrudField<T> {
   disableToday?: boolean;
   disabledFutureDays?: boolean;
   disabledPastDays?: boolean;
-  report?: InitialCrudField<T>['report'] & {
+  report?: InitialCrudField<T>["report"] & {
     range?: boolean;
     required?: boolean;
   };
@@ -197,21 +207,21 @@ export interface DateBasedFieldProps<T> extends InitialCrudField<T> {
 }
 
 export interface TimeBasedFieldProps<T> extends InitialCrudField<T> {
-  type: 'time';
+  type: "time";
   placeholder?: string;
   use12Hours?: boolean;
   range?: boolean;
-  format?: 'h:mm:ss' | 'h:mm:ss A' | 'h:mm' | 'h:mm A' | 'mm' | 'h' | 'h A';
+  format?: "h:mm:ss" | "h:mm:ss A" | "h:mm" | "h:mm A" | "mm" | "h" | "h A";
   disableCurrent?: boolean;
   disabledFuture?: boolean;
   disabledPast?: boolean;
-  report?: InitialCrudField<T>['report'] & {
+  report?: InitialCrudField<T>["report"] & {
     range?: boolean;
   };
   onChange?: (value: Dayjs | undefined, form: FormInstance<T>) => void;
 }
 
-export type CrudPurpose = 'new' | 'clone' | 'update';
+export type CrudPurpose = "new" | "clone" | "update";
 
 export type GetFormFieldOptions = {
   onChange?: (value: any) => void;
@@ -219,14 +229,14 @@ export type GetFormFieldOptions = {
 };
 export type FormBuilderFunc0<T> = (
   name: keyof T,
-  options?: GetFormFieldOptions,
+  options?: GetFormFieldOptions
 ) => ReactElement;
 export type FormBuilderFunc<T> = (
   i: FormBuilderFunc0<T>,
   otherUtils: {
     isAnyFieldHidden: (...name: Array<keyof T>) => boolean;
     isAllFieldsHidden: (...name: Array<keyof T>) => boolean;
-  },
+  }
 ) => ReactElement;
 
 export type CrudFieldProps<T> =
@@ -290,7 +300,7 @@ export type CrudComponentProps<T, FormType = T> = {
 } & CrudSearchComponentProps<T, FormType>;
 
 function CrudComponent<T, FormType = T>({
-  idField = 'id',
+  idField = "id",
   onCreate,
   onDelete,
   onHide,
@@ -318,7 +328,7 @@ function CrudComponent<T, FormType = T>({
   onClickNew,
   ...props
 }: CrudComponentProps<T, FormType>) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
 
   const [openModal, setOpenModal] = useState(false);
 
@@ -328,12 +338,12 @@ function CrudComponent<T, FormType = T>({
   const _onSave = useCallback(
     async (x?: any) => {
       const field = wizard ? x : await form.validateFields();
-      const colorFields = fields.filter((e) => e.type === 'color');
+      const colorFields = fields.filter((e) => e.type === "color");
       const colorValues = {};
       colorFields.forEach((e) => {
         const color = form.getFieldValue(e.name);
         colorValues[e.name as any] =
-          typeof color === 'string'
+          typeof color === "string"
             ? color
             : (color as Color)?.toHexString()?.toUpperCase();
       });
@@ -351,7 +361,7 @@ function CrudComponent<T, FormType = T>({
       form.resetFields();
       setOpenModal(false);
     },
-    [fields, form, idField, onCreate, onUpdate, updatingField, wizard],
+    [fields, form, idField, onCreate, onUpdate, updatingField, wizard]
   );
 
   const [blockSubmitButton, setBlockSubmitButton] = useState(false);
@@ -382,11 +392,11 @@ function CrudComponent<T, FormType = T>({
       try {
         setUpdating(true);
         setOpenModal(true);
-        if (shouldSetUpdatingField) setPurpose('update');
+        if (shouldSetUpdatingField) setPurpose("update");
         const _data = {};
         for (const e of fields) {
           const dataField = data[e.name as any];
-          if (isClone && e.type === 'image') {
+          if (isClone && e.type === "image") {
             const filePath = dataField;
             try {
               const clonedFilePath = await e.provider.clone(filePath);
@@ -396,15 +406,20 @@ function CrudComponent<T, FormType = T>({
               continue;
             }
           }
-          if (e.type === 'date') {
+          if (e.type === "date") {
             if (dataField) _data[e.name as any] = dayjs(dataField);
-          } else if (e.type === 'select') {
+          } else if (e.type === "select") {
             if (e.multiple && Array.isArray(dataField)) {
-              _data[e.name as any] = dataField.map((x) => x[e.innerFieldId ?? 'id']);
-            } else if (dataField && typeof dataField === 'object')
-              _data[e.name as any] = dataField[e.innerFieldId ?? 'id'];
-            else if (dataField && typeof dataField === 'string' || typeof dataField === 'number')
-              _data[e.name as any] = dataField; 
+              _data[e.name as any] = dataField.map(
+                (x) => x[e.innerFieldId ?? "id"]
+              );
+            } else if (dataField && typeof dataField === "object")
+              _data[e.name as any] = dataField[e.innerFieldId ?? "id"];
+            else if (
+              (dataField && typeof dataField === "string") ||
+              typeof dataField === "number"
+            )
+              _data[e.name as any] = dataField;
           } else _data[e.name as any] = dataField;
         }
         form.setFieldsValue(_data);
@@ -414,16 +429,16 @@ function CrudComponent<T, FormType = T>({
         setUpdating(false);
       }
     },
-    [fields, form],
+    [fields, form]
   );
 
   const [purpose, setPurpose] = useState<CrudPurpose>();
   const onClickClone = useCallback(
     async (data: T) => {
-      setPurpose('clone');
+      setPurpose("clone");
       onClickUpdate(data, false, true);
     },
-    [onClickUpdate],
+    [onClickUpdate]
   );
 
   return (
@@ -437,7 +452,7 @@ function CrudComponent<T, FormType = T>({
                   onClickNew();
                 } else {
                   setOpenModal((e) => !e);
-                  setPurpose('new');
+                  setPurpose("new");
                 }
               }}
               className="flex-1"
@@ -477,12 +492,12 @@ function CrudComponent<T, FormType = T>({
         />
       </Space>
       <Modal
-        width={fullWidthModal ? '100%' : undefined}
-        title={t(purpose ?? 'new')}
+        width={fullWidthModal ? "100%" : undefined}
+        title={t(purpose ?? "new")}
         open={openModal}
         confirmLoading={isCreating || isUpdating}
-        okText={t('str.' + (purpose === 'update' ? 'update' : 'save'))}
-        cancelText={t('str.cancel')}
+        okText={t("str." + (purpose === "update" ? "update" : "save"))}
+        cancelText={t("str.cancel")}
         cancelButtonProps={{
           disabled: blockCancelButton,
           hidden: Boolean(wizard),
@@ -493,12 +508,14 @@ function CrudComponent<T, FormType = T>({
         }}
         onCancel={async () => {
           try {
-            if (purpose === 'clone') {
+            if (purpose === "clone") {
               const values = !wizard ? form.getFieldsValue() : updatingField;
-              const imageFields = fields.filter((e) => e.type === 'image');
+              const imageFields = fields.filter((e) => e.type === "image");
               for (const field of imageFields) {
                 if (values[field.name]) {
-                  (field as ImageCrudField<T>).provider.delete(values[field.name]);
+                  (field as ImageCrudField<T>).provider.delete(
+                    values[field.name]
+                  );
                 }
               }
             }
@@ -528,7 +545,7 @@ function CrudComponent<T, FormType = T>({
           {wizard && (
             <CrudFormWizard<T>
               submitting={isCreating || isUpdating}
-              className={'mt-2'}
+              className={"mt-2"}
               onSave={_onSave}
               updatingValue={updatingValueWizard}
               fields={fields}

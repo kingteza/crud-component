@@ -3,13 +3,12 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import { DownCircleOutlined, UpCircleOutlined } from '@ant-design/icons';
+import { UpCircleOutlined } from '@ant-design/icons';
 import { Popconfirm } from 'antd';
 import { ButtonType } from 'antd/es/button';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { translations } from '../../../config/localization/translations';
 import ButtonComponent from './Button';
 
 interface Props<T> {
@@ -35,14 +34,14 @@ function UnHideButton<T>({
   type = 'link',
   hidden
 }: Props<T>) {
-  const { t } = useTranslation();
-  const txt = useMemo(() => text ?? t(translations.str.unhide), [text, t]);
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const txt = useMemo(() => text ?? t("str.unhide"), [text, t]);
   const [_loading, set_loading] = useState(false);
   useEffect(() => {
     set_loading(loading ?? false);
   }, [loading]);
   const _onClick = useCallback(
-    async (e) => {
+    async () => {
       try {
         set_loading(true);
         await onClick(value);
@@ -69,9 +68,9 @@ function UnHideButton<T>({
   }
   return (
     <Popconfirm
-      title={t(translations.qus.doYouWantToHide)}
+      title={t("qus.doYouWantToHide")}
       okText={txt.toUpperCase()}
-      cancelText={t(translations.str.no).toUpperCase()}
+      cancelText={t("str.no").toUpperCase()}
       onConfirm={_onClick}
     >
       <ButtonComponent

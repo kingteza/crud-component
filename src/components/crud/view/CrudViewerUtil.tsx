@@ -1,4 +1,6 @@
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { Tooltip, Avatar } from "antd";
+import { ShowMore } from "components/common";
 import {
   CrudFieldProps,
   DateBasedFieldProps,
@@ -9,8 +11,15 @@ import {
   TimeBasedFieldProps,
 } from "components/crud/CrudComponent";
 import { FileCrudCellValue } from "components/crud/FileCrudField";
-import { ImageCrudCellValue, ImageCrudField } from "components/crud/ImageCrudField";
+import {
+  ImageCrudCellValue,
+  ImageCrudField,
+} from "components/crud/ImageCrudField";
+import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
+import { t } from "i18next";
 import React from "react";
+import DateUtil from "util/DateUtil";
+import NumberUtil from "util/NumberUtil";
 
 export function getRendererValueCrudViewer<T>(
   { type, render, ...props }: CrudFieldProps<T>,
@@ -44,7 +53,8 @@ export function getRendererValueCrudViewer<T>(
     : type === "enum"
     ? (e, value, i) => {
         const v = t(
-          (props as any as EnumCrudField<{}>)?.translation?.[e ?? ""] ?? e
+          (props as any as EnumCrudField<{}>)?.translation?.[e ?? ""] ?? e,
+          { ns: TRANSLATION_NAMESPACE }
         );
         return typeof render === "function" ? render(e, value, i) : v;
       }

@@ -3,14 +3,14 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import { PlusOutlined } from '@ant-design/icons';
-import { SizeType } from 'antd/es/config-provider/SizeContext';
-import { ButtonType } from 'antd/lib/button';
-import React, { FC } from 'react';
-import { useTranslation } from 'react-i18next';
+import { PlusOutlined } from "@ant-design/icons";
+import { SizeType } from "antd/es/config-provider/SizeContext";
+import { ButtonType } from "antd/lib/button";
+import React, { FC } from "react";
+import { useTranslation } from "react-i18next";
 
-import { translations } from '../../../config/localization/translations';
-import ButtonComponent from './Button';
+import ButtonComponent from "./Button";
+import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 
 export const NewButton: FC<{
   to?: string;
@@ -20,8 +20,8 @@ export const NewButton: FC<{
   block?: boolean;
   className?: string;
   size?: SizeType;
-}> = ({ size, block, className, type = 'primary', onClick, title, to }) => {
-  const { t } = useTranslation();
+}> = ({ size, block, className, type = "primary", onClick, title, to }) => {
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
 
   return (
     <ButtonComponent
@@ -33,7 +33,7 @@ export const NewButton: FC<{
       onClick={onClick && (() => onClick(true))}
       icon={<PlusOutlined />}
     >
-      {title ?? t(translations.str.new)}
+      {title ?? t("str.new")}
     </ButtonComponent>
   );
 };

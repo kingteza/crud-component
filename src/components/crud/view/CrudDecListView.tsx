@@ -3,22 +3,25 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import { Breakpoint } from 'antd';
-import DescList, { DescPropsNullable } from 'components/common/description/DescList';
-import { translations } from 'config/localization/translations';
-import React, { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Breakpoint } from "antd";
+import { DescList, DescPropsNullable } from "components/common";
+import React, { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 
-import { CrudFieldProps } from '../CrudComponent';
-import { getRendererValueCrudViewer } from './CrudViewer';
+import { CrudFieldProps } from "../CrudComponent";
+import { getRendererValueCrudViewer } from "./CrudViewerUtil";
 
-export type DescListColumn = number | Partial<Record<Breakpoint, number>> | undefined;
+export type DescListColumn =
+  | number
+  | Partial<Record<Breakpoint, number>>
+  | undefined;
 export interface CrudDecListViewProps<T> {
   fields: CrudFieldProps<T>[];
   data: T | undefined;
   className?: string;
   descListColumn?: DescListColumn;
-  layout?: 'horizontal' | 'vertical';
+  layout?: "horizontal" | "vertical";
   action?: React.JSX.Element;
   keepEmptyValues?: boolean;
 }
@@ -30,9 +33,9 @@ export function CrudDecListView<T>({
   descListColumn = { xs: 1, md: 3, sm: 2, lg: 4 },
   layout,
   action,
-  keepEmptyValues
+  keepEmptyValues,
 }: CrudDecListViewProps<T>) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
 
   const _fields: DescPropsNullable[] = useMemo(() => {
     const list: DescPropsNullable[] = fields
@@ -40,9 +43,13 @@ export function CrudDecListView<T>({
       .map((e, i) => ({
         label: e.label,
         noFormatting: true,
-        value: getRendererValueCrudViewer(e)(data?.[e.name as any], data as any, i),
+        value: getRendererValueCrudViewer(e)(
+          data?.[e.name as any],
+          data as any,
+          i
+        ),
       }));
-    if (action) list.push({ label: t(translations.str.action), value: action });
+    if (action) list.push({ label: t('str.action'), value: action });
     return list;
   }, [action, data, fields, t]);
 

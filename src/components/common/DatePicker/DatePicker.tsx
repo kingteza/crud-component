@@ -22,8 +22,6 @@ dayjs.extend(localeData);
 dayjs.extend(weekOfYear);
 dayjs.extend(weekYear);
 
-import { translations } from '../../../config/localization/translations';
-
 export type DateRange = [Dayjs | null, Dayjs | null];
 export interface DatePickerComponentProps extends FormItemProps<any> {
   type?: any;
@@ -81,7 +79,7 @@ const DatePickerComponent: FC<DateRangePickerProps | DatePickerProps> = ({
   renderExtraFooter,
   ...props
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
 
   const today = useMemo(() => {
     const date = new Date();
@@ -114,7 +112,7 @@ const DatePickerComponent: FC<DateRangePickerProps | DatePickerProps> = ({
         {
           required,
           message: `${label ?? placeholder ?? ''} ${t(
-            translations.err.validation.required,
+            "err.validation.required",
           )}`,
         },
         ...rules,

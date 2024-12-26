@@ -21,10 +21,9 @@ import CrudViewer from "./view/CrudViewer";
 import {
   ReportSelectFieldItems,
   SelectFieldInReport,
-} from "components/common/report/SelectFieldInReport";
-import ButtonComponent from "components/common/button/Button";
-import { PrintButton } from "components/common/button/PrintButton";
-import SelectComponent from "components/common/select/SelectComponent";
+} from "components/common";
+import { ButtonComponent, PrintButton } from "components/common";
+import { SelectComponent } from "components/common";
 import { getRendererValueCrudViewer } from "./view/CrudViewerUtil";
 
 export type CrudReportSubmitForm<T> = {

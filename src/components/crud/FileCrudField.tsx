@@ -2,33 +2,34 @@
  Copyright (c) 2020-2024 Kingteza and/or its affiliates. All rights reserved.
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
-import './style.css';
+import "./style.css";
 
 import {
-    ExportOutlined,
-    FileExcelOutlined,
-    FileImageOutlined,
-    FileOutlined,
-    FilePdfOutlined,
-    FilePptOutlined,
-    FileTextOutlined,
-    FileWordOutlined,
-} from '@ant-design/icons';
-import { Form, Modal, Upload, UploadProps } from 'antd';
-import { UploadFile } from 'antd/lib';
- 
-import mime from 'mime';
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+  ExportOutlined,
+  FileExcelOutlined,
+  FileImageOutlined,
+  FileOutlined,
+  FilePdfOutlined,
+  FilePptOutlined,
+  FileTextOutlined,
+  FileWordOutlined,
+} from "@ant-design/icons";
+import { Form, Modal, Upload, UploadProps } from "antd";
+import { UploadFile } from "antd/lib";
 
-import { InitialCrudField } from './CrudComponent';
-import { FileDownloadProvider, FileUploadProvider } from './ImageCrudField';
-import ValidationUtil from 'util/ValidationUtil';
-import ButtonComponent from 'components/common/button/Button';
-import VerticalSpace from 'components/common/layout/VerticalSpace';
+import mime from "mime";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
+
+import { InitialCrudField } from "./CrudComponent";
+import { FileDownloadProvider, FileUploadProvider } from "./ImageCrudField";
+import ValidationUtil from "util/ValidationUtil";
+import { ButtonComponent } from "components/common";
+import { VerticalSpace } from "components/common";
 
 export interface FileCrudField<T> extends _FileCrudField<T> {
-  type: 'file';
+  type: "file";
 }
 
 export interface _FileCrudField<T> extends InitialCrudField<T> {
@@ -60,7 +61,7 @@ export default function FileCrudFieldComponent<T>({
 
   const [isUploading, setIsUploading] = useState(false);
   const [isUpload, setIsUpload] = useState(false); // Indicate whether this is a upload
-  const customRequest: Exclude<UploadProps['customRequest'], null | undefined> =
+  const customRequest: Exclude<UploadProps["customRequest"], null | undefined> =
     useCallback(
       async (options) => {
         try {
@@ -69,8 +70,8 @@ export default function FileCrudFieldComponent<T>({
           setIsUploading(true);
           setIsUpload(true);
           onUploading?.(true);
-          const fileName = filename ?? '';
-          const array = fileName.split('.');
+          const fileName = filename ?? "";
+          const array = fileName.split(".");
           const extension = array[array.length - 1];
           const name0 = provider.generateFileName(fileName);
 
@@ -78,7 +79,7 @@ export default function FileCrudFieldComponent<T>({
           console.log({ filePath });
           const finalPath = await provider.upload(
             { ...(file as any), originFileObj: file },
-            filePath,
+            filePath
           );
 
           onUploading?.(false);
@@ -91,24 +92,26 @@ export default function FileCrudFieldComponent<T>({
           setIsUploading(false);
         }
       },
-      [form, name, onUploading, provider],
+      [form, name, onUploading, provider]
     );
 
   const [fileList, setFileList] = useState<any>([]);
   useEffect(() => {
     if (!isUpload && fieldValue) {
       Promise.all(
-        (Array.isArray(fieldValue) ? fieldValue : [fieldValue]).map(async (e) => {
-          const mimeType = mime.getType(e);
-          const fileName = e.split('/').pop();
-          const url = await provider.getRealUrl(e);
-          return {
-            uid: e,
-            url,
-            type: mimeType,
-            name: fileName,
-          };
-        }),
+        (Array.isArray(fieldValue) ? fieldValue : [fieldValue]).map(
+          async (e) => {
+            const mimeType = mime.getType(e);
+            const fileName = e.split("/").pop();
+            const url = await provider.getRealUrl(e);
+            return {
+              uid: e,
+              url,
+              type: mimeType,
+              name: fileName,
+            };
+          }
+        )
       ).then((value) => {
         return setFileList(() => {
           const list = value.map(({ url, type, uid, name }) => {
@@ -129,7 +132,7 @@ export default function FileCrudFieldComponent<T>({
       onRemoved?.();
       if (file) form.setFieldsValue({ [name as any]: null });
     },
-    [form, name, onRemoved, provider],
+    [form, name, onRemoved, provider]
   );
 
   return (
@@ -138,13 +141,16 @@ export default function FileCrudFieldComponent<T>({
       required={required}
       name={name as any}
       className={fieldClassName}
-      rules={[...(required ? ValidationUtil.required(label) : []), ...(rules ?? [])]}
+      rules={[
+        ...(required ? ValidationUtil.required(label) : []),
+        ...(rules ?? []),
+      ]}
     >
       <input hidden />
       <Upload
         {...props}
         fileList={fileList}
-        className={(fileList?.length ?? 0) >= maxCount ? 'hide-upload' : ''}
+        className={(fileList?.length ?? 0) >= maxCount ? "hide-upload" : ""}
         maxCount={maxCount}
         customRequest={customRequest}
         onRemove={onRemove}
@@ -152,7 +158,7 @@ export default function FileCrudFieldComponent<T>({
         onChange={({ fileList }) => {
           setFileList(fileList);
         }}
-        style={block ? { width: '100%' } : undefined}
+        style={block ? { width: "100%" } : undefined}
       >
         <ButtonComponent loading={isUploading}>Upload File</ButtonComponent>
       </Upload>
@@ -175,7 +181,7 @@ export const FileCrudCellValue: FC<{
         setUrl({
           mimeType: mime.getType(value),
           url: e,
-          fileName: value.split('/').pop() ?? value,
+          fileName: value.split("/").pop() ?? value,
         });
       });
   }, [provider, value]);
@@ -183,7 +189,11 @@ export const FileCrudCellValue: FC<{
     return <></>;
   }
   return (
-    <FileCellValue fileName={url.fileName} url={url?.url} mimeType={url?.mimeType} />
+    <FileCellValue
+      fileName={url.fileName}
+      url={url?.url}
+      mimeType={url?.mimeType}
+    />
   );
 };
 
@@ -191,38 +201,41 @@ export const FileCellValue: FC<{
   url: string;
   mimeType?: string | null;
   fileName: string;
-}> = ({ url, mimeType = '', fileName }) => {
+}> = ({ url, mimeType = "", fileName }) => {
   const type = useMemo(() => {
-    if (mimeType?.includes('image')) {
-      return 'image';
-    } else if (mimeType?.includes('pdf')) {
-      return 'pdf';
-    } else if (mimeType?.includes('word')) {
-      return 'word';
-    } else if (mimeType?.includes('text')) {
-      return 'text';
-    } else if (mimeType?.includes('presentation')) {
-      return 'presentation';
-    } else if (mimeType?.includes('excel') || mimeType?.includes('spreadsheet')) {
-      return 'excel';
+    if (mimeType?.includes("image")) {
+      return "image";
+    } else if (mimeType?.includes("pdf")) {
+      return "pdf";
+    } else if (mimeType?.includes("word")) {
+      return "word";
+    } else if (mimeType?.includes("text")) {
+      return "text";
+    } else if (mimeType?.includes("presentation")) {
+      return "presentation";
+    } else if (
+      mimeType?.includes("excel") ||
+      mimeType?.includes("spreadsheet")
+    ) {
+      return "excel";
     } else {
-      return 'file';
+      return "file";
     }
   }, [mimeType]);
 
   const icon = useMemo(() => {
     switch (type) {
-      case 'image':
+      case "image":
         return <FileImageOutlined />;
-      case 'pdf':
+      case "pdf":
         return <FilePdfOutlined />;
-      case 'word':
+      case "word":
         return <FileWordOutlined />;
-      case 'text':
+      case "text":
         return <FileTextOutlined />;
-      case 'excel':
+      case "excel":
         return <FileExcelOutlined />;
-      case 'presentation':
+      case "presentation":
         return <FilePptOutlined />;
       default:
         return <FileOutlined />;
@@ -231,9 +244,9 @@ export const FileCellValue: FC<{
 
   const [openModal, setOpenModal] = useState(false);
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
 
-  if (type !== 'file' && type !== 'text') {
+  if (type !== "file" && type !== "text") {
     return (
       <>
         <Modal
@@ -241,8 +254,8 @@ export const FileCellValue: FC<{
           title={fileName}
           onCancel={() => setOpenModal(false)}
           footer={<></>}
-          width={'100%'}
-          style={{ top: '8px', minHeight: '700px' }}
+          width={"100%"}
+          style={{ top: "8px", minHeight: "700px" }}
           destroyOnClose
         >
           <VerticalSpace>
@@ -251,26 +264,29 @@ export const FileCellValue: FC<{
               icon={<ExportOutlined />}
               target="_blank"
               href={url}
-              style={{ textDecoration: 'none' }}
+              style={{ textDecoration: "none" }}
             >
-              {t('str.openInNewTab')}
+              {t("str.openInNewTab")}
             </ButtonComponent>
-            {type === 'image' ? (
-              <img src={url} alt={fileName} style={{ width: '100%' }} />
-            ) : type === 'pdf' ? (
+            {type === "image" ? (
+              <img src={url} alt={fileName} style={{ width: "100%" }} />
+            ) : type === "pdf" ? (
               <iframe title={fileName} src={url} width="100%" height="700px">
-                This browser does not support PDFs. Please download the PDF to view it:
+                This browser does not support PDFs. Please download the PDF to
+                view it:
                 <a href={url}>Download PDF</a>.
               </iframe>
             ) : (
               <iframe
                 title={fileName}
-                src={`https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(url)}`}
+                src={`https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(
+                  url
+                )}`}
                 width="100%"
                 height="700px"
               >
-                This browser does not support open {type.toUpperCase()}. Please download
-                the
+                This browser does not support open {type.toUpperCase()}. Please
+                download the
                 {type.toUpperCase()} to view it:
                 <a href={url}>Download {type.toUpperCase()}</a>.
               </iframe>

@@ -3,11 +3,10 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import { Form, Select } from 'antd';
-import { CrudFieldGrid } from 'components/crud/CrudComponent';
-import React, { FC, useEffect, useState } from 'react';
+import { Form, Select } from "antd";
+import React, { FC, useEffect, useState } from "react";
 
-import SelectComponent from '../select/SelectComponent';
+import SelectComponent from "../select/SelectComponent";
 
 export interface ReportSelectFieldItems {
   id: any;
@@ -17,7 +16,7 @@ export interface ReportSelectFieldItems {
 }
 
 export const SelectFieldInReport: FC<{
-  mode?: 'multiple' | 'tags' | undefined;
+  mode?: "multiple" | "tags" | undefined;
   name: string;
   label: string;
   className?: string;
@@ -31,7 +30,7 @@ export const SelectFieldInReport: FC<{
     if (items && first) {
       const fields = items.filter((e) => e.alreadySelected).map((e) => e.id);
       form?.setFieldsValue({
-        [name]: mode === 'multiple' ? fields : fields?.[0],
+        [name]: mode === "multiple" ? fields : fields?.[0],
       });
       setFirst(false);
     }

@@ -21,7 +21,7 @@ export type TableComponentColumnProp<T> = {
 }[] &
   ColumnsType<T>;
 
-interface TableComponentProps<T> extends TableProps<T> {
+export interface TableComponentProps<T> extends TableProps<T> {
   minusHeight?: number;
   count?: number;
   dataSource?: T[];

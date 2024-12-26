@@ -6,6 +6,7 @@ import { ColorPicker, Form, Radio, Select } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { useTranslation } from "react-i18next";
+import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 
 import {
   CheckboxBasedFieldProps,
@@ -21,14 +22,16 @@ import {
 } from "./CrudComponent";
 import FileCrudFieldComponent, { FileCrudField } from "./FileCrudField";
 import ImageCrudFieldComponent, { ImageCrudField } from "./ImageCrudField";
-import TextField from "components/common/text-field/TextField";
-import NumberTextField from "components/common/text-field/NumberField";
-import CheckBoxComponent from "components/common/check-box/CheckBox";
-import DatePickerComponent from "components/common/DatePicker/DatePicker";
-import TimePickerComponent from "components/common/DatePicker/TimePicker";
-import SelectComponent from "components/common/select/SelectComponent";
-import TextAreaComponent from "components/common/text-field/TextArea";
-import TooltipComponent from "components/common/tooltip/TooltipComponent";
+import {
+  TextField,
+  NumberTextField,
+  CheckBoxComponent,
+  DatePickerComponent,
+  TimePickerComponent,
+  SelectComponent,
+  TextAreaComponent,
+  TooltipComponent,
+} from "components/common";
 
 export default function CrudField<T>(props0: CrudFieldProps<T>) {
   const {
@@ -60,7 +63,7 @@ export default function CrudField<T>(props0: CrudFieldProps<T>) {
     }
   }, [form, props, type, props?.updatingValue]);
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
   if (readonly || hidden) return <></>;
   if (customFormFieldRender) {
     return customFormFieldRender(form, props0);

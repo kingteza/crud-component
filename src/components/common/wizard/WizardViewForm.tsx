@@ -3,9 +3,8 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import { Steps } from 'antd';
+import { Steps } from "antd";
 import React, {
-  FC,
   forwardRef,
   ReactElement,
   useCallback,
@@ -13,9 +12,9 @@ import React, {
   useImperativeHandle,
   useMemo,
   useState,
-} from 'react';
+} from "react";
 
-import Hider from '../appearance/Hider';
+import Hider from "../appearance/Hider";
 
 interface WizardViewFormProps {
   pages: {
@@ -28,13 +27,13 @@ interface WizardViewFormProps {
         backward: () => void;
       },
       formSubmissionData: any[],
-      isActive: boolean,
+      isActive: boolean
     ) => ReactElement;
   }[];
-  labelPlacement?: 'vertical' | 'horizontal';
+  labelPlacement?: "vertical" | "horizontal";
   initPosition?: number;
   onSubmit?: (val: (any | undefined)[], combinedValue: any) => void;
-  type?: 'default' | 'navigation' | 'inline';
+  type?: "default" | "navigation" | "inline";
   className?: string;
   progressDot?: boolean;
   pageStyle?: React.CSSProperties;
@@ -48,12 +47,23 @@ export interface WizardViewFormRef {
 
 const WizardViewForm = forwardRef<WizardViewFormRef, WizardViewFormProps>(
   (
-    { pages, onSubmit, initPosition = 0, progressDot, type, labelPlacement, className, pageStyle },
-    ref,
+    {
+      pages,
+      onSubmit,
+      initPosition = 0,
+      progressDot,
+      type,
+      labelPlacement,
+      className,
+      pageStyle,
+    },
+    ref
   ) => {
     const [current, setCurrent] = useState(0);
 
-    const [formSubmissions, setFormSubmissions] = useState<(any | undefined)[]>([]);
+    const [formSubmissions, setFormSubmissions] = useState<(any | undefined)[]>(
+      []
+    );
 
     useEffect(() => {
       setCurrent(initPosition);
@@ -64,7 +74,7 @@ const WizardViewForm = forwardRef<WizardViewFormRef, WizardViewFormProps>(
       () => ({
         gotTo: (index: number) => setCurrent(index),
       }),
-      [],
+      []
     );
 
     const forward = useCallback(
@@ -76,7 +86,7 @@ const WizardViewForm = forwardRef<WizardViewFormRef, WizardViewFormProps>(
         }
         if (!isRetry) setCurrent(current + 1);
         if (submit && onSubmit) {
-          let value = {} as any;
+          const value = {} as any;
           for (const values of newS) {
             for (const key in values) {
               value[key] = values[key];
@@ -85,7 +95,7 @@ const WizardViewForm = forwardRef<WizardViewFormRef, WizardViewFormProps>(
           onSubmit(newS, value);
         }
       },
-      [current, formSubmissions, onSubmit],
+      [current, formSubmissions, onSubmit]
     );
 
     const backward = useCallback(() => {
@@ -96,15 +106,15 @@ const WizardViewForm = forwardRef<WizardViewFormRef, WizardViewFormProps>(
     }, [current, formSubmissions]);
 
     const components = useMemo(() => {
-      let steps: ReactElement[] = [];
-      let _pages: ReactElement[] = [];
+      const steps: ReactElement[] = [];
+      const _pages: ReactElement[] = [];
       const list = pages.filter((e) => !e.hidden);
       for (let i = 0; i < list.length; i++) {
         const p = list[i];
         _pages.push(
           <Hider hide={current !== i} key={`${p.title}${i}`}>
             {p.component({ forward, backward }, formSubmissions, current === i)}
-          </Hider>,
+          </Hider>
         );
         steps.push(<Step icon={p.icon} title={p.title} key={p.title} />);
       }
@@ -119,7 +129,7 @@ const WizardViewForm = forwardRef<WizardViewFormRef, WizardViewFormProps>(
         <Steps
           labelPlacement={labelPlacement}
           progressDot={progressDot}
-          className={[className, 'pb-3'].join(' ')}
+          className={[className, "pb-3"].join(" ")}
           current={current}
           type={type}
         >
@@ -128,7 +138,7 @@ const WizardViewForm = forwardRef<WizardViewFormRef, WizardViewFormProps>(
         <div style={pageStyle}>{components._pages}</div>
       </>
     );
-  },
+  }
 );
 
 export default WizardViewForm;

@@ -3,16 +3,15 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import { LeftOutlined, RightOutlined, SaveOutlined } from '@ant-design/icons';
-import { Col, Divider, Form, Row } from 'antd';
-import { FormInstance } from 'antd/lib';
-import React, { FC, useEffect, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { LeftOutlined, RightOutlined, SaveOutlined } from "@ant-design/icons";
+import { Col, Divider, Form, Row } from "antd";
+import React, { useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 
-import { CrudFieldProps, CrudPurpose, CrudWizardProp } from './CrudComponent';
-import { CrudFormFields } from './CrudForm';
-import WizardViewForm from 'components/common/wizard/WizardViewForm';
-import ButtonComponent from 'components/common/button/Button';
+import { CrudFieldProps, CrudPurpose, CrudWizardProp } from "./CrudComponent";
+import { CrudFormFields } from "./CrudForm";
+import { ButtonComponent, WizardViewForm } from "components/common";
 
 export interface CrudFormWizardProps<T> {
   onDeleteFile?: (e) => void;
@@ -37,12 +36,13 @@ function CrudFormWizard<T>({
   onSave,
   submitting,
 }: CrudFormWizardProps<T>) {
-  const { t } = useTranslation();
 
   const wizard0 = useMemo(() => {
     return wizard.map((e) => {
       let hidden = true;
-      const fieldThatShouldShowing = fields.filter((x) => e.fields.includes(x.name as any));
+      const fieldThatShouldShowing = fields.filter((x) =>
+        e.fields.includes(x.name as any)
+      );
       fieldThatShouldShowing.forEach((x) => (hidden &&= x.hidden ?? false));
       return {
         ...e,
@@ -51,7 +51,10 @@ function CrudFormWizard<T>({
       };
     });
   }, [fields, wizard]);
-  const filteredWizard = useMemo(() => wizard0.filter((e) => !e.hidden), [wizard0]);
+  const filteredWizard = useMemo(
+    () => wizard0.filter((e) => !e.hidden),
+    [wizard0]
+  );
   return (
     <>
       <WizardViewForm
@@ -65,7 +68,7 @@ function CrudFormWizard<T>({
             title,
             icon,
             hidden,
-            component: (props, isActive) => {
+            component: (props) => {
               return (
                 <SubForm<T>
                   fields={fieldThatShouldShowing}
@@ -82,7 +85,7 @@ function CrudFormWizard<T>({
                 />
               );
             },
-          }),
+          })
         )}
       />
     </>
@@ -102,22 +105,22 @@ function SubForm<T>({
   backward,
   submitting,
   updatingValue,
-}: Omit<CrudFormWizardProps<T>, 'form' | 'onSave'> & {
+}: Omit<CrudFormWizardProps<T>, "form" | "onSave"> & {
   i: number;
   forward: (
     value?: any,
     submit?: boolean | undefined,
-    isRetry?: boolean | undefined,
+    isRetry?: boolean | undefined
   ) => void;
   backward: () => void;
 }) {
   const thisWizard = wizard[i];
   //   const fields0 = fields.filter((e) => thisWizard.fields.includes(e.name));
-  const { t } = useTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (updatingValue && (purpose === 'update' || purpose === 'clone')) {
+    if (updatingValue && (purpose === "update" || purpose === "clone")) {
       const obj = {};
       for (const key of fields) {
         obj[key.name as any] = updatingValue[key.name as any];
@@ -151,27 +154,33 @@ function SubForm<T>({
               size="large"
               onClick={() => backward()}
             >
-              {t('str.back')}
+              {t("str.back")}
             </ButtonComponent>
           </Col>
         )}
         <Col md={i > 0 ? 12 : 24}>
           <ButtonComponent
             block
-            icon={wizard.length - 1 === i ? <SaveOutlined /> : <RightOutlined />}
+            icon={
+              wizard.length - 1 === i ? <SaveOutlined /> : <RightOutlined />
+            }
             htmlType="submit"
             type="primary"
             loading={submitting}
             size="large"
             onClick={() => {
               form.validateFields().then((values) => {
-                forward(values, wizard.length - 1 === i, wizard.length - 1 === i);
+                forward(
+                  values,
+                  wizard.length - 1 === i,
+                  wizard.length - 1 === i
+                );
               });
             }}
           >
             {wizard.length - 1 === i
-              ? t('str.' + (purpose === 'update' ? 'update' : 'save'))
-              : t('str.next')}
+              ? t("str." + (purpose === "update" ? "update" : "save"))
+              : t("str.next")}
           </ButtonComponent>
         </Col>
       </Row>

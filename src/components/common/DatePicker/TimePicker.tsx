@@ -3,12 +3,12 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import { Form, TimePicker } from 'antd';
-import { FormItemProps } from 'antd/lib/form';
-import { translations } from 'config/localization/translations';
-import dayjs, { Dayjs } from 'dayjs';
-import React, { FC, useCallback, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Form, TimePicker } from "antd";
+import { FormItemProps } from "antd/lib/form";
+import dayjs, { Dayjs } from "dayjs";
+import React, { FC, useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 
 export type DateRange = [Dayjs | null, Dayjs | null];
 export interface TimePickerComponentProps extends FormItemProps<any> {
@@ -60,17 +60,17 @@ const TimePickerComponent: FC<TimeRangePickerProps | TimePickerProps> = ({
   defaultValue,
   value,
   format,
-  autoComplete = 'off',
+  autoComplete = "off",
   renderExtraFooter,
   ...props
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
 
   const placeHolder0 = useMemo(
-    () => (placeholder ? placeholder : range ? ['From', 'To'] : 'Select time'),
-    [placeholder, range],
+    () => (placeholder ? placeholder : range ? ["From", "To"] : "Select time"),
+    [placeholder, range]
   );
-  console.log(placeHolder0)
+  console.log(placeHolder0);
   const Component = !range ? TimePicker : TimePicker.RangePicker;
 
   const disabledDate = useCallback(
@@ -85,7 +85,7 @@ const TimePickerComponent: FC<TimeRangePickerProps | TimePickerProps> = ({
       const con3 = disableCurrent && current < today && today < current;
       return con1 || con2 || con3;
     },
-    [disableCurrent, disabledFuture, disabledPast], // Dependencies for useCallback
+    [disableCurrent, disabledFuture, disabledPast] // Dependencies for useCallback
   );
 
   return (
@@ -95,8 +95,8 @@ const TimePickerComponent: FC<TimeRangePickerProps | TimePickerProps> = ({
       rules={[
         {
           required,
-          message: `${label ?? placeholder ?? ''} ${t(
-            translations.err.validation.required,
+          message: `${label ?? placeholder ?? ""} ${t(
+            "err.validation.required"
           )}`,
         },
         ...rules,

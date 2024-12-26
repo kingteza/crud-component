@@ -7,7 +7,6 @@ import { EditOutlined } from '@ant-design/icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { translations } from '../../../config/localization/translations';
 import ButtonComponent from './Button';
 
 interface Props<T> {
@@ -16,10 +15,10 @@ interface Props<T> {
 }
 
 function UpdateButtonTable<T>({ value, onClick }: Props<T>) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
   return (
     <ButtonComponent
-      tooltip={t(translations.str.update)}
+      tooltip={t("str.update")}
       type="link"
       onClick={() => onClick(value)}
       icon={<EditOutlined />}

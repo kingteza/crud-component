@@ -7,7 +7,8 @@ import { CopyOutlined } from '@ant-design/icons';
 import React from 'react';
  
 import ButtonComponent from './Button';
-import { useLibTranslation } from 'i18n/hooks/useLibTranslation';
+import { useTranslation } from 'react-i18next';
+import { TRANSLATION_NAMESPACE } from 'locale/hooks/translation-constants';
 
 interface Props<T> {
   value: T;
@@ -15,7 +16,7 @@ interface Props<T> {
 }
 
 function CloneButtonTable<T>({ value, onClick }: Props<T>) {
-  const { t } = useLibTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
   return (
     <ButtonComponent
       type="link"

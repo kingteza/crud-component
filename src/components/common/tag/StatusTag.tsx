@@ -24,7 +24,7 @@ const StatusTag: FC<StatusTagProps> = ({
   value,
 }) => {
   const val = colorFunction?.(value);
-  const { t } = useTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
   const Component = Tag;
   return (
     <Component

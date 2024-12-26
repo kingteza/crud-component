@@ -2,12 +2,14 @@
  Copyright (c) 2020-2021 KINGTEZA and/or its affiliates. All rights reserved.
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
-import { Button, ButtonProps, Tooltip } from 'antd';
-import React, { useCallback, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
-import { useLibTranslation } from '../../i18n/hooks/useLibTranslation';
+import { Button, ButtonProps, Tooltip } from "antd";
+import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
+import React, { useCallback, useContext, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { UNSAFE_NavigationContext, useNavigate } from "react-router-dom";
+import './style.css';
 
-interface ButtonComponentProps extends ButtonProps {
+export interface ButtonComponentProps extends ButtonProps {
   to?: string | number;
   tooltip?: string | undefined;
   ref?: any;
@@ -21,13 +23,22 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
   ref,
   ...props
 }) => {
-  const { t } = useLibTranslation();
-  const navigate = useNavigate();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const navigation = useContext(UNSAFE_NavigationContext);
+  
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const navigate = navigation ? useNavigate?.() : undefined;
 
   const btn = useMemo(
     () => (
       <Button
-        onClick={onClick ? onClick : to ? () => navigate(to as string) : undefined}
+        onClick={
+          onClick 
+            ? onClick 
+            : (to && navigate) 
+              ? () => navigate(to as any) 
+              : undefined
+        }
         className={className}
         {...props}
       >
@@ -36,9 +47,9 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
     ),
     [className, navigate, onClick, props, t, to],
   );
+
   return tooltip ? <Tooltip title={tooltip}>{btn}</Tooltip> : btn;
 };
-
 
 const Async: React.FC<ButtonComponentProps> = ({
   className,
@@ -60,18 +71,20 @@ const Async: React.FC<ButtonComponentProps> = ({
         setLoading(false);
       }
     },
-    [onClick],
+    [onClick]
   );
   const btn = useMemo(
     () => (
       <Button
         loading={loading || props.loading}
-        onClick={onClick ? _onClick : to ? () => navigate(to as any) : undefined}
+        onClick={
+          onClick ? _onClick : to ? () => navigate(to as any) : undefined
+        }
         className={className}
         {...props}
       />
     ),
-    [_onClick, className, loading, navigate, onClick, props, to],
+    [_onClick, className, loading, navigate, onClick, props, to]
   );
   return tooltip ? <Tooltip title={tooltip}>{btn}</Tooltip> : btn;
 };

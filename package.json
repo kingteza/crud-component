@@ -1,6 +1,6 @@
 {
-  "name": "crud-component",
-  "private": true,
+  "name": "@kingteza/crud-component",
+  "private": false,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -9,16 +9,43 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./common": {
+      "import": "./dist/common/index.js",
+      "require": "./dist/common/index.cjs",
+      "types": "./dist/common/index.d.ts"
+    },
+    "./util": {
+      "import": "./dist/util/index.js",
+      "require": "./dist/util/index.cjs",
+      "types": "./dist/util/index.d.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
+    "@ant-design/icons": "^5.5.2",
     "antd": "^5.22.6",
+    "bootstrap-css-only": "^4.4.1",
+    "browser-image-compression": "^2.0.2",
     "file-saver": "^2.0.5",
     "mime": "^4.0.6",
     "papaparse": "^5.4.1",
     "path-browserify": "^1.0.1",
     "react": "^18.3.1",
+    "react-cropper": "^2.3.3",
     "react-dom": "^18.3.1",
     "react-highlight-words": "^0.20.0",
+    "react-responsive": "^10.0.0",
     "react-router": "^7.1.1",
+    "react-router-dom": "^7.1.1",
+    "react-show-more-text": "^1.7.1",
     "uuid": "^11.0.3"
   },
   "devDependencies": {
@@ -28,6 +55,7 @@
     "@types/path-browserify": "^1.0.3",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "@types/react-show-more-text": "^1.4.5",
     "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.17.0",
@@ -40,7 +68,9 @@
     "react-i18next": "^15.2.0",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
-    "vite": "^6.0.5"
+    "vite": "^6.0.5",
+    "vite-plugin-dts": "^4.4.0",
+    "vite-tsconfig-paths": "^5.1.4"
   },
   "peerDependencies": {
     "i18next": ">=21.0.0",

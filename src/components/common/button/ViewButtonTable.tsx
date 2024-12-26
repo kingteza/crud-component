@@ -7,7 +7,6 @@ import { EyeOutlined } from '@ant-design/icons';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { translations } from '../../../config/localization/translations';
 import ButtonComponent from './Button';
 
 interface Props<T> {
@@ -16,13 +15,13 @@ interface Props<T> {
 }
 
 function ViewButtonTable<T>({ value, onClick }: Props<T>) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(TRANSLATION_NAMESPACE);
   return (
     <ButtonComponent
       type="link"
       onClick={() => onClick(value)}
       icon={<EyeOutlined></EyeOutlined>}
-      tooltip={t(translations.str.view)}
+      tooltip={t("str.view")}
     />
   );
 }

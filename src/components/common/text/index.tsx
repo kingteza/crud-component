@@ -4,5 +4,6 @@
 ***************************************************************************** */
 
 import { Typography } from 'antd';
-
-export const { Text } = Typography;
+import { Title } from './title';
+const { Text } = Typography;
+export { Title, Text };
