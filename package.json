@@ -1,9 +1,17 @@
 {
   "name": "@kingteza/crud-component",
   "private": false,
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "React CRUD component library with Ant Design",
-  "keywords": ["react", "crud", "antd", "typescript"],
+  "keywords": [
+    "react",
+    "crud",
+    "antd",
+    "typescript",
+    "types",
+    "typings"
+  ],
+  "types": "./dist/index.d.ts",
   "author": "Kingteza",
   "license": "MIT",
   "repository": {
@@ -15,9 +23,10 @@
     "README.md"
   ],
   "type": "module",
+  "sideEffects": false,
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
