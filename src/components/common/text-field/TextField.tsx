@@ -4,7 +4,7 @@
 ***************************************************************************** */
 
 import { LoadingOutlined } from "@ant-design/icons";
-import { Form, FormItemProps, Input, Tooltip } from "antd";
+import { Form, FormItemProps, Input } from "antd";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import { FormInstance } from "antd/lib/form/Form";
 import React, { useMemo } from "react";

@@ -4,6 +4,7 @@
 ***************************************************************************** */
 
 import { Tag } from 'antd';
+import { TRANSLATION_NAMESPACE } from 'locale/hooks/translation-constants';
 import React, { FC, ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -3,7 +3,7 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import { Form, InputNumber, Tooltip } from "antd";
+import { Form, InputNumber } from "antd";
 import React, { forwardRef, ReactNode, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
@@ -21,12 +21,6 @@ interface NumberTextFieldProps extends TextFieldProps {
   min?: number | null;
 }
 
-function isNumeric(str: any) {
-  if (typeof str !== "string") return false; // we only process strings!
-  return (
-    !Number.isNaN(str) && !Number.isNaN(parseFloat(str)) // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-  ); // ...and ensure strings of whitespace fail
-}
 
 const NumberTextField = forwardRef<HTMLInputElement, NumberTextFieldProps>(
   function Input(

@@ -3,11 +3,12 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import { Result, Skeleton, Spin } from 'antd';
+import { Result, Skeleton } from 'antd';
 import React, { FC, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ButtonComponent from '../button/Button';
+import { TRANSLATION_NAMESPACE } from 'locale/hooks/translation-constants';
 
 const LoadingIndicator: FC<PropsWithChildren<{
   loading: boolean;

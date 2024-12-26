@@ -27,7 +27,7 @@ class ImageUtl {
       const img = new Image();
       img.src = data.data;
       const rst = await new Promise<{ width: number; height: number }>(
-        (resolve, reject) => {
+        (resolve) => {
           img.onload = function () {
             resolve({
               height: img.height,

@@ -1,0 +1,22 @@
+# Source
+src/
+tests/
+examples/
+
+# Config files
+.eslintrc
+.prettierrc
+tsconfig.json
+tsconfig.*.json
+vite.config.ts
+
+# Development
+node_modules/
+.vscode/
+.idea/
+.git/
+.gitignore
+
+# Build artifacts
+coverage/
+*.log 

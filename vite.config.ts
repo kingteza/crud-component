@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import dts from "vite-plugin-dts";
-import { resolve } from "path-browserify";
+import { resolve } from "path";
 
 // https://vite.dev/config/
 export default defineConfig({

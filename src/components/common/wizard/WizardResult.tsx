@@ -4,12 +4,13 @@
 ***************************************************************************** */
 
 import { ArrowLeftOutlined, LoadingOutlined } from '@ant-design/icons';
-import { Result, Spin } from 'antd';
+import { Result } from 'antd';
 import { t } from 'i18next';
 import React, { FC, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ButtonComponent from '../button/Button';
+import { TRANSLATION_NAMESPACE } from 'locale/hooks/translation-constants';
 
 const WizardResult: FC<
   {

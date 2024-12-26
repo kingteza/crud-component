@@ -396,7 +396,7 @@ export const UploadComponent: FC<{
         key={fileList.length}
         fileList={fileList}
         defaultFileList={fileList}
-        onChange={(props) => {
+        onChange={() => {
           // setFileList(props.fileList);
         }}
         className={

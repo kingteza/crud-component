@@ -1,5 +1,3 @@
-import CrudSearchComponent from "./CrudSearchComponent";
-
 export type {
   CheckboxBasedFieldProps,
   ColorPickerFieldProps,

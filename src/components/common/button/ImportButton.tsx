@@ -52,7 +52,7 @@ export function ImportButton({
     [onClick]
   );
   return (
-    <div>
+    <div className={className}>
       <input
         type="file"
         key={key}

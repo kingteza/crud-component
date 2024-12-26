@@ -21,10 +21,11 @@ import React from "react";
 import DateUtil from "util/DateUtil";
 import NumberUtil from "util/NumberUtil";
 
-export function getRendererValueCrudViewer<T>(
-  { type, render, ...props }: CrudFieldProps<T>,
-  plain = false
-) {
+export function getRendererValueCrudViewer<T>({
+  type,
+  render,
+  ...props
+}: CrudFieldProps<T>) {
   return type === "object"
     ? (e, value, i) =>
         typeof render === "function" ? render(e, value, i) : String()
@@ -139,5 +140,5 @@ export function getRendererValueCrudViewer<T>(
       }
     : typeof render === "function"
     ? render
-    : (e, value, i) => e;
+    : (e) => e;
 }

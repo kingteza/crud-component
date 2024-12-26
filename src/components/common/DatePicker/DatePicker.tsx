@@ -12,7 +12,8 @@ import localeData from 'dayjs/plugin/localeData';
 import weekday from 'dayjs/plugin/weekday';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import weekYear from 'dayjs/plugin/weekYear';
-import React, { FC, useCallback, useMemo } from 'react';
+import { TRANSLATION_NAMESPACE } from 'locale/hooks/translation-constants';
+import React, { FC, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 dayjs.extend(customParseFormat);
@@ -81,11 +82,6 @@ const DatePickerComponent: FC<DateRangePickerProps | DatePickerProps> = ({
 }) => {
   const { t } = useTranslation(TRANSLATION_NAMESPACE);
 
-  const today = useMemo(() => {
-    const date = new Date();
-    date.setHours(0, 0, 0, 0);
-    return dayjs(date);
-  }, []);
   const Component: any = !range ? DatePicker : DatePicker.RangePicker;
 
   const disabledDate = useCallback(

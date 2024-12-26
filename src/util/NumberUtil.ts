@@ -9,7 +9,7 @@ const options = {
 const integerOptions = { minimumFractionDigits: 0, maximumFractionDigits: 0 };
 
 function toMoney(num: number = 0) {
-  return Number(+num).toLocaleString('en', options);
+  return Number(+num).toLocaleString("en", options);
 }
 
 function roundNoNan(num: number = 0, pow = 2) {
@@ -20,7 +20,7 @@ function roundNoNan(num: number = 0, pow = 2) {
 function round(num: number = 0, pow = 2) {
   num = +num;
 
-  if (typeof pow !== 'number' || pow < 0) pow = 2;
+  if (typeof pow !== "number" || pow < 0) pow = 2;
   switch (pow) {
     case 0:
       return Math.round(num);
@@ -42,7 +42,7 @@ function round(num: number = 0, pow = 2) {
 function toInt(num: number = 0, formatted = false) {
   const val = Math.floor(num);
   if (!formatted) return val.toString();
-  return val.toLocaleString('en', integerOptions);
+  return val.toLocaleString("en", integerOptions);
 }
 
 function randInt(max = 1000000000) {
@@ -62,14 +62,22 @@ function removeTrailingZeros(num: number = 0): number {
   const str = num.toString();
 
   // If no decimal point, return the original number
-  if (!str.includes('.')) {
+  if (!str.includes(".")) {
     return num;
   }
 
   // Remove trailing zeros and decimal point if all digits after it are zero
-  const trimmed = str.replace(/\.?0+$/, '');
+  const trimmed = str.replace(/\.?0+$/, "");
 
   return Number(trimmed);
 }
 
-export default { toInt, round, toMoney, randInt, withoutNan, removeTrailingZeros };
+export default {
+  toInt,
+  round,
+  toMoney,
+  randInt,
+  withoutNan,
+  removeTrailingZeros,
+  roundNoNan,
+};

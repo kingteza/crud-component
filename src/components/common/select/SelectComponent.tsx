@@ -10,7 +10,6 @@ import {
   Select,
   SelectProps,
   Spin,
-  Tooltip,
 } from "antd";
 import { RefSelectProps } from "antd/lib/select";
 import React, { ReactElement, useCallback } from "react";

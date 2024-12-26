@@ -4,8 +4,6 @@
 ***************************************************************************** */
 
 import dayjs from 'dayjs';
-import localeEn from 'dayjs/locale/en';
-import localeSi from 'dayjs/locale/si';
 import i18next from 'i18next';
 
 // moment.locale('si', {

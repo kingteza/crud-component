@@ -40,7 +40,7 @@ function HideButtonTable<T>({
     set_loading(loading ?? false);
   }, [loading]);
   const _onClick = useCallback(
-    async (e) => {
+    async () => {
       try {
         set_loading(true);
         await onClick(value);

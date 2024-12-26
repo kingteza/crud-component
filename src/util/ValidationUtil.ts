@@ -30,7 +30,7 @@ const percentageValidation = (): Rule[] => {
   return [
     {
       type: 'number',
-      validator(rule, value, callback) {
+      validator(_, value, callback) {
         const val = Number(value);
         if (isNaN(val) && value) {
           callback(t('err.validation.percentage'));

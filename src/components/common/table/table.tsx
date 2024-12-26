@@ -7,9 +7,6 @@ import { Table } from 'antd';
 import { ColumnsType, TableProps } from 'antd/lib/table';
 import React, { useMemo } from 'react';
 
-const PageConstant = {
-  SIZE: 10,
-};
 
 export type TableComponentColumnProp<T> = {
   dataIndex?: keyof T;
