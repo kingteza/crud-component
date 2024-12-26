@@ -18,7 +18,7 @@ import { Form, Modal, Upload, UploadProps } from "antd";
 import { UploadFile } from "antd/lib";
 
 import mime from "mime";
-import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 

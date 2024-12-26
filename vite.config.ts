@@ -1,8 +1,8 @@
-import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import dts from "vite-plugin-dts";
 import { resolve } from "path";
+import { defineConfig } from "vite";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -18,17 +18,25 @@ export default defineConfig({
     rollupOptions: {
       external: ["react", "react-dom", "antd"],
       output: {
-        dir: "dist",
         preserveModules: true,
-        entryFileNames: "[name].js",
       },
     },
   },
+
   plugins: [
     tsconfigPaths(),
     react(),
     dts({
-      insertTypesEntry: true,
+      tsconfigPath: "./tsconfig.app.json",
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+      compilerOptions: {
+        declarationDir: "./dist",
+        declaration: true,
+        emitDeclarationOnly: true,
+      },
+      pathsToAliases: false,
+      copyDtsFiles: true,
     }),
-  ],
+  ] as any,
 });

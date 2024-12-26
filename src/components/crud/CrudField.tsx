@@ -3,7 +3,7 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 import { ColorPicker, Form, Radio, Select } from "antd";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { useTranslation } from "react-i18next";
 import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";

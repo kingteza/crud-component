@@ -3,7 +3,6 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import React from 'react';
 import ReactShowMoreText, { ReactShowMoreTextProps } from 'react-show-more-text';
 import "./style.css";
 

@@ -17,7 +17,7 @@ import {
 } from "components/crud/ImageCrudField";
 import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 import { t } from "i18next";
-import React from "react";
+
 import DateUtil from "util/DateUtil";
 import NumberUtil from "util/NumberUtil";
 

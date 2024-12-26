@@ -5,7 +5,7 @@
 
 import { LeftOutlined, RightOutlined, SaveOutlined } from "@ant-design/icons";
 import { Col, Divider, Form, Row } from "antd";
-import React, { useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 

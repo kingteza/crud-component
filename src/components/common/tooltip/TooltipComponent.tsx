@@ -4,7 +4,7 @@
 ***************************************************************************** */
 
 import { Tooltip } from 'antd';
-import React, { FC, PropsWithChildren, ReactElement } from 'react';
+import { FC, PropsWithChildren, ReactElement } from 'react';
 
 const TooltipComponent: FC<PropsWithChildren<{ title?: ReactElement }>> = ({
   children,

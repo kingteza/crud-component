@@ -4,7 +4,7 @@
 ***************************************************************************** */
 
 import { Form, FormItemProps, Radio } from 'antd';
-import React, { FC, memo, useMemo } from 'react';
+import { FC, memo, useMemo } from 'react';
 
 interface GeneralProps extends FormItemProps {
   values: { key: string | number | undefined; value: string | number }[];

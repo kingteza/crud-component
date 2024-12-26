@@ -5,7 +5,7 @@
 
 import { Checkbox, Switch } from 'antd';
 import { Form, FormItemProps } from 'antd';
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 const FormItem = Form.Item;
 

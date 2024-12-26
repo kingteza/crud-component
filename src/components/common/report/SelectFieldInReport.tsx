@@ -4,7 +4,7 @@
 ***************************************************************************** */
 
 import { Form, Select } from "antd";
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 import SelectComponent from "../select/SelectComponent";
 

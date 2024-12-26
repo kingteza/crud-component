@@ -17,7 +17,6 @@ export {
 } from "./button";
 export { CheckBoxComponent } from "./check-box";
 export { DescList } from "./description";
-export { DescListComponent } from "./description";
 export type { DescPropsNullable } from "./description";
 export { default as VerticalSpace } from "./layout/VerticalSpace";
 export { LoadingIndicator } from "./loading";

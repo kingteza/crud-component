@@ -6,7 +6,7 @@
 import { UpCircleOutlined } from '@ant-design/icons';
 import { Popconfirm } from 'antd';
 import { ButtonType } from 'antd/es/button';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ButtonComponent from './Button';

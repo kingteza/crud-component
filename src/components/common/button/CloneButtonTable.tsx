@@ -4,8 +4,7 @@
 ***************************************************************************** */
 
 import { CopyOutlined } from '@ant-design/icons';
-import React from 'react';
- 
+
 import ButtonComponent from './Button';
 import { useTranslation } from 'react-i18next';
 import { TRANSLATION_NAMESPACE } from 'locale/hooks/translation-constants';

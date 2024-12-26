@@ -7,7 +7,6 @@ export {
   DatePickerComponent,
   DeleteButtonTable,
   DescList,
-  DescListComponent,
   ExportButton,
   HideButtonTable,
   ImagePicker,

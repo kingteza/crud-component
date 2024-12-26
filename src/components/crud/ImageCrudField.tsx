@@ -10,7 +10,7 @@ import { Avatar, Form, Image, Input } from "antd";
 import { UploadListType } from "antd/es/upload/interface";
 import { UploadFile } from "antd/lib";
 import path from "path-browserify";
-import React, { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import NumberUtil from "util/NumberUtil";
 import ValidationUtil from "util/ValidationUtil";
 import { v4 as uuidV4 } from "uuid";

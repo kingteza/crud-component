@@ -1,5 +1,4 @@
 import { setupI18n } from "locale";
-import React from "react";
 import { CrudComponent } from ".";
 
 // Initialize with your custom translations

@@ -6,7 +6,7 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import { ButtonType } from "antd/lib/button";
-import React, { FC } from "react";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
 
 import ButtonComponent from "./Button";

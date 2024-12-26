@@ -3,7 +3,7 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import ValidationUtil from '../../../util/ValidationUtil';
 import TextField, { TextFieldProps } from './TextField';

@@ -4,7 +4,7 @@
 ***************************************************************************** */
 
 import { Form, InputNumber } from "antd";
-import React, { forwardRef, ReactNode, useMemo } from "react";
+import { forwardRef, ReactNode, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 

@@ -12,7 +12,7 @@ import {
   Spin,
 } from "antd";
 import { RefSelectProps } from "antd/lib/select";
-import React, { ReactElement, useCallback } from "react";
+import { ReactElement, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 

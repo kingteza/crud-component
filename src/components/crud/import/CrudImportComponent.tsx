@@ -7,7 +7,7 @@ import { DownloadOutlined, WarningTwoTone } from "@ant-design/icons";
 import Papa from "papaparse";
 import { Modal, Progress, Space, Spin, Tooltip } from "antd";
 import { saveAs } from "file-saver";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 

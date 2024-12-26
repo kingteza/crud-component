@@ -4,7 +4,7 @@
 ***************************************************************************** */
 
 import { Result, Skeleton } from 'antd';
-import React, { FC, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ButtonComponent from '../button/Button';

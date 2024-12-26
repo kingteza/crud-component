@@ -6,7 +6,7 @@
 import { SearchOutlined } from "@ant-design/icons";
 import { Col, Form, Row } from "antd";
 import { ColProps } from "antd/lib";
-import React, { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 import { CrudFieldProps } from "./CrudComponent";
 import CrudField from "./CrudField";

@@ -1,5 +1,5 @@
-import DescList, { DescPropsNullable } from "./DescList";
-import DescListComponent from "./DescList";
+import { DescPropsNullable } from "./DescList";
+import DescList from "./DescList";
 
-export { DescList, DescListComponent };
+export { DescList };
 export type { DescPropsNullable };

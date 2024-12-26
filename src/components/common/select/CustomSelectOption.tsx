@@ -4,7 +4,7 @@
 ***************************************************************************** */
 
 import {List } from 'antd';
-import React, { FC, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren } from 'react';
 
 const Meta = List.Item.Meta;
 const Item = List.Item;
