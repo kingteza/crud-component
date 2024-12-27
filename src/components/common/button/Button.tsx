@@ -4,7 +4,7 @@
 ***************************************************************************** */
 import { Button, ButtonProps, Tooltip } from "antd";
 import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import './style.css';
 import { useNavigate } from "react-router";
