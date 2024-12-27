@@ -1,4 +1,4 @@
-import { App, ColorPickerProps, Form, Modal, Space, Spin } from "antd";
+import { ColorPickerProps, Form, Modal, Space, Spin } from "antd";
 
 import { Color } from "antd/es/color-picker";
 import { Rule } from "antd/es/form";
