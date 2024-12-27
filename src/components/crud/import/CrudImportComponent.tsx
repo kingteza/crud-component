@@ -5,7 +5,7 @@
 
 import { DownloadOutlined, WarningTwoTone } from "@ant-design/icons";
 import Papa from "papaparse";
-import { Modal, Progress, Space, Spin, Tooltip } from "antd";
+import { App, Modal, Progress, Space, Spin, Tooltip } from "antd";
 import { saveAs } from "file-saver";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -148,7 +148,6 @@ function CrudImportComponent<T>({
     },
     [t]
   );
-
   const progressCallback = useCallback(async (progress: number) => {
     setProgress(progress);
   }, []);
@@ -163,16 +162,28 @@ function CrudImportComponent<T>({
       setProgress(0);
     }
   }, [data, importProps, onCloseMethod, progressCallback]);
+
+  const { modal } = App.useApp();
+
   const onclickSubmit = useCallback(async () => {
     if (hasAnyError) {
-      Modal.warn({
-        title: t("str.warning"),
-        content: t("qus.importWithIssues"),
-        okText: t("str.import"),
-        onOk: onImport,
-        okCancel: true,
-        closable: true,
-      });
+      if (modal.warning) {
+        modal.warning({
+          title: t("str.warning"),
+          content: t("qus.importWithIssues"),
+          okText: t("str.import"),
+          onOk: onImport,
+          okCancel: true,
+          closable: true,
+        });
+      } else {
+        console.error(
+          "You must wrap your react app with App component. https://ant.design/components/app"
+        );
+        if (window.confirm(t("qus.importWithIssues"))) {
+          onImport();
+        }
+      }
     } else {
       onImport();
     }

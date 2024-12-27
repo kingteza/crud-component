@@ -6,8 +6,8 @@ import { Button, ButtonProps, Tooltip } from "antd";
 import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 import React, { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import './style.css';
-import { useNavigate } from "react-router";
+import "./style.css";
+import { useNavigate } from "react-router-dom";
 
 export interface ButtonComponentProps extends ButtonProps {
   to?: string | number;
@@ -24,7 +24,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
   ...props
 }) => {
   const { t } = useTranslation(TRANSLATION_NAMESPACE);
-  
+
   let navigate;
   try {
     navigate = useNavigate?.();
@@ -36,11 +36,11 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
     () => (
       <Button
         onClick={
-          onClick 
-            ? onClick 
-            : (to && navigate) 
-              ? () => navigate(to as any) 
-              : undefined
+          onClick
+            ? onClick
+            : to && navigate
+            ? () => navigate(to as any)
+            : undefined
         }
         className={className}
         {...props}
@@ -48,7 +48,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
         {props.children || t(`button.${props.type}`)}
       </Button>
     ),
-    [className, navigate, onClick, props, t, to],
+    [className, navigate, onClick, props, t, to]
   );
 
   return tooltip ? <Tooltip title={tooltip}>{btn}</Tooltip> : btn;
@@ -62,7 +62,12 @@ const Async: React.FC<ButtonComponentProps> = ({
   ref,
   ...props
 }) => {
-  const navigate = useNavigate();
+  let navigate;
+  try {
+    navigate = useNavigate();
+  } catch (error) {
+    console.error(error);
+  }
 
   const [loading, setLoading] = useState(false);
   const _onClick = useCallback(
@@ -81,7 +86,17 @@ const Async: React.FC<ButtonComponentProps> = ({
       <Button
         loading={loading || props.loading}
         onClick={
-          onClick ? _onClick : to ? () => navigate(to as any) : undefined
+          onClick
+            ? _onClick
+            : to
+            ? () => {
+                if (navigate) {
+                  navigate?.(to as any);
+                } else {
+                  window.location.href = to as any;
+                }
+              }
+            : undefined
         }
         className={className}
         {...props}
