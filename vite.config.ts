@@ -7,6 +7,7 @@ import { defineConfig } from "vite";
 // https://vite.dev/config/
 export default defineConfig({
   build: {
+    outDir: "dist",
     lib: {
       entry: {
         index: resolve(__dirname, "src/index.ts"),
@@ -16,16 +17,64 @@ export default defineConfig({
       formats: ["es", "cjs"],
     },
     rollupOptions: {
-      external: ["react", "react-dom", "antd"],
+      external: [
+        "react",
+        "react-dom",
+        "react/jsx-runtime",
+        "antd",
+        "i18next",
+        "react-i18next",
+        "dayjs",
+        "dayjs/plugin/advancedFormat",
+        "dayjs/plugin/customParseFormat",
+        "dayjs/plugin/localeData",
+        "dayjs/plugin/weekday",
+        "dayjs/plugin/weekOfYear",
+        "dayjs/plugin/weekYear",
+        "@ant-design/icons",
+        "react-cropper",
+        "react-highlight-words",
+        "react-responsive",
+        "react-router",
+        "react-router-dom",
+        "react-show-more-text",
+        "uuid",
+        "file-saver",
+        "mime",
+        "papaparse",
+        "path-browserify",
+        "browser-image-compression",
+        /^antd\/.*/,
+        /^@ant-design\/.*/,
+        /^dayjs\/.*/
+      ],
       output: {
         preserveModules: true,
+        preserveModulesRoot: "src",
+        dir: "dist",
+        globals: {
+          react: "React",
+          "react-dom": "ReactDOM",
+          "react/jsx-runtime": "jsx",
+          antd: "antd",
+          dayjs: "dayjs",
+          "dayjs/plugin/advancedFormat": "dayjsAdvancedFormat",
+          "dayjs/plugin/customParseFormat": "dayjsCustomParseFormat",
+          "dayjs/plugin/localeData": "dayjsLocaleData",
+          "dayjs/plugin/weekday": "dayjsWeekday",
+          "dayjs/plugin/weekOfYear": "dayjsWeekOfYear",
+          "dayjs/plugin/weekYear": "dayjsWeekYear",
+          i18next: "i18next",
+          "react-i18next": "reactI18next",
+          "browser-image-compression": "browserImageCompression"
+        },
       },
     },
   },
 
   plugins: [
     tsconfigPaths(),
-    react(),
+    react({}),
     dts({
       tsconfigPath: "./tsconfig.app.json",
       include: ["src/**/*.{ts,tsx}"],
@@ -38,5 +87,5 @@ export default defineConfig({
       pathsToAliases: false,
       copyDtsFiles: true,
     }),
-  ] as any,
+  ],
 });

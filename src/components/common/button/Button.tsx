@@ -6,8 +6,8 @@ import { Button, ButtonProps, Tooltip } from "antd";
 import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 import React, { useCallback, useContext, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { UNSAFE_NavigationContext, useNavigate } from "react-router-dom";
 import './style.css';
+import { useNavigate } from "react-router";
 
 export interface ButtonComponentProps extends ButtonProps {
   to?: string | number;
@@ -24,10 +24,13 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
   ...props
 }) => {
   const { t } = useTranslation(TRANSLATION_NAMESPACE);
-  const navigation = useContext(UNSAFE_NavigationContext);
   
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const navigate = navigation ? useNavigate?.() : undefined;
+  let navigate;
+  try {
+    navigate = useNavigate?.();
+  } catch (error) {
+    console.error(error);
+  }
 
   const btn = useMemo(
     () => (

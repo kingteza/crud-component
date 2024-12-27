@@ -1,7 +1,7 @@
 {
   "name": "@kingteza/crud-component",
   "private": false,
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "React CRUD component library with Ant Design",
   "keywords": [
     "react",
@@ -105,6 +105,8 @@
     "i18next": ">=21.0.0",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
-    "react-i18next": ">=11.0.0"
+    "react-i18next": ">=11.0.0",
+    "react-router": ">=6.0.0",
+    "react-router-dom": ">=6.0.0"
   }
 }
