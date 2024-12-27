@@ -1,7 +1,7 @@
 {
   "name": "@kingteza/crud-component",
   "private": false,
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "React CRUD component library with Ant Design",
   "keywords": [
     "react",
@@ -59,9 +59,9 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.2",
-    "antd": "^5.22.6",
     "bootstrap-css-only": "^4.4.1",
     "browser-image-compression": "^2.0.2",
+    "dayjs": "^1.11.13",
     "file-saver": "^2.0.5",
     "mime": "^4.0.6",
     "papaparse": "^5.4.1",
@@ -71,8 +71,6 @@
     "react-dom": "^18.3.1",
     "react-highlight-words": "^0.20.0",
     "react-responsive": "^10.0.0",
-    "react-router": "^7.1.1",
-    "react-router-dom": "^7.1.1",
     "react-show-more-text": "^1.7.1",
     "uuid": "^11.0.3"
   },
@@ -86,6 +84,7 @@
     "@types/react-show-more-text": "^1.4.5",
     "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "antd": "^5.22.6",
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
@@ -94,6 +93,7 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-i18next": "^15.2.0",
+    "react-router-dom": "^7.0.2",
     "tsup": "^8.3.5",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
@@ -102,12 +102,11 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "peerDependencies": {
-    "antd": ">=5.0.0",
+    "antd": ">=5.22.6",
     "i18next": ">=21.0.0",
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
+    "react": ">=18.3.1",
+    "react-dom": ">=18.3.1",
     "react-i18next": ">=11.0.0",
-    "react-router": ">=6.0.0",
-    "react-router-dom": ">=6.0.0"
+    "react-router-dom": ">=7.0.0"
   }
 }
