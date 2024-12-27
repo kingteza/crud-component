@@ -1,7 +1,7 @@
 {
   "name": "@kingteza/crud-component",
   "private": false,
-  "version": "1.0.23",
+  "version": "1.0.24",
   "description": "React CRUD component library with Ant Design",
   "keywords": [
     "react",
@@ -11,7 +11,7 @@
     "types",
     "typings"
   ],
-  "types": "./dist/index.d.ts",
+  "types": "./index.d.ts",
   "author": "Kingteza",
   "license": "MIT",
   "repository": {
@@ -19,39 +19,39 @@
     "url": "https://github.com/kingteza/crud-component"
   },
   "files": [
-    "dist/*.js",
-    "dist/*.cjs",
-    "dist/*.d.ts",
-    "dist/components/",
-    "dist/util/",
-    "dist/locale/",
-    "README.md"
+    "/*.js",
+    "/*.cjs",
+    "/*.d.ts",
+    "/components/",
+    "/util/",
+    "/locale/",
+    "../README.md"
   ],
   "type": "module",
   "sideEffects": false,
   "scripts": {
     "dev": "vite",
     "clean": "rm -rf dist",
-    "build": "npm run clean && tsc && vite build",
+    "build": "npm run clean && tsc && vite build && cp package.json dist/",
     "prepublishOnly": "npm run clean && npm run build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.cjs"
     },
     "./common": {
-      "types": "./dist/components/common/index.d.ts",
-      "import": "./dist/components/common/index.js",
-      "require": "./dist/components/common/index.cjs"
+      "types": "./components/common/index.d.ts",
+      "import": "./components/common/index.js",
+      "require": "./components/common/index.cjs"
     },
     "./util": {
-      "types": "./dist/util/index.d.ts",
-      "import": "./dist/util/index.js",
-      "require": "./dist/util/index.cjs"
+      "types": "./util/index.d.ts",
+      "import": "./util/index.js",
+      "require": "./util/index.cjs"
     }
   },
   "publishConfig": {
