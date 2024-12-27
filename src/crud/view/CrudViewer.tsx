@@ -16,11 +16,11 @@ import {
   RefreshButton,
   UpdateButtonTable,
   ViewButtonTable,
-} from "components/common";
+} from "common";
 
 import TableComponent, {
   TableComponentColumnProp,
-} from "components/common/table/table";
+} from "common/table/table";
 import React, {
   ReactElement,
   useCallback,

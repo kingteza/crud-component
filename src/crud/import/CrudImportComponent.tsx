@@ -15,7 +15,7 @@ import { CrudFieldProps } from "../CrudComponent";
 import CrudViewer from "../view/CrudViewer";
 import { DialogProps } from "types/DialogComponentProp";
 import DateUtil from "util/DateUtil";
-import { ButtonComponent, ImportButton } from "components/common";
+import { ButtonComponent, ImportButton } from "common";
 
 export interface CrudImportComponentProps<T> {
   fields: CrudFieldProps<T>[];

@@ -11,7 +11,7 @@ import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 
 import { CrudFieldProps, CrudPurpose, CrudWizardProp } from "./CrudComponent";
 import { CrudFormFields } from "./CrudForm";
-import { ButtonComponent, WizardViewForm } from "components/common";
+import { ButtonComponent, WizardViewForm } from "common";
 
 export interface CrudFormWizardProps<T> {
   onDeleteFile?: (e) => void;

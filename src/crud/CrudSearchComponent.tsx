@@ -10,7 +10,7 @@ import { useCallback, useEffect, useMemo } from "react";
 
 import { CrudFieldProps } from "./CrudComponent";
 import CrudField from "./CrudField";
-import { ButtonComponent } from "components/common";
+import { ButtonComponent } from "common";
 
 export type CrudSearchOption<T> = { required?: boolean } & (
   | { type: "text"; name: keyof T }

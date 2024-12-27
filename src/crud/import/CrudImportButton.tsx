@@ -6,7 +6,7 @@ import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 import CrudImportComponent, {
   CrudImportComponentProps,
 } from "./CrudImportComponent";
-import ButtonComponent from "components/common/button/Button";
+import ButtonComponent from "common/button/Button";
 
 function CrudImportButton<T>(props: CrudImportComponentProps<T>) {
   const { t } = useTranslation(TRANSLATION_NAMESPACE);

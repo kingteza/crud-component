@@ -4,7 +4,7 @@
 ***************************************************************************** */
 
 import { Breakpoint } from "antd";
-import { DescList, DescPropsNullable } from "components/common";
+import { DescList, DescPropsNullable } from "common";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";

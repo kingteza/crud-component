@@ -25,8 +25,8 @@ import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 import { InitialCrudField } from "./CrudComponent";
 import { FileDownloadProvider, FileUploadProvider } from "./ImageCrudField";
 import ValidationUtil from "util/ValidationUtil";
-import { ButtonComponent } from "components/common";
-import { VerticalSpace } from "components/common";
+import { ButtonComponent } from "common";
+import { VerticalSpace } from "common";
 
 export interface FileCrudField<T> extends _FileCrudField<T> {
   type: "file";

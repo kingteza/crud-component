@@ -20,7 +20,7 @@ export {
   ImageCrudCellValue,
   ImageCrudField,
   SelectCrudFieldComponent,
-} from "./components/crud";
+} from "./crud";
 
 export type {
   CheckboxBasedFieldProps,
@@ -54,5 +54,5 @@ export type {
   TextAreaBasedFieldProps,
   TextBasedFieldProps,
   TimeBasedFieldProps,
-} from "./components/crud";
+} from "./crud";
 

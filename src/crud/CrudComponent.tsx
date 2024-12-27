@@ -16,8 +16,8 @@ import { ImageCrudField } from "./ImageCrudField";
 import CrudImportButton from "./import/CrudImportButton";
 import { CrudImportProps } from "./import/CrudImportComponent";
 import CrudViewer from "./view/CrudViewer";
-import { NewButton, PrintButton } from "components/common";
-import { SelectTagRenderProps } from "components/common/select/SelectComponent";
+import { NewButton, PrintButton } from "common";
+import { SelectTagRenderProps } from "common/select/SelectComponent";
 
 export type SelectFieldItem = {
   key?: string | number;

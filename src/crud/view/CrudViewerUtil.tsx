@@ -1,6 +1,6 @@
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { Tooltip, Avatar } from "antd";
-import { ShowMore } from "components/common";
+import { ShowMore } from "common";
 import {
   CrudFieldProps,
   DateBasedFieldProps,
@@ -9,12 +9,12 @@ import {
   SelectCrudField,
   TextAreaBasedFieldProps,
   TimeBasedFieldProps,
-} from "components/crud/CrudComponent";
-import { FileCrudCellValue } from "components/crud/FileCrudField";
+} from "crud/CrudComponent";
+import { FileCrudCellValue } from "crud/FileCrudField";
 import {
   ImageCrudCellValue,
   ImageCrudField,
-} from "components/crud/ImageCrudField";
+} from "crud/ImageCrudField";
 import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
 import { t } from "i18next";
 

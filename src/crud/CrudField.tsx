@@ -31,7 +31,7 @@ import {
   SelectComponent,
   TextAreaComponent,
   TooltipComponent,
-} from "components/common";
+} from "common";
 
 export default function CrudField<T>(props0: CrudFieldProps<T>) {
   const {

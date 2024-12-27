@@ -7,7 +7,7 @@ import { Descriptions } from 'antd';
 import { DescriptionsProps } from 'antd/lib/descriptions';
 import React, { FC, useMemo } from 'react';
 
-import NumberUtil from '../../../util/NumberUtil';
+import NumberUtil from '../../util/NumberUtil';
 
 export type DescPropsNullable = {
   label?: string | React.ReactElement;
