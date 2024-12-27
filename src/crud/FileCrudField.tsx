@@ -20,13 +20,13 @@ import { UploadFile } from "antd/lib";
 import mime from "mime";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
+import { TRANSLATION_NAMESPACE } from "../locale/hooks/translation-constants";
 
 import { InitialCrudField } from "./CrudComponent";
 import { FileDownloadProvider, FileUploadProvider } from "./ImageCrudField";
-import ValidationUtil from "util/ValidationUtil";
-import { ButtonComponent } from "common";
-import { VerticalSpace } from "common";
+import ValidationUtil from "../util/ValidationUtil";
+import { ButtonComponent } from "../common";
+import { VerticalSpace } from "../common";
 
 export interface FileCrudField<T> extends _FileCrudField<T> {
   type: "file";

@@ -1,4 +1,4 @@
-import { setupI18n } from "locale";
+import { setupI18n } from "./locale";
 import { CrudComponent } from ".";
 
 // Initialize with your custom translations

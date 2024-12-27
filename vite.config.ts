@@ -46,9 +46,12 @@ export default defineConfig({
         "browser-image-compression",
         /^antd\/.*/,
         /^@ant-design\/.*/,
-        /^dayjs\/.*/
+        /^dayjs\/.*/,
       ],
       output: {
+        entryFileNames: ({ name }) => {
+          return `${name}.[format].js`;
+        },
         preserveModules: true,
         preserveModulesRoot: "src",
         dir: "dist",
@@ -66,7 +69,7 @@ export default defineConfig({
           "dayjs/plugin/weekYear": "dayjsWeekYear",
           i18next: "i18next",
           "react-i18next": "reactI18next",
-          "browser-image-compression": "browserImageCompression"
+          "browser-image-compression": "browserImageCompression",
         },
       },
     },

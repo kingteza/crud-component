@@ -7,7 +7,7 @@ import { Form, FormInstance, FormItemProps, Input } from "antd";
 import { TextAreaProps } from "antd/lib/input";
 import { InputHTMLAttributes } from "react";
 import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
+import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
 
 export interface TextFieldProps extends TextAreaProps, FormItemProps<any> {
   type?: InputHTMLAttributes<HTMLInputElement>;

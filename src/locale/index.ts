@@ -1,4 +1,4 @@
-import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
+import { TRANSLATION_NAMESPACE } from "../locale/hooks/translation-constants";
 import en from "./translations/en";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";

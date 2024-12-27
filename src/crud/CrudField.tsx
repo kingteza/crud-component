@@ -6,7 +6,7 @@ import { ColorPicker, Form, Radio, Select } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
+import { TRANSLATION_NAMESPACE } from "../locale/hooks/translation-constants";
 
 import {
   CheckboxBasedFieldProps,
@@ -31,7 +31,7 @@ import {
   SelectComponent,
   TextAreaComponent,
   TooltipComponent,
-} from "common";
+} from "../common";
 
 export default function CrudField<T>(props0: CrudFieldProps<T>) {
   const {

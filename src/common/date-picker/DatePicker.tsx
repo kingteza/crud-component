@@ -12,7 +12,7 @@ import localeData from 'dayjs/plugin/localeData';
 import weekday from 'dayjs/plugin/weekday';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import weekYear from 'dayjs/plugin/weekYear';
-import { TRANSLATION_NAMESPACE } from 'locale/hooks/translation-constants';
+import { TRANSLATION_NAMESPACE } from '../../locale/hooks/translation-constants';
 import React, { FC, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 

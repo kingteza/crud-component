@@ -6,7 +6,6 @@
     "allowJs": false,
     "skipLibCheck": true,
     "strictNullChecks": true,
-    "baseUrl": "src",
     "esModuleInterop": false,
     "declaration": true,
     "declarationDir": "./dist",
@@ -26,7 +25,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "strictFunctionTypes": true
+    "strictFunctionTypes": true,
+    "baseUrl": "."
   },
   "include": ["src"]
 }

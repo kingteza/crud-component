@@ -4,10 +4,10 @@
 ***************************************************************************** */
 
 import { Breakpoint } from "antd";
-import { DescList, DescPropsNullable } from "common";
+import { DescList, DescPropsNullable } from "../../common";
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
+import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
 
 import { CrudFieldProps } from "../CrudComponent";
 import { getRendererValueCrudViewer } from "./CrudViewerUtil";

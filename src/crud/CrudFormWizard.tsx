@@ -7,11 +7,11 @@ import { LeftOutlined, RightOutlined, SaveOutlined } from "@ant-design/icons";
 import { Col, Divider, Form, Row } from "antd";
 import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
+import { TRANSLATION_NAMESPACE } from "../locale/hooks/translation-constants";
 
 import { CrudFieldProps, CrudPurpose, CrudWizardProp } from "./CrudComponent";
 import { CrudFormFields } from "./CrudForm";
-import { ButtonComponent, WizardViewForm } from "common";
+import { ButtonComponent, WizardViewForm } from "../common";
 
 export interface CrudFormWizardProps<T> {
   onDeleteFile?: (e) => void;

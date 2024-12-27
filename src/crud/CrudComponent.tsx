@@ -6,8 +6,7 @@ import { FormInstance } from "antd/lib";
 import dayjs, { Dayjs } from "dayjs";
 import React, { ReactElement, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
-import IdProps from "types/Id";
+import { TRANSLATION_NAMESPACE } from "../locale/hooks/translation-constants";
 import { CrudForm } from "./CrudForm";
 import CrudFormWizard from "./CrudFormWizard";
 import { CrudSearchComponentProps } from "./CrudSearchComponent";
@@ -16,8 +15,9 @@ import { ImageCrudField } from "./ImageCrudField";
 import CrudImportButton from "./import/CrudImportButton";
 import { CrudImportProps } from "./import/CrudImportComponent";
 import CrudViewer from "./view/CrudViewer";
-import { NewButton, PrintButton } from "common";
-import { SelectTagRenderProps } from "common/select/SelectComponent";
+import { NewButton, PrintButton } from "../common";
+import { SelectTagRenderProps } from "../common/select/SelectComponent";
+import IdProps from "../types/Id";
 
 export type SelectFieldItem = {
   key?: string | number;

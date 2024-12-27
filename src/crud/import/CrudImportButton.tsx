@@ -1,12 +1,12 @@
 import { ImportOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
+import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
 
 import CrudImportComponent, {
   CrudImportComponentProps,
 } from "./CrudImportComponent";
-import ButtonComponent from "common/button/Button";
+import ButtonComponent from "../../common/button/Button";
 
 function CrudImportButton<T>(props: CrudImportComponentProps<T>) {
   const { t } = useTranslation(TRANSLATION_NAMESPACE);

@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-export { DatePickerComponent, TimePickerComponent } from "./DatePicker";
+export { DatePickerComponent, TimePickerComponent } from "./date-picker";
 export {
   ButtonComponent,
   ButtonComponent as Button,

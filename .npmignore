@@ -18,4 +18,8 @@ node_modules/
 
 # Build artifacts
 coverage/
-*.log 
+*.log
+
+App.*
+main.*
+vite.*

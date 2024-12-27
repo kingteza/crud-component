@@ -7,7 +7,7 @@ import { EyeOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 
 import ButtonComponent from './Button';
-import { TRANSLATION_NAMESPACE } from 'locale/hooks/translation-constants';
+import { TRANSLATION_NAMESPACE } from '../../locale/hooks/translation-constants';
 
 interface Props<T> {
   value: T;

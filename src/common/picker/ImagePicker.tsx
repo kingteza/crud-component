@@ -30,10 +30,10 @@ const FormItem = Form.Item;
 import { UploadListType } from "antd/es/upload/interface";
 import { Cropper, ReactCropperElement } from "react-cropper";
 import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
+import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
 
 import ButtonComponent from "../button/Button";
-import ImageUtil from "util/ImageUtil";
+import ImageUtil from "../../util/ImageUtil";
 
 function getBase64(file) {
   return new Promise<string>((resolve, reject) => {

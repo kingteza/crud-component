@@ -7,7 +7,7 @@ import { ReloadOutlined } from "@ant-design/icons";
 import { ButtonType } from "antd/lib/button";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
+import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
 
 import ButtonComponent from "./Button";
 

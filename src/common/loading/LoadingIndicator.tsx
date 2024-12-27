@@ -8,7 +8,7 @@ import { FC, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ButtonComponent from '../button/Button';
-import { TRANSLATION_NAMESPACE } from 'locale/hooks/translation-constants';
+import { TRANSLATION_NAMESPACE } from '../../locale/hooks/translation-constants';
 
 const LoadingIndicator: FC<PropsWithChildren<{
   loading: boolean;

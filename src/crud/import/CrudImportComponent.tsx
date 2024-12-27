@@ -9,13 +9,13 @@ import { App, Modal, Progress, Space, Spin, Tooltip } from "antd";
 import { saveAs } from "file-saver";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
+import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
 
 import { CrudFieldProps } from "../CrudComponent";
 import CrudViewer from "../view/CrudViewer";
-import { DialogProps } from "types/DialogComponentProp";
-import DateUtil from "util/DateUtil";
-import { ButtonComponent, ImportButton } from "common";
+import { DialogProps } from "../../types/DialogComponentProp";
+import DateUtil from "../../util/DateUtil";
+import { ButtonComponent, ImportButton } from "../../common";
 
 export interface CrudImportComponentProps<T> {
   fields: CrudFieldProps<T>[];

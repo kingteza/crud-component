@@ -11,12 +11,12 @@ import { UploadListType } from "antd/es/upload/interface";
 import { UploadFile } from "antd/lib";
 import path from "path-browserify";
 import { FC, useCallback, useEffect, useState } from "react";
-import NumberUtil from "util/NumberUtil";
-import ValidationUtil from "util/ValidationUtil";
+import NumberUtil from "../util/NumberUtil";
+import ValidationUtil from "../util/ValidationUtil";
 import { v4 as uuidV4 } from "uuid";
 
 import { InitialCrudField } from "./CrudComponent";
-import { ImagePicker } from "common";
+import { ImagePicker } from "../common";
 
 export interface _ImageCrudField<T> extends InitialCrudField<T> {
   provider: FileUploadProvider;

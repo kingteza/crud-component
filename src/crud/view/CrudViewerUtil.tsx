@@ -1,6 +1,6 @@
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { Tooltip, Avatar } from "antd";
-import { ShowMore } from "common";
+import { ShowMore } from "../../common";
 import {
   CrudFieldProps,
   DateBasedFieldProps,
@@ -9,17 +9,17 @@ import {
   SelectCrudField,
   TextAreaBasedFieldProps,
   TimeBasedFieldProps,
-} from "crud/CrudComponent";
-import { FileCrudCellValue } from "crud/FileCrudField";
+} from "../CrudComponent";
+import { FileCrudCellValue } from "../FileCrudField";
 import {
   ImageCrudCellValue,
   ImageCrudField,
-} from "crud/ImageCrudField";
-import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
+} from "../ImageCrudField";
+import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
 import { t } from "i18next";
 
-import DateUtil from "util/DateUtil";
-import NumberUtil from "util/NumberUtil";
+import DateUtil from "../../util/DateUtil";
+import NumberUtil from "../../util/NumberUtil";
 
 export function getRendererValueCrudViewer<T>({
   type,

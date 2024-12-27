@@ -14,7 +14,7 @@ import {
 import { RefSelectProps } from "antd/lib/select";
 import { ReactElement, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
+import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
 
 import TooltipComponent from "../tooltip/TooltipComponent";
 

@@ -16,11 +16,11 @@ import {
   RefreshButton,
   UpdateButtonTable,
   ViewButtonTable,
-} from "common";
+} from "../../common";
 
 import TableComponent, {
   TableComponentColumnProp,
-} from "common/table/table";
+} from "../../common/table/table";
 import React, {
   ReactElement,
   useCallback,
@@ -29,8 +29,8 @@ import React, {
   useState,
 } from "react";
 import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "locale/hooks/translation-constants";
-import IdProps from "types/Id";
+import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
+import IdProps from "../../types/Id";
 
 import {
   CrudFieldProps,
