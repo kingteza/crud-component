@@ -1,7 +1,7 @@
 {
   "name": "@kingteza/crud-component",
   "private": false,
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "React CRUD component library with Ant Design",
   "keywords": [
     "react",
@@ -102,6 +102,7 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "peerDependencies": {
+    "antd": ">=5.0.0",
     "i18next": ">=21.0.0",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
