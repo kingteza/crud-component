@@ -1,7 +1,7 @@
 import { TRANSLATION_NAMESPACE } from "../locale/hooks/translation-constants";
 import en from "./translations/en";
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
+import i18n, { i18n as i18nType } from "i18next";
+import { initReactI18next, useTranslation, UseTranslationOptions } from "react-i18next";
 
 export const defaultTranslations = {
   en: {
@@ -14,13 +14,19 @@ export type LibTranslations = typeof en;
 export interface SetupI18nOptions {
   translations?: Record<string, { [TRANSLATION_NAMESPACE]: LibTranslations }>;
   language?: string;
-  i18nInstance?: typeof i18n;
+  i18nInstance?: i18nType;
 }
+export let i18nInstance: i18nType = i18n;
 
 export const setupI18n = (options: SetupI18nOptions = {}) => {
-  const { translations = defaultTranslations, language = "en", i18nInstance } = options;
+  const {
+    translations = defaultTranslations,
+    language = "en",
+    i18nInstance: i18nInstanceToUse,
+  } = options;
   // Use provided i18n instance or create new one
-  const i18nToUse = i18nInstance || i18n;
+  const i18nToUse = i18nInstanceToUse || i18n;
+  i18nInstance = i18nToUse;
   if (!i18nToUse.isInitialized) {
     i18nToUse.use(initReactI18next).init({
       resources: translations,
@@ -34,7 +40,7 @@ export const setupI18n = (options: SetupI18nOptions = {}) => {
   } else {
     Object.entries(translations).forEach(([lang, namespaces]) => {
       Object.entries(namespaces).forEach(([ns, resources]) => {
-        i18n.addResourceBundle(lang, ns, resources, true, true);
+        i18nToUse.addResourceBundle(lang, ns, resources, true, true);
       });
     });
   }
@@ -46,7 +52,7 @@ export const setupI18n = (options: SetupI18nOptions = {}) => {
 export const updateTranslations = (
   language: string,
   translations: Record<string, any>,
-  i18nInstance?: typeof i18n
+  i18nInstance?: i18nType
 ) => {
   const i18nToUse = i18nInstance || i18n;
   i18nToUse.addResourceBundle(
@@ -56,4 +62,15 @@ export const updateTranslations = (
     true,
     true
   );
+};
+
+export const useTranslationLib = (options?: Omit<UseTranslationOptions<string>, "i18n">) => {
+  return useTranslation(TRANSLATION_NAMESPACE, { ...options, i18n: i18nInstance });
+};
+
+export const t = (key: string, options?: any) => {
+  return i18nInstance?.t(key, {
+    ns: TRANSLATION_NAMESPACE,
+    ...options,
+  });
 };

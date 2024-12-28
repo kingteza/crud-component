@@ -7,8 +7,8 @@ import { DownCircleOutlined } from "@ant-design/icons";
 import { Popconfirm } from "antd";
 import { ButtonType } from "antd/es/button";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
+import { useTranslationLib } from "../../locale";
+
 
 import ButtonComponent from "./Button";
 
@@ -33,7 +33,7 @@ function HideButtonTable<T>({
   disabled,
   type = "link",
 }: Props<T>) {
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
   const txt = useMemo(() => text ?? t("str.hide"), [text, t]);
   const [_loading, set_loading] = useState(false);
   useEffect(() => {

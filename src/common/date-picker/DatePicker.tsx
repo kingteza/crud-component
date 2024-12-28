@@ -12,9 +12,8 @@ import localeData from 'dayjs/plugin/localeData';
 import weekday from 'dayjs/plugin/weekday';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import weekYear from 'dayjs/plugin/weekYear';
-import { TRANSLATION_NAMESPACE } from '../../locale/hooks/translation-constants';
+import { useTranslationLib } from '../../locale';
 import React, { FC, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
 
 dayjs.extend(customParseFormat);
 dayjs.extend(advancedFormat);
@@ -80,7 +79,7 @@ const DatePickerComponent: FC<DateRangePickerProps | DatePickerProps> = ({
   renderExtraFooter,
   ...props
 }) => {
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
 
   const Component: any = !range ? DatePicker : DatePicker.RangePicker;
 

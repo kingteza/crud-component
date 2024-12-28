@@ -13,8 +13,8 @@ import {
 } from "antd";
 import { RefSelectProps } from "antd/lib/select";
 import { ReactElement, useCallback } from "react";
-import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
+import { useTranslationLib } from "../../locale";
+
 
 import TooltipComponent from "../tooltip/TooltipComponent";
 
@@ -57,7 +57,7 @@ function SelectComponent<T = any>({
   tagRender,
   ...props
 }: SelectComponentProps<T>) {
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
   const _itemBuilder = useCallback(
     (value) => {
       const key =

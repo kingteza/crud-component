@@ -3,11 +3,10 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import { EyeOutlined } from '@ant-design/icons';
-import { useTranslation } from 'react-i18next';
+import { EyeOutlined } from "@ant-design/icons";
+import { useTranslationLib } from "../../locale";
 
-import ButtonComponent from './Button';
-import { TRANSLATION_NAMESPACE } from '../../locale/hooks/translation-constants';
+import ButtonComponent from "./Button";
 
 interface Props<T> {
   value: T;
@@ -15,7 +14,7 @@ interface Props<T> {
 }
 
 function ViewButtonTable<T>({ value, onClick }: Props<T>) {
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
   return (
     <ButtonComponent
       type="link"

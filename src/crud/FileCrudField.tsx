@@ -19,8 +19,8 @@ import { UploadFile } from "antd/lib";
 
 import mime from "mime";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "../locale/hooks/translation-constants";
+import { useTranslationLib } from "../locale";
+
 
 import { InitialCrudField } from "./CrudComponent";
 import { FileDownloadProvider, FileUploadProvider } from "./ImageCrudField";
@@ -244,7 +244,7 @@ export const FileCellValue: FC<{
 
   const [openModal, setOpenModal] = useState(false);
 
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
 
   if (type !== "file" && type !== "text") {
     return (

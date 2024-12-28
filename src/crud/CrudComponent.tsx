@@ -5,8 +5,7 @@ import { Rule } from "antd/es/form";
 import { FormInstance } from "antd/lib";
 import dayjs, { Dayjs } from "dayjs";
 import React, { ReactElement, useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "../locale/hooks/translation-constants";
+
 import { CrudForm } from "./CrudForm";
 import CrudFormWizard from "./CrudFormWizard";
 import { CrudSearchComponentProps } from "./CrudSearchComponent";
@@ -18,6 +17,7 @@ import CrudViewer from "./view/CrudViewer";
 import { NewButton, PrintButton } from "../common";
 import { SelectTagRenderProps } from "../common/select/SelectComponent";
 import IdProps from "../types/Id";
+import { useTranslationLib } from "../locale";
 
 export type SelectFieldItem = {
   key?: string | number;
@@ -328,7 +328,7 @@ function CrudComponent<T, FormType = T>({
   onClickNew,
   ...props
 }: CrudComponentProps<T, FormType>) {
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
 
   const [openModal, setOpenModal] = useState(false);
 

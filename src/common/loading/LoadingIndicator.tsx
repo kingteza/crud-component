@@ -5,16 +5,15 @@
 
 import { Result, Skeleton } from 'antd';
 import { FC, PropsWithChildren } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslationLib } from '../../locale';
 
 import ButtonComponent from '../button/Button';
-import { TRANSLATION_NAMESPACE } from '../../locale/hooks/translation-constants';
 
 const LoadingIndicator: FC<PropsWithChildren<{
   loading: boolean;
   error?: any;
 }>> = ({ loading, children, error }) => {
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
   return (
     // <Spin spinning={loading} className="h-100">
       <Skeleton loading={loading} paragraph className='h-100'>

@@ -8,8 +8,8 @@ import { Form, FormItemProps, Input } from "antd";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import { FormInstance } from "antd/lib/form/Form";
 import React, { useMemo } from "react";
-import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
+import { useTranslationLib } from "../../locale";
+
 
 import TooltipComponent from "../tooltip/TooltipComponent";
 
@@ -73,7 +73,7 @@ const TextField: React.FC<TextFieldProps> = ({
   tooltip,
   ...props
 }) => {
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
 
   const r = useMemo(() => {
     const list = [

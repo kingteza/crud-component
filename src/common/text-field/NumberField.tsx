@@ -5,8 +5,8 @@
 
 import { Form, InputNumber } from "antd";
 import { forwardRef, ReactNode, useMemo } from "react";
-import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
+import { useTranslationLib } from "../../locale";
+
 
 import TooltipComponent from "../tooltip/TooltipComponent";
 import { onEnterInternalTextField, TextFieldProps } from "./TextField";
@@ -53,7 +53,7 @@ const NumberTextField = forwardRef<HTMLInputElement, NumberTextFieldProps>(
     },
     ref
   ) {
-    const { t } = useTranslation(TRANSLATION_NAMESPACE);
+    const { t } = useTranslationLib();
 
     const r = useMemo(
       () => [

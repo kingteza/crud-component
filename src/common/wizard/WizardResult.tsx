@@ -3,14 +3,12 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import { ArrowLeftOutlined, LoadingOutlined } from '@ant-design/icons';
-import { Result } from 'antd';
-import { t } from 'i18next';
-import React, { FC, PropsWithChildren } from 'react';
-import { useTranslation } from 'react-i18next';
+import { ArrowLeftOutlined, LoadingOutlined } from "@ant-design/icons";
+import { Result } from "antd";
+import React, { FC, PropsWithChildren } from "react";
 
-import ButtonComponent from '../button/Button';
-import { TRANSLATION_NAMESPACE } from '../../locale/hooks/translation-constants';
+import ButtonComponent from "../button/Button";
+import { useTranslationLib, t } from "../../locale";
 
 const WizardResult: FC<
   {
@@ -40,33 +38,46 @@ const WizardResult: FC<
   success,
   loading,
   error,
-  successTitle = t('str.success'),
+  successTitle,
   successMessage,
-  errorMessage = t('err.save'),
-  errorTitle = t('str.error'),
+  errorMessage,
+  errorTitle,
 
-  loadingTitle = t('message.loading.saving'),
+  loadingTitle,
   loadingMessage,
 }) => {
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
-
+  const { t } = useTranslationLib();
+  const successTitle0 = successTitle ?? t("str.success");
+  const errorTitle0 = errorTitle ?? t("str.error");
+  const errorMessage0 = errorMessage
+    ? typeof errorMessage === "function"
+      ? errorMessage()
+      : errorMessage
+    : t("err.save");
+  const loadingTitle0 = loadingTitle ?? t("message.loading.saving");
   return (
     <Result
       status={
         loading
           ? undefined
           : success
-          ? 'success'
+          ? "success"
           : error
-          ? ['403', '404', '500'].includes(error?.code)
+          ? ["403", "404", "500"].includes(error?.code)
             ? error.code
             : error
-            ? 'error'
+            ? "error"
             : undefined
           : undefined
       }
       title={
-        loading ? loadingTitle : success ? successTitle : error ? errorTitle : undefined
+        loading
+          ? loadingTitle0
+          : success
+          ? successTitle0
+          : error
+          ? errorTitle0
+          : undefined
       }
       icon={loading ? <LoadingOutlined /> : undefined}
       subTitle={
@@ -75,9 +86,9 @@ const WizardResult: FC<
           : success
           ? successMessage
           : error
-          ? typeof errorMessage === 'function'
-            ? errorMessage() ?? t('err.save')
-            : errorMessage ?? t('err.save')
+          ? typeof errorMessage === "function"
+            ? errorMessage() ?? errorMessage0
+            : errorMessage ?? errorMessage0
           : undefined
       }
       extra={[
@@ -93,7 +104,7 @@ const WizardResult: FC<
                 type="primary"
                 icon={<ArrowLeftOutlined />}
               >
-                {t('str.previous')}
+                {t("str.previous")}
               </ButtonComponent>
             )}
             {Boolean(onRetry) && (
@@ -102,7 +113,7 @@ const WizardResult: FC<
                 key="retry"
                 onClick={() => onRetry!(undefined, undefined, true)}
               >
-                {t('str.retry')}
+                {t("str.retry")}
               </ButtonComponent>
             )}
             {errorChildren}

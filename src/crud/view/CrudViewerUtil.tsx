@@ -15,11 +15,11 @@ import {
   ImageCrudCellValue,
   ImageCrudField,
 } from "../ImageCrudField";
-import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
-import { t } from "i18next";
+
 
 import DateUtil from "../../util/DateUtil";
 import NumberUtil from "../../util/NumberUtil";
+import { t } from "../../locale";
 
 export function getRendererValueCrudViewer<T>({
   type,
@@ -55,7 +55,6 @@ export function getRendererValueCrudViewer<T>({
     ? (e, value, i) => {
         const v = t(
           (props as any as EnumCrudField<{}>)?.translation?.[e ?? ""] ?? e,
-          { ns: TRANSLATION_NAMESPACE }
         );
         return typeof render === "function" ? render(e, value, i) : v;
       }

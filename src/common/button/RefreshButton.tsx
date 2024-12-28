@@ -6,8 +6,8 @@
 import { ReloadOutlined } from "@ant-design/icons";
 import { ButtonType } from "antd/lib/button";
 import { FC } from "react";
-import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
+import { useTranslationLib } from "../../locale";
+
 
 import ButtonComponent from "./Button";
 
@@ -20,7 +20,7 @@ export const RefreshButton: FC<{
   className?: string;
   disabled?: boolean;
 }> = ({ disabled, block, className, type = "primary", onClick, title, to }) => {
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
 
   return (
     <ButtonComponent

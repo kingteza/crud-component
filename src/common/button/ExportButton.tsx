@@ -1,9 +1,9 @@
 import { ExportOutlined } from "@ant-design/icons";
 import { useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslationLib } from "../../locale";
 
 import ButtonComponent from "./Button";
-import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
+
 
 export function ExportButton<T>({
   value,
@@ -13,7 +13,7 @@ export function ExportButton<T>({
   onClick: (value: T) => Promise<any>;
 }) {
   const [loading, setLoading] = useState(false);
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
 
   const _click = useCallback(async () => {
     setLoading(true);

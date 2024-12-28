@@ -29,8 +29,8 @@ import React, {
 const FormItem = Form.Item;
 import { UploadListType } from "antd/es/upload/interface";
 import { Cropper, ReactCropperElement } from "react-cropper";
-import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
+import { useTranslationLib } from "../../locale";
+
 
 import ButtonComponent from "../button/Button";
 import ImageUtil from "../../util/ImageUtil";
@@ -215,7 +215,7 @@ const ImagePicker: FC<Props> = ({
       setFileList(list as any);
     }
   }, [values]);
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
 
   const validator = useMemo(
     () =>

@@ -7,8 +7,8 @@ import {
   useRef,
   useState,
 } from "react";
-import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
+import { useTranslationLib } from "../../locale";
+
 
 import ButtonComponent from "./Button";
 
@@ -27,7 +27,7 @@ export function ImportButton({
   type?: BaseButtonProps["type"];
 }>) {
   const [loading, setLoading] = useState(false);
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
 
   const fileInputRef = useRef<ElementRef<"input">>(null);
   const _click = useCallback(() => {

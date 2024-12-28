@@ -28,8 +28,8 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
+import { useTranslationLib } from "../../locale";
+
 import IdProps from "../../types/Id";
 
 import {
@@ -110,7 +110,7 @@ function CrudViewer<T, FormType = T>({
   actionWidth = 190,
   ...props
 }: CrudViewerProps<T, FormType>) {
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
 
   const columns = useMemo(
     () =>

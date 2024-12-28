@@ -3,9 +3,9 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 import { Button, ButtonProps, Tooltip } from "antd";
-import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
+
 import React, { useCallback, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslationLib } from "../../locale";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
 
@@ -23,7 +23,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
   ref,
   ...props
 }) => {
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
 
   let navigate;
   try {

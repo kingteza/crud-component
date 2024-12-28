@@ -4,10 +4,9 @@
 ***************************************************************************** */
 
 import { EditOutlined } from '@ant-design/icons';
-import { useTranslation } from 'react-i18next';
+import { useTranslationLib } from '../../locale';
 
 import ButtonComponent from './Button';
-import { TRANSLATION_NAMESPACE } from '../../locale/hooks/translation-constants';
 
 interface Props<T> {
   value: T;
@@ -15,7 +14,7 @@ interface Props<T> {
 }
 
 function UpdateButtonTable<T>({ value, onClick }: Props<T>) {
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
   return (
     <ButtonComponent
       tooltip={t("str.update")}

@@ -9,8 +9,7 @@ import { ButtonType } from "antd/es/button";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import ButtonComponent from "./Button";
-import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
+import { useTranslationLib } from "../../locale";
 
 interface Props<T> {
   value: T;
@@ -33,23 +32,20 @@ function DeleteButtonTable<T>({
   disabled,
   type = "link",
 }: Props<T>) {
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
   const txt = useMemo(() => text ?? t("str.delete"), [text, t]);
   const [_loading, set_loading] = useState(false);
   useEffect(() => {
     set_loading(loading ?? false);
   }, [loading]);
-  const _onClick = useCallback(
-    async () => {
-      try {
-        set_loading(true);
-        await onClick(value);
-      } finally {
-        set_loading(false);
-      }
-    },
-    [onClick, value]
-  );
+  const _onClick = useCallback(async () => {
+    try {
+      set_loading(true);
+      await onClick(value);
+    } finally {
+      set_loading(false);
+    }
+  }, [onClick, value]);
 
   if (!shouldConfirm) {
     return (

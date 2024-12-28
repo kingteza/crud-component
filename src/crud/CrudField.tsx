@@ -5,8 +5,7 @@
 import { ColorPicker, Form, Radio, Select } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import Highlighter from "react-highlight-words";
-import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "../locale/hooks/translation-constants";
+import { useTranslationLib } from "../locale";
 
 import {
   CheckboxBasedFieldProps,
@@ -63,7 +62,7 @@ export default function CrudField<T>(props0: CrudFieldProps<T>) {
     }
   }, [form, props, type, props?.updatingValue]);
 
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
   if (readonly || hidden) return <></>;
   if (customFormFieldRender) {
     return customFormFieldRender(form, props0);

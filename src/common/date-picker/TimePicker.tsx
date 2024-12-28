@@ -7,8 +7,8 @@ import { Form, TimePicker } from "antd";
 import { FormItemProps } from "antd/lib/form";
 import dayjs, { Dayjs } from "dayjs";
 import React, { FC, useCallback, useMemo } from "react";
-import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
+import { useTranslationLib } from "../../locale";
+
 
 export type DateRange = [Dayjs | null, Dayjs | null];
 export interface TimePickerComponentProps extends FormItemProps<any> {
@@ -64,7 +64,7 @@ const TimePickerComponent: FC<TimeRangePickerProps | TimePickerProps> = ({
   renderExtraFooter,
   ...props
 }) => {
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
 
   const placeHolder0 = useMemo(
     () => (placeholder ? placeholder : range ? ["From", "To"] : "Select time"),

@@ -8,8 +8,8 @@ import Papa from "papaparse";
 import { App, Modal, Progress, Space, Spin, Tooltip } from "antd";
 import { saveAs } from "file-saver";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
+import { useTranslationLib } from "../../locale";
+
 
 import { CrudFieldProps } from "../CrudComponent";
 import CrudViewer from "../view/CrudViewer";
@@ -85,7 +85,7 @@ function CrudImportComponent<T>({
     [columnNames, importProps?.name]
   );
 
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
 
   const onClickImport = useCallback(async (file: File) => {
     const reader = new FileReader();

@@ -7,10 +7,10 @@ import { PlusOutlined } from "@ant-design/icons";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import { ButtonType } from "antd/lib/button";
 import { FC } from "react";
-import { useTranslation } from "react-i18next";
+import { useTranslationLib } from "../../locale";
 
 import ButtonComponent from "./Button";
-import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
+
 
 export const NewButton: FC<{
   to?: string;
@@ -21,7 +21,7 @@ export const NewButton: FC<{
   className?: string;
   size?: SizeType;
 }> = ({ size, block, className, type = "primary", onClick, title, to }) => {
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
 
   return (
     <ButtonComponent

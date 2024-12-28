@@ -4,9 +4,8 @@
 ***************************************************************************** */
 
 import { Tag } from 'antd';
-import { TRANSLATION_NAMESPACE } from '../../locale/hooks/translation-constants';
+import { useTranslationLib } from '../../locale';
 import { FC, ReactElement } from 'react';
-import { useTranslation } from 'react-i18next';
 
 type StatusTagProps = {
   translation: any;
@@ -25,7 +24,7 @@ const StatusTag: FC<StatusTagProps> = ({
   value,
 }) => {
   const val = colorFunction?.(value);
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
   const Component = Tag;
   return (
     <Component

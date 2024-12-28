@@ -6,8 +6,8 @@
 import { Breakpoint } from "antd";
 import { DescList, DescPropsNullable } from "../../common";
 import React, { useMemo } from "react";
-import { useTranslation } from "react-i18next";
-import { TRANSLATION_NAMESPACE } from "../../locale/hooks/translation-constants";
+import { useTranslationLib } from "../../locale";
+
 
 import { CrudFieldProps } from "../CrudComponent";
 import { getRendererValueCrudViewer } from "./CrudViewerUtil";
@@ -35,7 +35,7 @@ export function CrudDecListView<T>({
   action,
   keepEmptyValues,
 }: CrudDecListViewProps<T>) {
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
 
   const _fields: DescPropsNullable[] = useMemo(() => {
     const list: DescPropsNullable[] = fields

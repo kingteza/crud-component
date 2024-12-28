@@ -7,10 +7,9 @@
 import { PrinterOutlined } from '@ant-design/icons';
 import { ButtonType } from 'antd/lib/button';
 import { FC } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslationLib } from '../../locale';
 
 import ButtonComponent from './Button';
-import { TRANSLATION_NAMESPACE } from '../../locale/hooks/translation-constants';
 
 export const PrintButton: FC<{
   to?: string;
@@ -22,7 +21,7 @@ export const PrintButton: FC<{
   className?: string;
   disabled?: boolean;
 }> = ({ disabled, loading, block, className, type = 'primary', onClick, title, to }) => {
-  const { t } = useTranslation(TRANSLATION_NAMESPACE);
+  const { t } = useTranslationLib();
   const _title = title ?? t("str.print");
   return (
     <ButtonComponent
