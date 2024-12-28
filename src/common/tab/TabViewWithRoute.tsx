@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router';
 import { useLocation } from 'react-router-dom';
 
-import useWindowDimensions from '../../context/WindowDimension';
+import { useWindowDimensions } from '../../context';
 
 const { Content } = Layout;
 

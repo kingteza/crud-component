@@ -1,3 +1,3 @@
-import { TabViewWithRoute } from './TabViewWithRoute';
+import { TabViewWithRoute } from "./TabViewWithRoute";
 
 export { TabViewWithRoute };
