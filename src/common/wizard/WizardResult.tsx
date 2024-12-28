@@ -8,7 +8,7 @@ import { Result } from "antd";
 import React, { FC, PropsWithChildren } from "react";
 
 import ButtonComponent from "../button/Button";
-import { useTranslationLib, t } from "../../locale";
+import { useTranslationLib } from "../../locale";
 
 const WizardResult: FC<
   {
