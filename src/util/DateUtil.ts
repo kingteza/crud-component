@@ -4,7 +4,7 @@
 ***************************************************************************** */
 
 import dayjs from 'dayjs';
-import i18next from 'i18next';
+import { i18nInstance } from 'src/locale';
 
 // moment.locale('si', {
 //   calendar: {
@@ -37,19 +37,19 @@ import i18next from 'i18next';
 // });
 
 const formatDateTime = (d?: Date) => {
-  return dayjs(d).locale(i18next.language).format('YYYY-MM-DD HH:mm');
+  return dayjs(d).locale(i18nInstance?.language ?? 'en').format('YYYY-MM-DD HH:mm');
 };
 
 const formatDateTimeWithSecond = (d?: Date) => {
-  return dayjs(d).locale(i18next.language).format('YYYY-MM-DD HH:mm:ss');
+  return dayjs(d).locale(i18nInstance?.language ?? 'en').format('YYYY-MM-DD HH:mm:ss');
 };
 
 const formatDate = (d?: Date) => {
-  return dayjs(d).locale(i18next.language).format('YYYY-MM-DD');
+  return dayjs(d).locale(i18nInstance?.language ?? 'en').format('YYYY-MM-DD');
 };
 
 const formatTime = (d?: Date, format = 'HH:mm:ss') => {
-  return dayjs(d).locale(i18next.language).format(format);
+  return dayjs(d).locale(i18nInstance?.language ?? 'en').format(format);
 };
 
 export default { formatDateTime, formatDate, formatDateTimeWithSecond, formatTime };
