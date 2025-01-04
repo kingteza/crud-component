@@ -2,7 +2,7 @@
  Copyright (c) 2020-2024 Kingteza and/or its affiliates. All rights reserved.
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
-import { ColorPicker, Form, Radio, Select } from "antd";
+import { ColorPicker, Form, Radio, Select, Tag } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { useTranslationLib } from "../locale";
@@ -245,6 +245,7 @@ export default function CrudField<T>(props0: CrudFieldProps<T>) {
         onChange,
         onSearch,
         multiple,
+        tagRender,
       } = props as EnumCrudField<T>;
       const list = Array.isArray(enumList) ? enumList : Object.keys(enumList);
       if (radio) {
@@ -278,6 +279,21 @@ export default function CrudField<T>(props0: CrudFieldProps<T>) {
       return (
         <SelectComponent
           {...props}
+          tagRender={
+            typeof tagRender === "function"
+              ? tagRender
+              : tagRender
+              ? (props) => {
+                  const { value, label } = props;
+                  const tagProps = tagRender[value];
+                  if (tagProps) {
+                    return <Tag color={tagProps.color}>{label}</Tag>;
+                  }
+                  return <Tag>{label}</Tag>;
+                }
+              : undefined
+          }
+          
           onChange={onChange ? (val) => onChange(val, form) : undefined}
           className={["w-100", fieldClassName].join(" ")}
           name={name as any}
@@ -289,7 +305,14 @@ export default function CrudField<T>(props0: CrudFieldProps<T>) {
           disabled={!updatable}
           onSearch={onSearch ? (val) => onSearch(val, form) : undefined}
           allowClear
-          mode={multiple ? "multiple" : undefined}
+          maxCount={multiple ? undefined : 1}
+          mode={
+            multiple
+              ? "multiple"
+              : typeof tagRender === "function" || typeof tagRender === "object"
+              ? "tags"
+              : undefined
+          }
           itemBuilder={(e) => (
             <Select.Option key={e} value={e}>
               {translation ? t(translation[e]) : e}

@@ -129,13 +129,26 @@ export interface SelectCrudField<
 export interface EnumCrudField<T> extends InitialCrudField<T> {
   type: "enum";
   placeholder?: string;
+  name: keyof T; // Ensure `name` corresponds to a key in T
+  // enum: T[keyof T]
+  //   | (T[keyof T] extends string | number | symbol
+  //       ? Record<string, T[keyof T]>
+  //       : never)
+  //   | T[keyof T][]; // Allow plain string arrays
   enum: object | object[];
   radio?: boolean;
   translation?: object;
   multiple?: boolean;
-  tagRender?: SelectTagRenderProps;
-  onChange?: (value: any, form: FormInstance<T>) => void;
-  onSearch?: (keyword: any, form: FormInstance<T>) => void;
+  tagRender?: Record<string, { color: string }> | SelectTagRenderProps;
+  // tagRender?: keyof T extends infer K // Infer the name
+  //   ? K extends this['name']
+  //     ? T[K] extends string | number | symbol // Validate that T[name] is a valid type
+  //       ? Record<T[K], { color: string }> // Enforce the structure
+  //       : never
+  //     : never
+  //   : never;// Dynamically infer keys based on `name`
+  onChange?: (value: T[keyof T], form: FormInstance<T>) => void;
+  onSearch?: (keyword: string, form: FormInstance<T>) => void;
 }
 
 export interface ObjectCrudField<T> extends InitialCrudField<T> {

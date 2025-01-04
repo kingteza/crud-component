@@ -1,5 +1,5 @@
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
-import { Tooltip, Avatar } from "antd";
+import { Tooltip, Avatar, Tag } from "antd";
 import { ShowMore } from "../../common";
 import {
   CrudFieldProps,
@@ -11,11 +11,7 @@ import {
   TimeBasedFieldProps,
 } from "../CrudComponent";
 import { FileCrudCellValue } from "../FileCrudField";
-import {
-  ImageCrudCellValue,
-  ImageCrudField,
-} from "../ImageCrudField";
-
+import { ImageCrudCellValue, ImageCrudField } from "../ImageCrudField";
 
 import DateUtil from "../../util/DateUtil";
 import NumberUtil from "../../util/NumberUtil";
@@ -54,9 +50,19 @@ export function getRendererValueCrudViewer<T>({
     : type === "enum"
     ? (e, value, i) => {
         const v = t(
-          (props as any as EnumCrudField<{}>)?.translation?.[e ?? ""] ?? e,
-        );
-        return typeof render === "function" ? render(e, value, i) : v;
+          (props as any as EnumCrudField<{}>)?.translation?.[e ?? ""] ?? e
+        ) as string;
+        const tagRender = (props as any as EnumCrudField<{}>)?.tagRender;
+        if (typeof render === "function") {
+          return render(e, value, i);
+        }
+        if (typeof tagRender === "object") {
+          const tagProps = tagRender[e];
+          if (tagProps) {
+            return <Tag color={tagProps.color}>{v}</Tag>;
+          }
+        }
+        return v;
       }
     : type === "date"
     ? (e, value, i) => {
