@@ -293,7 +293,6 @@ export default function CrudField<T>(props0: CrudFieldProps<T>) {
                 }
               : undefined
           }
-          
           onChange={onChange ? (val) => onChange(val, form) : undefined}
           className={["w-100", fieldClassName].join(" ")}
           name={name as any}
@@ -305,14 +304,7 @@ export default function CrudField<T>(props0: CrudFieldProps<T>) {
           disabled={!updatable}
           onSearch={onSearch ? (val) => onSearch(val, form) : undefined}
           allowClear
-          maxCount={multiple ? undefined : 1}
-          mode={
-            multiple
-              ? "multiple"
-              : typeof tagRender === "function" || typeof tagRender === "object"
-              ? "tags"
-              : undefined
-          }
+          mode={multiple ? "multiple" : undefined}
           itemBuilder={(e) => (
             <Select.Option key={e} value={e}>
               {translation ? t(translation[e]) : e}
