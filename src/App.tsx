@@ -1,7 +1,5 @@
 import { setupI18n } from "./locale";
 import { CrudComponent } from ".";
-import { Button } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
 
 // Initialize with your custom translations
 setupI18n();
