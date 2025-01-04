@@ -44,9 +44,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
         }
         className={className}
         {...props}
-      >
-        {props.children || t(`button.${props.type}`)}
-      </Button>
+      >{props.children}</Button>
     ),
     [className, navigate, onClick, props, t, to]
   );

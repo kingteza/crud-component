@@ -1,5 +1,7 @@
 import { setupI18n } from "./locale";
 import { CrudComponent } from ".";
+import { Button } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
 
 // Initialize with your custom translations
 setupI18n();
@@ -26,7 +28,16 @@ function App() {
   return (
     <div className="">
       <CrudComponent<Purchase>
-        data={[{ status: PurchaseStatus.CANCELLED, test: TestEnum.TEST, value: "test" }]}
+        data={[
+          {
+            status: PurchaseStatus.CANCELLED,
+            test: TestEnum.TEST,
+            value: "test",
+          },
+        ]}
+        onDelete={async (e) => {
+          console.log(e);
+        }}
         fields={[
           {
             type: "enum",
@@ -59,7 +70,7 @@ function App() {
             tagRender: {
               TEST: { color: "red" },
               TEST2: { color: "blue" },
-              TEST3: { color: "green" },              
+              TEST3: { color: "green" },
             },
           },
         ]}
