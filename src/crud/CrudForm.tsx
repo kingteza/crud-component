@@ -51,19 +51,21 @@ export function CrudFormFields<T>({
       fields
         .filter((e) => !e.readonly)
         .map((e) => {
-          const functionProps: {
-            onUploading: (x: File) => void;
-            onDelete: (x: File | string) => void;
-          } = {
-            onUploading: (x) => {
-              if ((e as FileCrudField<T>).onUploading)
-                (e as any).onUploading?.(x);
-              onUploadFile?.(x);
-            },
-            onDelete: (x) => {
-              if ((e as FileCrudField<T>).onUploading) (e as any).onDelete?.(x);
-              onDeleteFile?.(x);
-            },
+          const functionProps = {
+            onUploading:
+              e.type === "image" || e.type === "file"
+                ? (x) => {
+                    if ((e as any).onUploading) (e as any).onUploading?.(x);
+                    onUploadFile?.(x);
+                  }
+                : undefined,
+            onDelete:
+              e.type === "image" || e.type === "file"
+                ? (x) => {
+                    if ((e as any).onUploading) (e as any).onDelete?.(x);
+                    onDeleteFile?.(x);
+                  }
+                : undefined,
           };
           return (
             <React.Fragment key={e.name as string}>
@@ -72,7 +74,7 @@ export function CrudFormFields<T>({
                   <CrudField
                     {...e}
                     {...(functionProps as any)}
-                    key={typeof e.name === 'string' ? e.name : String(e.name)}
+                    key={typeof e.name === "string" ? e.name : String(e.name)}
                     updatable={purpose !== "update" ? true : e.updatable}
                   />
                 </Col>
@@ -80,7 +82,7 @@ export function CrudFormFields<T>({
                 <CrudField
                   {...e}
                   {...(functionProps as any)}
-                  key={typeof e.name === 'string' ? e.name : String(e.name)}
+                  key={typeof e.name === "string" ? e.name : String(e.name)}
                   updatable={purpose !== "update" ? true : e.updatable}
                 />
               )}
@@ -95,11 +97,28 @@ export function CrudFormFields<T>({
       const e = fields.find((field) => field.name === name);
       if (e?.hidden) return <></>;
       if (e) {
+        const functionProps = {
+          onUploading:
+            e.type === 'image' || e.type === 'file'
+              ? (x) => {
+                  if ((e as any).onUploading) (e as any).onUploading?.(x);
+                  onUploadFile?.(x);
+                }
+              : undefined,
+          onDelete:
+            e.type === 'image' || e.type === 'file'
+              ? (x) => {
+                  if ((e as any).onUploading) (e as any).onDelete?.(x);
+                  onDeleteFile?.(x);
+                }
+              : undefined,
+        };
         const component = (
           <CrudField
             {...e}
             {...options}
-            key={typeof e.name === 'string' ? e.name : String(e.name)}
+            {...functionProps}
+            key={typeof e.name === "string" ? e.name : String(e.name)}
             updatable={purpose !== "update" ? true : e.updatable}
           />
         );
