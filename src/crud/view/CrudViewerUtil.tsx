@@ -1,5 +1,5 @@
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
-import { Tooltip, Avatar, Tag } from "antd";
+import { Tooltip, Avatar, Tag, Space } from "antd";
 import { ShowMore } from "../../common";
 import {
   CrudFieldProps,
@@ -55,7 +55,23 @@ export function getRendererValueCrudViewer<T>({
           }
           if (propsEnum.multiple) {
             const ar = Array.isArray(e) ? e : e ? [e] : [];
-            if (propsEnum?.translation) {
+            if (typeof propsEnum.tagRender === "object") {
+              <Space wrap>
+                {ar.map((item, index) => {
+                  const tagProps = propsEnum.tagRender?.[item];
+                  const translatedValue = t(
+                    propsEnum?.translation?.[item ?? ""] ?? item
+                  ) as any;
+                  return tagProps ? (
+                    <Tag key={index + item} color={tagProps.color}>
+                      {translatedValue}
+                    </Tag>
+                  ) : (
+                    translatedValue
+                  );
+                })}
+              </Space>;
+            } else if (propsEnum?.translation) {
               return ar
                 ?.map((e) => t(propsEnum?.translation?.[e ?? ""] ?? e))
                 .join(", ");
@@ -63,8 +79,16 @@ export function getRendererValueCrudViewer<T>({
               return ar?.join(", ");
             }
           }
+
           const val = propsEnum?.translation?.[e ?? ""] ?? e;
           const v = t(val);
+
+          if (typeof propsEnum.tagRender === "object") {
+            const tagProps = propsEnum.tagRender[e];
+            if (tagProps) {
+              return <Tag color={tagProps.color}>{v as any}</Tag>;
+            }
+          }
 
           return v;
         }
