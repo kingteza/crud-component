@@ -27,14 +27,11 @@ import {
   DatePickerComponent,
   TimePickerComponent,
   SelectComponent,
-  TextAreaComponent,
   TooltipComponent,
 } from "../common";
-import CrudTextAreaComponent, {
-  TextAreaBasedFieldProps,
-} from "./CrudTextAreaComponent";
+import CrudTextAreaComponent from "./CrudTextAreaComponent";
 
-export default function CrudField<T>(props0: CrudFieldProps<T>) {
+export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
   const {
     label,
     name,
@@ -332,7 +329,7 @@ export default function CrudField<T>(props0: CrudFieldProps<T>) {
   }
 }
 
-export function SelectCrudFieldComponent<T>(props: SelectCrudField<T>) {
+export function SelectCrudFieldComponent<T>(props: Readonly<SelectCrudField<T>>) {
   const {
     items = [],
     loading,

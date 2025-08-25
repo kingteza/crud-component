@@ -55,7 +55,7 @@ export default function FileCrudFieldComponent<T>({
   maxCount = 1,
   block,
   ...props
-}: _FileCrudField<T>) {
+}: Readonly<_FileCrudField<T>>) {
   const form = Form.useFormInstance();
   const fieldValue = Form.useWatch(name, form);
 
@@ -274,7 +274,7 @@ export const FileCellValue: FC<{
               <iframe title={fileName} src={url} width="100%" height="700px">
                 This browser does not support PDFs. Please download the PDF to
                 view it:
-                <a href={url}>Download PDF</a>.
+                <a href={url}>Download PDF</a>
               </iframe>
             ) : (
               <iframe

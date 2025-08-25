@@ -33,7 +33,7 @@ export default function CrudSearchComponent<T, FormType>({
   onSearch,
   searchDefaultValues,
   searchFieldsCustomColumnProps,
-}: CrudSearchComponentProps<T, FormType>) {
+}: Readonly<CrudSearchComponentProps<T, FormType>>) {
   const showingFields: CrudFieldProps<T>[] = useMemo(
     () =>
       searchFields

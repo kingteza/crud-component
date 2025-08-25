@@ -21,9 +21,10 @@ import CrudViewer from "./view/CrudViewer";
 import {
   ReportSelectFieldItems,
   SelectFieldInReport,
+  ButtonComponent,
+  PrintButton,
+  SelectComponent,
 } from "../common";
-import { ButtonComponent, PrintButton } from "../common";
-import { SelectComponent } from "../common";
 import { getRendererValueCrudViewer } from "./view/CrudViewerUtil";
 
 export type CrudReportSubmitForm<T> = {
@@ -81,7 +82,7 @@ function CrudReportComponent<T, F = T>({
   extraSearchFields,
   searchOnMount,
   summary,
-}: CrudReportComponentProps<T, F>) {
+}: Readonly<CrudReportComponentProps<T, F>>) {
   const { searchable, selectable, sortable, defaultSort } = useMemo(() => {
     const searchable: ReportCrudFields<T, F>[] = [];
     const sortable: ReportCrudFields<T, F>[] = [];
@@ -185,156 +186,155 @@ function CrudReportComponent<T, F = T>({
   }, [fields, first, selectable]);
 
   return (
-    <>
-      <Space className="w-100" direction="vertical">
-        <Form form={form} layout="vertical" onFinish={_onSubmit}>
-          <Row gutter={[8, 8]}>
-            {searchable.map((e) => {
-              return (
-                <Col
-                  key={e.name as any}
-                  {...(e.grid ?? props)}
-                  style={{ alignSelf: "end" }}
-                >
-                  {e.report?.customRender ? (
-                    e.report.customRender(form)
-                  ) : e.type === "date" ? (
-                    <CrudField<any>
-                      {...e}
-                      type="date"
-                      range={e.report?.range}
-                      required={Boolean(e.report?.required)}
-                      readonly={false}
-                      fieldClassName="mb-0"
-                    />
-                  ) : e.type === "select" ? (
-                    <CrudField<any>
-                      {...e}
-                      type="select"
-                      multiple
-                      required={false}
-                      readonly={false}
-                      fieldClassName="mb-0"
-                    />
-                  ) : (
-                    <CrudField<any>
-                      {...e}
-                      readonly={false}
-                      required={false}
-                      fieldClassName="mb-0"
-                    />
-                  )}
-                </Col>
-              );
-            })}
-            {Boolean(selectable?.length) && (
-              <Col {...props2}>
-                <SelectFieldInReport
-                  items={selectable}
-                  name="showFields"
-                  mode="multiple"
-                  label="Show Fields"
-                  className="mb-0"
-                />
+    <Space className="w-100" direction="vertical">
+      <Form form={form} layout="vertical" onFinish={_onSubmit}>
+        <Row gutter={[8, 8]}>
+          {searchable.map((e) => {
+            return (
+              <Col
+                key={e.name as any}
+                {...(e.grid ?? props)}
+                style={{ alignSelf: "end" }}
+              >
+                {e.report?.customRender ? (
+                  e.report.customRender(form)
+                ) : e.type === "date" ? (
+                  <CrudField<any>
+                    {...e}
+                    type="date"
+                    range={e.report?.range}
+                    required={Boolean(e.report?.required)}
+                    readonly={false}
+                    fieldClassName="mb-0"
+                  />
+                ) : e.type === "select" ? (
+                  <CrudField<any>
+                    {...e}
+                    type="select"
+                    multiple
+                    required={false}
+                    readonly={false}
+                    fieldClassName="mb-0"
+                  />
+                ) : (
+                  <CrudField<any>
+                    {...e}
+                    readonly={false}
+                    required={false}
+                    fieldClassName="mb-0"
+                  />
+                )}
               </Col>
-            )}
-            {Boolean(sortable.length) && (
-              <Col {...props}>
-                <SelectComponent
-                  label="Sort By"
-                  name={"sortBy"}
-                  items={sortable.map((e) => ({ id: e.name, label: e.label }))}
-                  nameFieldInArray="label"
-                  fieldId="id"
-                  className="mb-0"
-                  dropdownRender={(menu) => {
-                    return (
-                      <>
-                        {menu}
-                        <Form.Item name={"sortByType"} noStyle className="mt-3">
-                          <Radio.Group
-                            className="w-100"
-                            defaultValue={"DESC"}
-                            optionType="button"
-                          >
-                            <Row>
-                              <Col xs={12}>
-                                <Radio
-                                  className="w-100"
-                                  style={{
-                                    borderTopRightRadius: 0,
-                                    borderBottomRightRadius: 0,
-                                  }}
-                                  value={"ASC"}
-                                >
-                                  {"Ascending"}
-                                </Radio>
-                              </Col>
-                              <Col xs={12}>
-                                <Radio
-                                  className="w-100"
-                                  style={{
-                                    borderTopLeftRadius: 0,
-                                    borderBottomLeftRadius: 0,
-                                  }}
-                                  value={"DESC"}
-                                >
-                                  {"Descending"}
-                                </Radio>
-                              </Col>
-                            </Row>
-                          </Radio.Group>
-                        </Form.Item>
-                      </>
-                    );
-                  }}
-                />
-              </Col>
-            )}
-
-            {extraSearchFields ? extraSearchFields(form) : null}
-          </Row>
-          <ButtonComponent
-            className="mt-3"
-            type="primary"
-            block
-            htmlType="submit"
-            disabled={loadingData}
-          >
-            Submit
-          </ButtonComponent>
-        </Form>
-        <Space>
-          {Boolean(onClickPrint) && (
-            <PrintButton
-              disabled={loadingData || !data.length}
-              onClick={() =>
-                onClickPrint?.({
-                  tableId: "#crud-table table",
-                  data,
-                  fields: showingFields.map((e) => ({
-                    ...e,
-                    render: getRendererValueCrudViewer<any>(e),
-                  })) as any,
-                })
-              }
-            />
+            );
+          })}
+          {Boolean(selectable?.length) && (
+            <Col {...props2}>
+              <SelectFieldInReport
+                items={selectable}
+                name="showFields"
+                mode="multiple"
+                label="Show Fields"
+                className="mb-0"
+              />
+            </Col>
           )}
-          {Boolean(onClickExcelExport) && (
-            <ButtonComponent
-              disabled={loadingData || !data.length}
-              onClick={() =>
-                onClickExcelExport?.({
-                  tableId: "#crud-table table",
-                  data,
-                  fields: showingFields.map((e) => ({
-                    ...e,
-                    render: getRendererValueCrudViewer<any>(e),
-                  })) as any,
-                })
-              }
-              icon={<FileExcelOutlined />}
-              className={`group
+          {Boolean(sortable.length) && (
+            <Col {...props}>
+              <SelectComponent
+                label="Sort By"
+                name={"sortBy"}
+                items={sortable.map((e) => ({ id: e.name, label: e.label }))}
+                nameFieldInArray="label"
+                fieldId="id"
+                className="mb-0"
+                dropdownRender={(menu) => {
+                  return (
+                    <>
+                      {menu}
+                      <Form.Item name={"sortByType"} noStyle className="mt-3">
+                        <Radio.Group
+                          className="w-100"
+                          defaultValue={"DESC"}
+                          optionType="button"
+                        >
+                          <Row>
+                            <Col xs={12}>
+                              <Radio
+                                className="w-100"
+                                style={{
+                                  borderTopRightRadius: 0,
+                                  borderBottomRightRadius: 0,
+                                }}
+                                value={"ASC"}
+                              >
+                                {"Ascending"}
+                              </Radio>
+                            </Col>
+                            <Col xs={12}>
+                              <Radio
+                                className="w-100"
+                                style={{
+                                  borderTopLeftRadius: 0,
+                                  borderBottomLeftRadius: 0,
+                                }}
+                                value={"DESC"}
+                              >
+                                {"Descending"}
+                              </Radio>
+                            </Col>
+                          </Row>
+                        </Radio.Group>
+                      </Form.Item>
+                    </>
+                  );
+                }}
+              />
+            </Col>
+          )}
+
+          {extraSearchFields ? extraSearchFields(form) : null}
+        </Row>
+        <ButtonComponent
+          className="mt-3"
+          type="primary"
+          block
+          htmlType="submit"
+          disabled={loadingData}
+        >
+          Submit
+        </ButtonComponent>
+      </Form>
+      <Space>
+        {Boolean(onClickPrint) && (
+          <PrintButton
+            disabled={loadingData || !data.length}
+            onClick={() =>
+              onClickPrint?.({
+                tableId: "#crud-table table",
+                data,
+                fields: showingFields.map((e) => ({
+                  ...e,
+                  render: getRendererValueCrudViewer<any>(e),
+                })) as any,
+              })
+            }
+          />
+        )}
+        {Boolean(onClickExcelExport) && (
+          <ButtonComponent
+            disabled={loadingData || !data.length}
+            onClick={() =>
+              onClickExcelExport?.({
+                tableId: "#crud-table table",
+                data,
+                fields: showingFields.map((e) => ({
+                  ...e,
+                  render: getRendererValueCrudViewer<any>(e),
+                })) as any,
+              })
+            }
+            icon={<FileExcelOutlined />}
+            className={`group
                 ${
                   loadingData || !data.length
                     ? ""
@@ -342,24 +342,23 @@ function CrudReportComponent<T, F = T>({
                 }
                 
               `}
-            >
-              Excel
-            </ButtonComponent>
-          )}
-        </Space>
-        {summary}
-        <CrudViewer<any>
-          minusHeight={minusHeight}
-          data={data as any}
-          size={size}
-          fields={showingFields}
-          idField={idField}
-          loadingData={loadingData}
-          paginateProps={paginateProps}
-          viewable={false}
-        />
+          >
+            Excel
+          </ButtonComponent>
+        )}
       </Space>
-    </>
+      {summary}
+      <CrudViewer<any>
+        minusHeight={minusHeight}
+        data={data as any}
+        size={size}
+        fields={showingFields}
+        idField={idField}
+        loadingData={loadingData}
+        paginateProps={paginateProps}
+        viewable={false}
+      />
+    </Space>
   );
 }
 

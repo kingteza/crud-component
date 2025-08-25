@@ -13,7 +13,6 @@ import {
   GetFormFieldOptions,
 } from "./CrudComponent";
 import CrudField from "./CrudField";
-import { FileCrudField } from "./FileCrudField";
 
 export interface CurdFormFieldsProps<T> {
   onDeleteFile?: (e) => void;
@@ -28,13 +27,11 @@ export function CrudForm<T>({
   form,
   purpose = "new",
   ...props
-}: CurdFormFieldsProps<T> & { form: FormInstance }) {
+}: Readonly<CurdFormFieldsProps<T> & { form: FormInstance }>) {
   return (
-    <>
-      <Form form={form} layout="vertical">
-        <CrudFormFields {...props} purpose={purpose} />
-      </Form>
-    </>
+    <Form form={form} layout="vertical">
+      <CrudFormFields {...props} purpose={purpose} />
+    </Form>
   );
 }
 
@@ -45,7 +42,7 @@ export function CrudFormFields<T>({
   onDeleteFile,
   onUploadFile,
   purpose,
-}: CurdFormFieldsProps<T>) {
+}: Readonly<CurdFormFieldsProps<T>>) {
   const _fields = useMemo(
     () =>
       fields
@@ -99,14 +96,14 @@ export function CrudFormFields<T>({
       if (e) {
         const functionProps = {
           onUploading:
-            e.type === 'image' || e.type === 'file'
+            e.type === "image" || e.type === "file"
               ? (x) => {
                   if ((e as any).onUploading) (e as any).onUploading?.(x);
                   onUploadFile?.(x);
                 }
               : undefined,
           onDelete:
-            e.type === 'image' || e.type === 'file'
+            e.type === "image" || e.type === "file"
               ? (x) => {
                   if ((e as any).onUploading) (e as any).onDelete?.(x);
                   onDeleteFile?.(x);

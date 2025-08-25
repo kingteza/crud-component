@@ -8,7 +8,6 @@ import { Col, Divider, Form, Row } from "antd";
 import { useEffect, useMemo } from "react";
 import { useTranslationLib } from "../locale";
 
-
 import { CrudFieldProps, CrudPurpose, CrudWizardProp } from "./CrudComponent";
 import { CrudFormFields } from "./CrudForm";
 import { ButtonComponent, WizardViewForm } from "../common";
@@ -35,8 +34,7 @@ function CrudFormWizard<T>({
   updatingValue,
   onSave,
   submitting,
-}: CrudFormWizardProps<T>) {
-
+}: Readonly<CrudFormWizardProps<T>>) {
   const wizard0 = useMemo(() => {
     return wizard.map((e) => {
       let hidden = true;
@@ -56,39 +54,37 @@ function CrudFormWizard<T>({
     [wizard0]
   );
   return (
-    <>
-      <WizardViewForm
-        onSubmit={(_, c) => {
-          console.log(c);
-          onSave(c);
-        }}
-        className={className}
-        pages={filteredWizard.map(
-          ({ title, icon, fieldThatShouldShowing, hidden }, i) => ({
-            title,
-            icon,
-            hidden,
-            component: (props) => {
-              return (
-                <SubForm<T>
-                  fields={fieldThatShouldShowing}
-                  onDeleteFile={onDeleteFile}
-                  onUploadFile={onUploadFile}
-                  purpose={purpose}
-                  key={i}
-                  i={i}
-                  updatingValue={updatingValue}
-                  backward={props.backward}
-                  forward={props.forward}
-                  wizard={filteredWizard}
-                  submitting={submitting}
-                />
-              );
-            },
-          })
-        )}
-      />
-    </>
+    <WizardViewForm
+      onSubmit={(_, c) => {
+        console.log(c);
+        onSave(c);
+      }}
+      className={className}
+      pages={filteredWizard.map(
+        ({ title, icon, fieldThatShouldShowing, hidden }, i) => ({
+          title,
+          icon,
+          hidden,
+          component: (props) => {
+            return (
+              <SubForm<T>
+                fields={fieldThatShouldShowing}
+                onDeleteFile={onDeleteFile}
+                onUploadFile={onUploadFile}
+                purpose={purpose}
+                key={i}
+                i={i}
+                updatingValue={updatingValue}
+                backward={props.backward}
+                forward={props.forward}
+                wizard={filteredWizard}
+                submitting={submitting}
+              />
+            );
+          },
+        })
+      )}
+    />
   );
 }
 
@@ -129,7 +125,6 @@ function SubForm<T>({
     } else if (!updatingValue) {
       //   form.resetFields();
     }
-    // console.log({ fields, form, purpose, updatingValue });
   }, [fields, form, purpose, updatingValue]);
 
   return (

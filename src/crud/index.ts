@@ -17,7 +17,6 @@ export type {
   ObjectCrudField,
   SelectCrudField,
   SelectFieldItem,
-  TextAreaBasedFieldProps,
   TextBasedFieldProps,
   TimeBasedFieldProps,
 } from "./CrudComponent";

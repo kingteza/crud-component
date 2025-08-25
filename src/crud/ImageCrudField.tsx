@@ -86,7 +86,7 @@ export default function ImageCrudFieldComponent<T>({
   fieldClassName,
   hideLabel = false,
   listType,
-}: _ImageCrudField<T>) {
+}: Readonly<_ImageCrudField<T>>) {
   const formInstance = Form.useFormInstance();
 
   const fieldValue = Form.useWatch(name, formInstance);
@@ -131,29 +131,27 @@ export default function ImageCrudFieldComponent<T>({
   }, [fieldValue, isUpload, provider, value]);
 
   return (
-    <>
-      <Form.Item
-        rules={required ? ValidationUtil.required(label) : []}
-        label={hideLabel ? null : label}
-        required={required}
-        name={name as any}
-      >
-        <ImagePicker
-          noStyle
-          listType={listType}
-          aspectRatio={aspectRatio}
-          values={value}
-          onRemove={(e) => {
-            if (e) onChange(e, false);
-          }}
-          onAdd={async (e) => {
-            if (e) await onChange(e, true);
-          }}
-          className={fieldClassName}
-        />
-        <Input hidden />
-      </Form.Item>
-    </>
+    <Form.Item
+      rules={required ? ValidationUtil.required(label) : []}
+      label={hideLabel ? null : label}
+      required={required}
+      name={name as any}
+    >
+      <ImagePicker
+        noStyle
+        listType={listType}
+        aspectRatio={aspectRatio}
+        values={value}
+        onRemove={(e) => {
+          if (e) onChange(e, false);
+        }}
+        onAdd={async (e) => {
+          if (e) await onChange(e, true);
+        }}
+        className={fieldClassName}
+      />
+      <Input hidden />
+    </Form.Item>
   );
 }
 
