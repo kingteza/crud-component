@@ -18,6 +18,7 @@ import { NewButton, PrintButton } from "../common";
 import { SelectTagRenderProps } from "../common/select/SelectComponent";
 import IdProps from "../types/Id";
 import { useTranslationLib } from "../locale";
+import { TextAreaBasedFieldProps } from "./CrudTextAreaComponent";
 
 export type SelectFieldItem = {
   key?: string | number;
@@ -164,18 +165,6 @@ export interface TextBasedFieldProps<T> extends InitialCrudField<T> {
   onChange?: (value: string, form: FormInstance<T>) => void;
 }
 
-export interface TextAreaBasedFieldProps<T> extends InitialCrudField<T> {
-  placeholder?: string;
-  type: "textarea";
-  rows?: number;
-  cols?: number;
-  /**
-   * number of lines to show. If false will not show truncated
-   * @default 2
-   */
-  truncated?: boolean | number;
-  onChange?: (value: string, form: FormInstance<T>) => void;
-}
 
 export interface ColorPickerFieldProps<T>
   extends Omit<InitialCrudField<T>, "placeholder"> {

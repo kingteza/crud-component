@@ -1,0 +1,25 @@
+/* Dark mode styles */
+.dark .ql-toolbar.ql-snow {
+  @apply border border-[#424242];
+}
+
+.dark .ql-container.ql-snow {
+  @apply border border-[#424242];
+}
+
+/* Light mode styles */
+.ql-toolbar.ql-snow {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  @apply border border-[#d9d9d9];
+}
+
+.ql-container.ql-snow {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  @apply border border-[#d9d9d9];
+}
+
+.quill {
+    border-radius: 6px;
+}

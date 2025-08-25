@@ -17,3 +17,4 @@ export * from "./text";
 export * from "./text-field";
 export * from "./tooltip";
 export * from "./wizard";
+export * from "./rich";

@@ -7,7 +7,6 @@ import {
   EnumCrudField,
   NumberBasedFieldProps,
   SelectCrudField,
-  TextAreaBasedFieldProps,
   TimeBasedFieldProps,
 } from "../CrudComponent";
 import { FileCrudCellValue } from "../FileCrudField";
@@ -16,6 +15,7 @@ import { ImageCrudCellValue, ImageCrudField } from "../ImageCrudField";
 import DateUtil from "../../util/DateUtil";
 import NumberUtil from "../../util/NumberUtil";
 import { t } from "../../locale";
+import { TextAreaBasedFieldProps } from "../CrudTextAreaComponent";
 
 export function getRendererValueCrudViewer<T>({
   type,
@@ -141,7 +141,7 @@ export function getRendererValueCrudViewer<T>({
             ?.use12Hours;
           const valueFormatted = DateUtil.formatTime(
             e,
-            format ? format : use12Hours ? "hh:mm:ss A" : undefined
+            format || (use12Hours ? "hh:mm:ss A" : undefined)
           );
           return typeof render === "function"
             ? render(e, value, i)
@@ -161,15 +161,29 @@ export function getRendererValueCrudViewer<T>({
         }
       : type === "textarea"
       ? (e, value, i) => {
-          const truncated =
-            (props as any as TextAreaBasedFieldProps<{}>)?.truncated ?? 1;
+          const props0 = props as any as TextAreaBasedFieldProps<{}>;
+          const truncated = props0.truncated ?? 1;
           return typeof render === "function" ? (
             render(e, value, i)
           ) : !truncated ? (
-            e
+            props0.rich ? (
+              <div
+                style={{ all: "unset" }}
+                dangerouslySetInnerHTML={{ __html: e }}
+              ></div>
+            ) : (
+              e
+            )
           ) : (
-            <ShowMore lines={truncated === true ? 1 : (truncated as number)}>
-              {e}
+            <ShowMore lines={truncated === true ? 1 : truncated}>
+              {props0.rich ? (
+                <div
+                  style={{ all: "unset" }}
+                  dangerouslySetInnerHTML={{ __html: e }}
+                ></div>
+              ) : (
+                e
+              )}
             </ShowMore>
           );
         }

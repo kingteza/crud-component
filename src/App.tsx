@@ -1,5 +1,6 @@
 import { setupI18n } from "./locale";
 import { CrudComponent } from ".";
+import { useState } from "react";
 
 // Initialize with your custom translations
 setupI18n();
@@ -20,21 +21,36 @@ export type Purchase = {
   status: PurchaseStatus;
   test: TestEnum;
   value: string;
+  id: string | number;
+  name: string;
 };
 
 function App() {
+  const [data, setData] = useState<Purchase[]>([
+    {
+      id: "1",
+      status: PurchaseStatus.CANCELLED,
+      test: TestEnum.TEST,
+      value: "test",
+      name: "test",
+    },
+  ]);
+
   return (
     <div className="">
       <CrudComponent<Purchase>
-        data={[
-          {
-            status: PurchaseStatus.CANCELLED,
-            test: TestEnum.TEST,
-            value: "test",
-          },
-        ]}
+        data={data}
         onDelete={async (e) => {
           console.log(e);
+          setData(data.filter((e) => e.id !== (e as any)));
+        }}
+        onCreate={async (e) => {
+          console.log(e);
+          setData((data) => [...data, { ...e, id: String(Math.random()) }]);
+        }}
+        onUpdate={async (x) => {
+          console.log(x);
+          setData(data.map((e) => (e.id === x.id ? x : e)));
         }}
         fields={[
           {
@@ -70,6 +86,13 @@ function App() {
               TEST2: { color: "blue" },
               TEST3: { color: "green" },
             },
+          },
+          {
+            type: "textarea",
+            name: "name",
+            label: "Rich Text Area",
+            rich: true,
+            truncated: 4,
           },
         ]}
       />

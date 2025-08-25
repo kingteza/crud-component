@@ -15,7 +15,6 @@ import {
   EnumCrudField,
   NumberBasedFieldProps,
   SelectCrudField,
-  TextAreaBasedFieldProps,
   TextBasedFieldProps,
   TimeBasedFieldProps,
 } from "./CrudComponent";
@@ -31,6 +30,9 @@ import {
   TextAreaComponent,
   TooltipComponent,
 } from "../common";
+import CrudTextAreaComponent, {
+  TextAreaBasedFieldProps,
+} from "./CrudTextAreaComponent";
 
 export default function CrudField<T>(props0: CrudFieldProps<T>) {
   const {
@@ -173,25 +175,7 @@ export default function CrudField<T>(props0: CrudFieldProps<T>) {
       );
     }
     case "textarea": {
-      const { onChange, placeholder, rows, cols } =
-        props as TextAreaBasedFieldProps<T>;
-      return (
-        <TextAreaComponent
-          rules={rules}
-          placeholder={placeholder}
-          onChange={
-            onChange ? (val) => onChange(val?.target?.value, form) : undefined
-          }
-          tooltip={fieldTooltip}
-          required={required}
-          disabled={!updatable}
-          name={name as any}
-          label={label}
-          className={fieldClassName}
-          rows={rows}
-          cols={cols}
-        />
-      );
+      return <CrudTextAreaComponent {...props0} />;
     }
     case "image":
       return (

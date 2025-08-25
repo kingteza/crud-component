@@ -34,7 +34,7 @@ export function CrudDecListView<T>({
   layout,
   action,
   keepEmptyValues,
-}: CrudDecListViewProps<T>) {
+}: Readonly<CrudDecListViewProps<T>>) {
   const { t } = useTranslationLib();
 
   const _fields: DescPropsNullable[] = useMemo(() => {

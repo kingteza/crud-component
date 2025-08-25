@@ -72,6 +72,7 @@
     "react-cropper": "^2.3.3",
     "react-highlight-words": "^0.20.0",
     "react-i18next": "^15.2.0",
+    "react-quill": "^2.0.0",
     "react-responsive": "^10.0.0",
     "react-show-more-text": "^1.7.1",
     "uuid": "^11.0.3"
