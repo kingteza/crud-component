@@ -1,7 +1,7 @@
 {
   "name": "@kingteza/crud-component",
   "private": false,
-  "version": "1.0.48",
+  "version": "1.0.50",
   "description": "React CRUD component library with Ant Design",
   "keywords": [
     "react",
@@ -26,6 +26,7 @@
     "/common/",
     "/types/",
     "/util/",
+    "/_virtual/",
     "/locale/",
     "/README.md"
   ],
