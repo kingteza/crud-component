@@ -8,7 +8,6 @@ import { Form } from "antd";
 import { Rule } from "antd/es/form";
 import React, { FC, Suspense, useEffect, useMemo, useState } from "react";
 import { ValidationUtil } from "src/util";
-import ReactQuill from "react-quill";
 
 export interface RichTextEditorProps {
   label?: string;
@@ -17,6 +16,14 @@ export interface RichTextEditorProps {
   rules?: Rule[];
   disabled?: boolean;
 }
+
+// Dynamically import ReactQuill for Vite
+const ReactQuill = React.lazy(async () => {
+  const { default: RQ } = await import('react-quill');
+  // eslint-disable-next-line react/display-name
+  return { default: (props: any) => <RQ {...props} /> };
+});
+
 
 export const RichTextEditor: FC<RichTextEditorProps> = ({
   name,
