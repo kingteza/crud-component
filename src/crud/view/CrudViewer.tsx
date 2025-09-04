@@ -6,7 +6,16 @@
 import { Modal } from "antd";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import { ExpandableConfig } from "antd/es/table/interface";
-import { TableProps } from "antd/lib";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import { TablePaginationConfig, TableProps } from "antd/lib";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { CSS } from "@dnd-kit/utilities";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+  useSortable,
+} from "@dnd-kit/sortable";
 import {
   VerticalSpace,
   CloneButtonTable,
@@ -16,6 +25,7 @@ import {
   RefreshButton,
   UpdateButtonTable,
   ViewButtonTable,
+  ButtonComponent,
 } from "../../common";
 
 import TableComponent, {
@@ -24,6 +34,7 @@ import TableComponent, {
 import React, {
   ReactElement,
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useState,
@@ -32,15 +43,22 @@ import { useTranslationLib } from "../../locale";
 
 import IdProps from "../../types/Id";
 
-import {
-  CrudFieldProps,
-  CrudPaginateProps,
-} from "../CrudComponent";
+import { CrudFieldProps, CrudPaginateProps } from "../CrudComponent";
 import CrudSearchComponent, {
   CrudSearchComponentProps,
 } from "../CrudSearchComponent";
 import { CrudDecListView, DescListColumn } from "./CrudDecListView";
 import { getRendererValueCrudViewer } from "./CrudViewerUtil";
+import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
+import { HolderOutlined } from "@ant-design/icons";
+
+// Create a stable table component that doesn't re-render unnecessarily
+const TableComponentMemo = React.memo(TableComponent) as typeof TableComponent;
+
+export type CrudDragableProps<T> = {
+  onDragEnd?: (event: DragEndEvent) => void;
+  onDrag?: (params: { newOrder: T[] }) => void;
+};
 
 export type CrudViewerProps<T, FormType> = {
   fields: CrudFieldProps<T>[];
@@ -74,6 +92,7 @@ export type CrudViewerProps<T, FormType> = {
   scrollToTop?: boolean;
   rowClassName?: TableProps<T>["rowClassName"];
   actionWidth?: string | number;
+  draggable?: CrudDragableProps<T>;
 } & CrudSearchComponentProps<T, FormType>;
 
 function CrudViewer<T, FormType = T>({
@@ -108,6 +127,7 @@ function CrudViewer<T, FormType = T>({
   confirmDeleting,
   rowClassName,
   actionWidth = 190,
+  draggable,
   ...props
 }: CrudViewerProps<T, FormType>) {
   const { t } = useTranslationLib();
@@ -131,6 +151,13 @@ function CrudViewer<T, FormType = T>({
   const [openView, setOpenView] = useState<T>();
   const [recentUpdateOrDeleteId, setRecentUpdateOrDeleteId] =
     useState<string>();
+  const [dataSource, setDataSource] = useState<T[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      setDataSource(data);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (data) {
@@ -214,6 +241,40 @@ function CrudViewer<T, FormType = T>({
     ]
   );
 
+  const onDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+      if(draggable?.onDragEnd)
+        draggable?.onDragEnd(event);
+      if (active.id !== over?.id) {
+        const activeIndex = dataSource.findIndex(
+          (record) => record[idField] === active.id
+        );
+        const overIndex = dataSource.findIndex(
+          (record) => record[idField] === over?.id
+        );
+
+        const newDataSource = arrayMove(dataSource, activeIndex, overIndex);
+
+        setDataSource((prevState) => {
+          const activeIndex = prevState.findIndex(
+            (record) => record[idField] === active?.id
+          );
+          const overIndex = prevState.findIndex(
+            (record) => record[idField] === over?.id
+          );
+          return arrayMove(prevState, activeIndex, overIndex);
+        });
+
+        // Update the backend with the new order
+        draggable?.onDrag?.({
+          newOrder: newDataSource.map((item) => item[idField]),
+        });
+      }
+    },
+    [dataSource, idField, draggable]
+  );
+
   const viewTitleValue = useMemo(() => {
     let tempViewTitleValue =
       typeof viewable === "string" ? (openView?.[viewable] as any) : undefined;
@@ -229,6 +290,123 @@ function CrudViewer<T, FormType = T>({
 
     return tempViewTitleValue;
   }, [viewable, openView, fields]);
+
+  // Memoize table props to prevent unnecessary re-renders
+  const tableProps = useMemo(
+    () => ({
+      rowClassName,
+      className,
+      scroll:
+        scroll ??
+        (minusHeight ? { y: `calc(100vh - ${minusHeight})` } : undefined),
+      id: "crud-table",
+      bordered,
+      size,
+      expandable,
+    }),
+    [rowClassName, className, scroll, minusHeight, bordered, size, expandable]
+  );
+
+  // Memoize pagination props separately
+  const paginationProps = useMemo(
+    () =>
+      paginateProps
+        ? ({
+            total: paginateProps.count,
+            onChange: paginateProps.setPage,
+            current: paginateProps.page,
+            pageSize: paginateProps.pageSize,
+          } as TablePaginationConfig)
+        : undefined,
+    [paginateProps]
+  );
+
+  // Memoize columns separately to avoid recreating on every render
+  const tableColumns = useMemo((): TableComponentColumnProp<T> => {
+    const hasActions =
+      onUpdate || onClickUpdate || onDelete || extraAction || viewable;
+    const columns0: TableComponentColumnProp<T> = [];
+    if (draggable) {
+      columns0.push({
+        key: "key",
+        align: "center",
+        width: 80,
+        render: () => <DragHandle />,
+      });
+    }
+    columns0.push(...columns);
+    if (!hasActions) return columns0;
+
+    if (hasActions) {
+      columns0.push({
+        title: t("str.action"),
+        fixed: "right" as const,
+        width: actionWidth,
+        render: (_, data: T) => (
+          <>
+            {viewable && <ViewButtonTable value={data} onClick={setOpenView} />}
+            {actions(data)}
+          </>
+        ),
+      });
+    }
+    return columns0;
+  }, [
+    columns,
+    onUpdate,
+    onClickUpdate,
+    onDelete,
+    extraAction,
+    viewable,
+    t,
+    actionWidth,
+    actions,
+  ]);
+
+  // Memoize sortable items for DnD
+  const sortableItems = useMemo(
+    () => dataSource.map((item) => item[idField]),
+    [dataSource, idField]
+  );
+
+  // Only wrap with DnD context when needed - this is stable
+  const renderTable = useCallback(() => {
+    const tableElement = (
+      <TableComponentMemo
+        {...tableProps}
+        dataSource={dataSource}
+        loading={loadingData}
+        components={draggable ? { body: { row: Row } } : undefined}
+        pagination={paginationProps}
+        columns={tableColumns}
+      />
+    );
+
+    // Only wrap with DndContext and SortableContext if draggable is enabled
+    if (draggable) {
+      return (
+        <DndContext modifiers={[restrictToVerticalAxis]} onDragEnd={onDragEnd}>
+          <SortableContext
+            items={sortableItems}
+            strategy={verticalListSortingStrategy}
+          >
+            {tableElement}
+          </SortableContext>
+        </DndContext>
+      );
+    }
+
+    return tableElement;
+  }, [
+    tableProps,
+    dataSource,
+    loadingData,
+    paginationProps,
+    tableColumns,
+    draggable,
+    sortableItems,
+    onDragEnd,
+  ]);
 
   return (
     <div>
@@ -246,7 +424,7 @@ function CrudViewer<T, FormType = T>({
               <CrudDecListView
                 layout={decListLayout}
                 descListColumn={descListColumn}
-                data={openView!}
+                data={openView}
                 fields={fields}
                 action={actions(openView!)}
               />
@@ -258,58 +436,65 @@ function CrudViewer<T, FormType = T>({
       <CrudSearchComponent<T, FormType> fields={fields} {...props} />
       <VerticalSpace>
         {Boolean(onClickRefresh) && <RefreshButton onClick={onClickRefresh} />}
-        <TableComponent
-          rowClassName={rowClassName}
-          className={className}
-          scroll={
-            scroll ??
-            (minusHeight
-              ? {
-                  y: `calc(100vh - ${minusHeight})`,
-                }
-              : undefined)
-          }
-          id="crud-table"
-          dataSource={data}
-          loading={loadingData}
-          bordered={bordered}
-          size={size}
-          expandable={expandable}
-          pagination={
-            paginateProps
-              ? {
-                  total: paginateProps.count,
-                  onChange: paginateProps.setPage,
-                  current: paginateProps.page,
-                  pageSize: paginateProps.pageSize,
-                }
-              : undefined
-          }
-          columns={
-            (onUpdate || onClickUpdate || onDelete || extraAction || viewable
-              ? [
-                  ...columns,
-                  {
-                    title: t('str.action'),
-                    dataIndex: "",
-                    fixed: "right",
-                    width: actionWidth,
-                    render: (_, data: T) => (
-                      <>
-                        {viewable && (
-                          <ViewButtonTable value={data} onClick={setOpenView} />
-                        )}
-                        {actions(data)}
-                      </>
-                    ),
-                  },
-                ]
-              : columns) as TableComponentColumnProp<T>
-          }
-        ></TableComponent>
+        {renderTable()}
       </VerticalSpace>
     </div>
   );
 }
 
 export default CrudViewer;
+
+interface RowContextProps {
+  setActivatorNodeRef?: (element: HTMLElement | null) => void;
+  listeners?: SyntheticListenerMap;
+}
+
+const RowContext = React.createContext<RowContextProps>({});
+
+const DragHandle: React.FC = () => {
+  const { setActivatorNodeRef, listeners } = useContext(RowContext);
+  return (
+    <ButtonComponent
+      type="text"
+      size="small"
+      icon={<HolderOutlined />}
+      style={{ cursor: "move" }}
+      ref={setActivatorNodeRef}
+      {...listeners}
+    />
+  );
+};
+
+interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
+  "data-row-key": string;
+}
+
+const Row: React.FC<RowProps> = (props) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: props["data-row-key"] });
+
+  const style: React.CSSProperties = {
+    ...props.style,
+    transform: CSS.Translate.toString(transform),
+    transition,
+    ...(isDragging ? { position: "relative", zIndex: 9999 } : {}),
+  };
+
+  const contextValue = useMemo<RowContextProps>(
+    () => ({ setActivatorNodeRef, listeners }),
+    [setActivatorNodeRef, listeners]
+  );
+
+  return (
+    <RowContext.Provider value={contextValue}>
+      <tr {...props} ref={setNodeRef} style={style} {...attributes} />
+    </RowContext.Provider>
+  );
+};

@@ -6,8 +6,7 @@
 import { Layout, Tabs } from 'antd';
 import { TabsPosition } from 'antd/lib/tabs';
 import React, { useEffect, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Outlet, useNavigate } from 'react-router-dom';
 
 import { useWindowDimensions } from '../../context';
 

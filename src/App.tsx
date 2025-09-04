@@ -1,6 +1,7 @@
 import { setupI18n } from "./locale";
 import { CrudComponent } from ".";
 import { useState } from "react";
+import BuildingAndFloorScreen from "./Play";
 
 // Initialize with your custom translations
 setupI18n();
@@ -38,6 +39,7 @@ function App() {
 
   return (
     <div className="">
+      <BuildingAndFloorScreen />
       <CrudComponent<Purchase>
         data={data}
         onDelete={async (e) => {
