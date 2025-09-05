@@ -34,6 +34,8 @@ import ImageUtil from "../../util/ImageUtil";
 import FlipHIcon from "src/icons/FlipHIcon";
 import FlipVIcon from "src/icons/FlipVIcon";
 
+const BUTTON_STATE = 'crud-component.image-picker.button-state';
+
 function getBase64(file) {
   return new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
@@ -196,7 +198,7 @@ const ImagePicker: FC<Props> = ({
       reader.addEventListener("load", () => {
         if (typeof reader.result === "string") {
           setPreview(reader.result);
-          const b = localStorage.getItem("cropper.state");
+          const b = localStorage.getItem(BUTTON_STATE);
           const box = b ? JSON.parse(b) : undefined;
           if (box) {
             // cropper?.current?.cropper.
@@ -236,7 +238,7 @@ const ImagePicker: FC<Props> = ({
     [required, preview, fileList?.length, label, t]
   );
 
-  const _buttonTitle = buttonTitle ?? t("message.fileUploadMessage2");
+  const _buttonTitle = buttonTitle ?? t("message.uploadButtonText");
 
   const uploadComponent = useMemo(
     () => (
@@ -283,7 +285,7 @@ const ImagePicker: FC<Props> = ({
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (croppedBoxData) {
-        localStorage.setItem("cropper.state", JSON.stringify(croppedBoxData));
+        localStorage.setItem(BUTTON_STATE, JSON.stringify(croppedBoxData));
       }
     }, 400);
     return () => clearTimeout(timeout);

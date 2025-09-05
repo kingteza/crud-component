@@ -51,6 +51,7 @@ export default {
     loading: {
       saving: "Saving",
     },
+    uploadButtonText: "Click to Upload",
   },
   qus: {
     importWithIssues:
