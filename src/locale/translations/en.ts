@@ -30,6 +30,10 @@ export default {
     refresh: "Refresh",
     fileUploadMessage1: "Drag file here or ",
     fileUploadMessage2: "Click to Upload",
+    rotateLeft: "Rotate Left",
+    rotateRight: "Rotate Right",
+    flipHorizontal: "Flip Horizontal",
+    flipVertical: "Flip Vertical",
   },
   err: {
     save: "An error occurred while saving",

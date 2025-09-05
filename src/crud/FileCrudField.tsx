@@ -256,7 +256,7 @@ export const FileCellValue: FC<{
           footer={<></>}
           width={"100%"}
           style={{ top: "8px", minHeight: "700px" }}
-          destroyOnClose
+          destroyOnHidden
         >
           <VerticalSpace>
             <ButtonComponent

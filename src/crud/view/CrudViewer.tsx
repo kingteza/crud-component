@@ -58,6 +58,8 @@ const TableComponentMemo = React.memo(TableComponent) as typeof TableComponent;
 export type CrudDragableProps<T> = {
   onDragEnd?: (event: DragEndEvent) => void;
   onDrag?: (params: { newOrder: T[] }) => void;
+  columnLabel?: string;
+  tooltip?: string;
 };
 
 export type CrudViewerProps<T, FormType> = {
@@ -330,8 +332,9 @@ function CrudViewer<T, FormType = T>({
       columns0.push({
         key: "key",
         align: "center",
-        width: 80,
-        render: () => <DragHandle />,
+        width: 5,
+        title: draggable?.columnLabel,
+        render: () => <DragHandle tooltip={draggable?.tooltip} />,
       });
     }
     columns0.push(...columns);
@@ -451,14 +454,15 @@ interface RowContextProps {
 
 const RowContext = React.createContext<RowContextProps>({});
 
-const DragHandle: React.FC = () => {
+const DragHandle: React.FC<{ tooltip?: string }> = ({ tooltip }) => {
   const { setActivatorNodeRef, listeners } = useContext(RowContext);
   return (
     <ButtonComponent
       type="text"
       size="small"
+      tooltip={tooltip}
       icon={<HolderOutlined />}
-      style={{ cursor: "move" }}
+      style={{ cursor: "move", border: "none" }}
       ref={setActivatorNodeRef}
       {...listeners}
     />

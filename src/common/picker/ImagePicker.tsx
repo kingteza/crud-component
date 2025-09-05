@@ -4,7 +4,8 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import "cropperjs/dist/cropper.css";
+import { CropperRef, Cropper, CropperState } from "react-advanced-cropper";
+import "react-advanced-cropper/dist/style.css";
 import "./style.css";
 
 import {
@@ -13,9 +14,7 @@ import {
   RotateRightOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { Form, FormItemProps } from "antd";
-import { Modal } from "antd";
-import { Upload, UploadProps } from "antd";
+import { Upload, UploadProps, Modal, Form, FormItemProps, Space } from "antd";
 import { RcFile, UploadFile } from "antd/lib/upload/interface";
 import React, {
   FC,
@@ -28,12 +27,12 @@ import React, {
 } from "react";
 const FormItem = Form.Item;
 import { UploadListType } from "antd/es/upload/interface";
-import { Cropper, ReactCropperElement } from "react-cropper";
 import { useTranslationLib } from "../../locale";
-
 
 import ButtonComponent from "../button/Button";
 import ImageUtil from "../../util/ImageUtil";
+import FlipHIcon from "src/icons/FlipHIcon";
+import FlipVIcon from "src/icons/FlipVIcon";
 
 function getBase64(file) {
   return new Promise<string>((resolve, reject) => {
@@ -112,7 +111,8 @@ const ImagePicker: FC<Props> = ({
   const [previewImage, setPreviewImage] = React.useState("");
   const [previewVisible, setPreviewVisible] = React.useState(false);
   const fileRef = useRef<RcFile>();
-  const cropper = useRef<ReactCropperElement>();
+  const cropperRef = useRef<CropperRef>(null);
+
   const [fileList, setFileList] = useState<UploadFile<RcFile>[]>([]);
   const [preview, setPreview] = useState<string>();
   const beforeUploadRef = useRef<UploadProps["beforeUpload"]>();
@@ -132,28 +132,33 @@ const ImagePicker: FC<Props> = ({
   const handleCropChange = () => {};
 
   const handleRotate = (isLeft?: boolean) => {
-    cropper?.current?.cropper.rotate(isLeft ? -90 : 90);
+    cropperRef.current?.rotateImage(isLeft ? -90 : 90);
     handleCropChange();
   };
+
+  const handleFlip = useCallback((mode: "h" | "v") => {
+    if (cropperRef.current) {
+      cropperRef.current?.flipImage(mode === "h", mode === "v");
+    }
+  }, []);
 
   useEffect(() => {
     onChange?.(fileList[0], fileList);
   }, [fileList, onChange]);
 
-  const onClickConfirmCrop = () => {
-    const croppedImgData = cropper?.current?.cropper.getCroppedCanvas();
-
+  const onClickConfirmCrop = async () => {
+    const croppedImgData = cropperRef.current?.getCanvas();
     // get the new image
     const { type, size, name, uid } = fileRef.current as any;
 
     setShowLoadingIndicator(true);
-    // const file: any = dataURLtoFile({ url, name });
     croppedImgData?.toBlob(async (blob: any) => {
       const file = Object.assign(new File([blob], name, { type }), {
         uid,
       }) as RcFile;
       const fileResized: RcFile = await ImageUtil.resizeImage(file);
       const url = await getBase64(fileResized);
+      console.log({ url });
       const fl = {
         url,
         name,
@@ -191,14 +196,14 @@ const ImagePicker: FC<Props> = ({
       reader.addEventListener("load", () => {
         if (typeof reader.result === "string") {
           setPreview(reader.result);
-          const b = localStorage.getItem("cropper.box");
+          const b = localStorage.getItem("cropper.state");
           const box = b ? JSON.parse(b) : undefined;
           if (box) {
             // cropper?.current?.cropper.
-            cropper?.current?.cropper.setCropBoxData(box);
+            cropperRef.current?.setState(box);
           }
           setTimeout(() => {
-            onCropMove();
+            onCropMove(cropperRef.current);
           }, 100);
         }
       });
@@ -274,11 +279,11 @@ const ImagePicker: FC<Props> = ({
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
 
-  const [croppedBoxData, setCroppedBoxData] = useState<Cropper.CropBoxData>();
+  const [croppedBoxData, setCroppedBoxData] = useState<CropperState | null>();
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (croppedBoxData) {
-        localStorage.setItem("cropper.box", JSON.stringify(croppedBoxData));
+        localStorage.setItem("cropper.state", JSON.stringify(croppedBoxData));
       }
     }, 400);
     return () => clearTimeout(timeout);
@@ -288,16 +293,20 @@ const ImagePicker: FC<Props> = ({
     if (!preview) {
       setWidth(0);
       setHeight(0);
+      const timeout = setTimeout(() => {
+        cropperRef.current?.reset();
+      }, 1500);
+      return () => clearTimeout(timeout);
     }
   }, [preview]);
 
-  const onCropMove = useCallback(async () => {
-    const ref = cropper?.current?.cropper;
+  const onCropMove = useCallback(async (ref: CropperRef | null) => {
     if (ref) {
-      const { width, height } = ref.getCroppedCanvas();
-      setCroppedBoxData(ref.getCropBoxData());
-      setWidth(width);
-      setHeight(height);
+      const cor = ref.getCoordinates();
+
+      setCroppedBoxData(ref.getState());
+      setWidth(cor?.width ?? 10);
+      setHeight(cor?.height ?? 10);
     }
   }, []);
 
@@ -318,28 +327,56 @@ const ImagePicker: FC<Props> = ({
         onOk={onClickConfirmCrop}
         closable={false}
         onCancel={onClickCancelCrop}
+        destroyOnHidden
       >
         <Cropper
-          ref={cropper as any}
+          ref={cropperRef}
+          stencilProps={{
+            grid: true,
+          }}
+          style={{ border: "1px solid black" }}
           src={preview}
-          cropmove={onCropMove}
-          viewMode={1}
+          onChange={(ref) => {
+            onCropMove(ref);
+          }}
           // width={'150%'}
-          aspectRatio={aspectRatio}
-          cropend={() => handleCropChange()}
+          aspectRatio={
+            aspectRatio
+              ? {
+                  minimum: aspectRatio,
+                  maximum: aspectRatio,
+                }
+              : undefined
+          }
         />
         <p className="text-center">{[width, height].join(" ⨉ ")}</p>
         <div className="mt-2 d-flex justify-content-center">
-          <ButtonComponent
-            size="large"
-            icon={<RotateLeftOutlined />}
-            onClick={() => handleRotate(true)}
-          />
-          <ButtonComponent
-            size="large"
-            icon={<RotateRightOutlined />}
-            onClick={() => handleRotate(false)}
-          />
+          <Space.Compact>
+            <ButtonComponent
+              size="large"
+              tooltip={t("str.rotateLeft")}
+              icon={<RotateLeftOutlined />}
+              onClick={() => handleRotate(true)}
+            />
+            <ButtonComponent
+              size="large"
+              icon={<RotateRightOutlined />}
+              tooltip={t("str.rotateRight")}
+              onClick={() => handleRotate(false)}
+            />
+            <ButtonComponent
+              size="large"
+              icon={<FlipHIcon />}
+              tooltip={t("str.flipHorizontal")}
+              onClick={() => handleFlip("h")}
+            />
+            <ButtonComponent
+              size="large"
+              icon={<FlipVIcon />}
+              tooltip={t("str.flipVertical")}
+              onClick={() => handleFlip("v")}
+            />
+          </Space.Compact>
         </div>
       </Modal>
       <Modal
@@ -391,6 +428,7 @@ export const UploadComponent: FC<{
 }) => {
   return (
     <>
+      {/* Upload component from antd and cropping using cropperjs */}
       <Upload
         accept="image/x-png,image/gif,image/jpeg"
         key={fileList.length}

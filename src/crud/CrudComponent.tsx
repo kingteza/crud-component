@@ -13,12 +13,13 @@ import { FileCrudField } from "./FileCrudField";
 import { ImageCrudField } from "./ImageCrudField";
 import CrudImportButton from "./import/CrudImportButton";
 import { CrudImportProps } from "./import/CrudImportComponent";
-import CrudViewer from "./view/CrudViewer";
+import CrudViewer, { CrudDragableProps } from "./view/CrudViewer";
 import { NewButton, PrintButton } from "../common";
 import { SelectTagRenderProps } from "../common/select/SelectComponent";
 import IdProps from "../types/Id";
 import { useTranslationLib } from "../locale";
 import { TextAreaBasedFieldProps } from "./CrudTextAreaComponent";
+import { SizeType } from "antd/es/config-provider/SizeContext";
 
 export type SelectFieldItem = {
   key?: string | number;
@@ -299,6 +300,8 @@ export type CrudComponentProps<T, FormType = T> = {
   extraView?: (t: T) => React.ReactElement;
   importable?: CrudImportProps<T>;
   onClickNew?: () => void;
+  draggable?: CrudDragableProps<T>;
+  size?: SizeType;
 } & CrudSearchComponentProps<T, FormType>;
 
 function CrudComponent<T, FormType = T>({
@@ -328,6 +331,7 @@ function CrudComponent<T, FormType = T>({
   extraView,
   importable,
   onClickNew,
+  size,
   ...props
 }: CrudComponentProps<T, FormType>) {
   const { t } = useTranslationLib();
@@ -477,6 +481,7 @@ function CrudComponent<T, FormType = T>({
           {...props}
           minusHeight={minusHeight}
           data={data}
+          size={size}
           fields={fields}
           extraAction={extraAction}
           idField={idField}
@@ -530,7 +535,7 @@ function CrudComponent<T, FormType = T>({
           setOpenModal(false);
         }}
         onOk={() => _onSave()}
-        destroyOnClose
+        destroyOnHidden
       >
         <Spin spinning={updating}>
           {!wizard && (

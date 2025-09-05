@@ -6,9 +6,10 @@
 import { Layout, Tabs } from 'antd';
 import { TabsPosition } from 'antd/lib/tabs';
 import React, { useEffect, useState } from 'react';
-import { useLocation, Outlet, useNavigate } from 'react-router-dom';
+import { useLocation, Outlet } from 'react-router-dom';
 
 import { useWindowDimensions } from '../../context';
+import { useNavigateOptional } from 'src/hooks/NavigatorHooks';
 
 const { Content } = Layout;
 
@@ -31,10 +32,10 @@ export const TabViewWithRoute: React.FC<TabViewWithRouteProps> = ({
   mode = 'default',
 }) => {
   const [activeKey, setActiveKey] = useState<string>(initialKey);
-  const navigate = useNavigate();
+  const navigate = useNavigateOptional();
 
   const callback = (route: string) => {
-    navigate(route);
+    navigate?.(route);
   };
 
   const location = useLocation();
@@ -42,7 +43,7 @@ export const TabViewWithRoute: React.FC<TabViewWithRouteProps> = ({
     const currentPos = location.pathname.split('/')[positionOfRoute];
     setActiveKey(currentPos ?? '');
     if (!currentPos) {
-      navigate(initialKey, { replace: true });
+      navigate?.(initialKey, { replace: true });
     }
   }, [initialKey, location.pathname, navigate, positionOfRoute]);
 

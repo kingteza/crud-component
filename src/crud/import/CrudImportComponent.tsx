@@ -194,7 +194,7 @@ function CrudImportComponent<T>({
       width={"100%"}
       open={open}
       onOk={onclickSubmit}
-      destroyOnClose
+      destroyOnHidden
       onCancel={() => onCloseMethod(false)}
       okText={t("str.import")}
       confirmLoading={loading}

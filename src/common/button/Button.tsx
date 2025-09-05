@@ -7,7 +7,7 @@ import { Button, ButtonProps, Tooltip } from "antd";
 import React, { useCallback, useMemo, useState } from "react";
 import { useTranslationLib } from "../../locale";
 import "./style.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigateOptional } from "src/hooks/NavigatorHooks";
 
 export interface ButtonComponentProps extends ButtonProps {
   to?: string | number;
@@ -25,12 +25,7 @@ const ButtonComponent: React.FC<ButtonComponentProps> = ({
 }) => {
   const { t } = useTranslationLib();
 
-  let navigate;
-  try {
-    navigate = useNavigate?.();
-  } catch (error) {
-    console.error(error);
-  }
+  const navigate = useNavigateOptional();
 
   const btn = useMemo(
     () => (
@@ -60,12 +55,7 @@ const Async: React.FC<ButtonComponentProps> = ({
   ref,
   ...props
 }) => {
-  let navigate;
-  try {
-    navigate = useNavigate();
-  } catch (error) {
-    console.error(error);
-  }
+  const navigate = useNavigateOptional();
 
   const [loading, setLoading] = useState(false);
   const _onClick = useCallback(
