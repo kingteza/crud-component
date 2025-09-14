@@ -11,6 +11,7 @@ import { useTranslationLib } from "../locale";
 import { CrudFieldProps, CrudPurpose, CrudWizardProp } from "./CrudComponent";
 import { CrudFormFields } from "./CrudForm";
 import { ButtonComponent, WizardViewForm } from "../common";
+import CrudUtil from "src/util/CrudUtil";
 
 export interface CrudFormWizardProps<T> {
   onDeleteFile?: (e) => void;
@@ -39,7 +40,7 @@ function CrudFormWizard<T>({
     return wizard.map((e) => {
       let hidden = true;
       const fieldThatShouldShowing = fields.filter((x) =>
-        e.fields.includes(x.name as any)
+        e.fields.includes(CrudUtil.getRealName(x.name))
       );
       fieldThatShouldShowing.forEach((x) => (hidden &&= x.hidden ?? false));
       return {
@@ -119,7 +120,8 @@ function SubForm<T>({
     if (updatingValue && (purpose === "update" || purpose === "clone")) {
       const obj = {};
       for (const key of fields) {
-        obj[key.name as any] = updatingValue[key.name as any];
+        obj[CrudUtil.getRealName(key.name, "upsertFieldName")] =
+          updatingValue[CrudUtil.getRealName(key.name, "upsertFieldName")];
       }
       form.setFieldsValue(obj);
     } else if (!updatingValue) {

@@ -27,6 +27,7 @@ import { FileDownloadProvider, FileUploadProvider } from "./ImageCrudField";
 import ValidationUtil from "../util/ValidationUtil";
 import { ButtonComponent } from "../common";
 import { VerticalSpace } from "../common";
+import CrudUtil from "src/util/CrudUtil";
 
 export interface FileCrudField<T> extends _FileCrudField<T> {
   type: "file";
@@ -57,7 +58,8 @@ export default function FileCrudFieldComponent<T>({
   ...props
 }: Readonly<_FileCrudField<T>>) {
   const form = Form.useFormInstance();
-  const fieldValue = Form.useWatch(name, form);
+  const realName = CrudUtil.getRealName(name, 'upsertFieldName');
+  const fieldValue = Form.useWatch(realName, form);
 
   const [isUploading, setIsUploading] = useState(false);
   const [isUpload, setIsUpload] = useState(false); // Indicate whether this is a upload

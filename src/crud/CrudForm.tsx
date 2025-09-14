@@ -13,6 +13,7 @@ import {
   GetFormFieldOptions,
 } from "./CrudComponent";
 import CrudField from "./CrudField";
+import CrudUtil from "src/util/CrudUtil";
 
 export interface CurdFormFieldsProps<T> {
   onDeleteFile?: (e) => void;
@@ -91,7 +92,7 @@ export function CrudFormFields<T>({
 
   const getFormField = useCallback(
     (name: keyof T | string, options: GetFormFieldOptions = {}) => {
-      const e = fields.find((field) => field.name === name);
+      const e = fields.find((field) => CrudUtil.getRealName(field.name) === name);
       if (e?.hidden) return <></>;
       if (e) {
         const functionProps = {
@@ -110,12 +111,13 @@ export function CrudFormFields<T>({
                 }
               : undefined,
         };
+        const realName = CrudUtil.getRealName(e.name);
         const component = (
           <CrudField
             {...e}
             {...options}
             {...functionProps}
-            key={typeof e.name === "string" ? e.name : String(e.name)}
+            key={typeof realName === "string" ? realName : String(realName)}
             updatable={purpose !== "update" ? true : e.updatable}
           />
         );

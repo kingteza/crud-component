@@ -11,6 +11,7 @@ import { useCallback, useEffect, useMemo } from "react";
 import { CrudFieldProps } from "./CrudComponent";
 import CrudField from "./CrudField";
 import { ButtonComponent } from "../common";
+import CrudUtil from "src/util/CrudUtil";
 
 export type CrudSearchOption<T> = { required?: boolean } & (
   | { type: "text"; name: keyof T }
@@ -141,10 +142,11 @@ export default function CrudSearchComponent<T, FormType>({
             sm: sm.field,
             xs: xs.field,
           };
+          const realName = CrudUtil.getRealName(field.name);
           return (
             <Col
               {...props}
-              key={`search_field_${String(field.name)}`}
+              key={`search_field_${String(realName)}`}
               className="align-self-end"
             >
               <CrudField {...field} readonly={false} fieldClassName="mb-0" />

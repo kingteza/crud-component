@@ -3,6 +3,7 @@ import { RichTextEditor, TextAreaComponent } from "src/common";
 import { Form } from "antd";
 import { InitialCrudField } from "./CrudComponent";
 import { FormInstance } from "antd/lib";
+import CrudUtil from "src/util/CrudUtil";
 
 interface InitialTextAreaProps<T> extends InitialCrudField<T> {
   type: "textarea";
@@ -37,10 +38,11 @@ const CrudTextAreaComponent = <T,>({
   ...props
 }: TextAreaBasedFieldProps<T>) => {
   const form = Form.useFormInstance();
+  const realName = CrudUtil.getRealName(name, 'upsertFieldName');
   if (props.rich) {
     return (
       <RichTextEditor
-        name={name as any}
+        name={realName}
         label={label}
         required={required}
         rules={rules}
@@ -60,7 +62,7 @@ const CrudTextAreaComponent = <T,>({
         tooltip={fieldTooltip}
         required={required}
         disabled={!updatable}
-        name={name as any}
+        name={name}
         label={label}
         className={fieldClassName}
         rows={rows}

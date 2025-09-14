@@ -16,6 +16,7 @@ import DateUtil from "../../util/DateUtil";
 import NumberUtil from "../../util/NumberUtil";
 import { t } from "../../locale";
 import { TextAreaBasedFieldProps } from "../CrudTextAreaComponent";
+import CrudUtil from "src/util/CrudUtil";
 
 export function getRendererValueCrudViewer<T>({
   type,
@@ -29,11 +30,16 @@ export function getRendererValueCrudViewer<T>({
       : type === "select"
       ? (e, value, i) => {
           const selectProps = props as any as SelectCrudField<{}>;
+          const e0 = e || (selectProps.items ?? []).find(
+                (item) =>
+                  item[selectProps.innerFieldId ?? "key"] ===
+                  value[CrudUtil.getRealName(props.name, "upsertFieldName")]
+              );
           const v = selectProps.multiple
-            ? Array.isArray(e)
-              ? e.map((e) => e?.[selectProps.innerFieldLabel ?? "name"])
+            ? Array.isArray(e0)
+              ? e0.map((e) => e?.[selectProps.innerFieldLabel ?? "name"])
               : undefined
-            : e?.[selectProps.innerFieldLabel ?? "name"];
+            : e0?.[selectProps.innerFieldLabel ?? "value"];
           return typeof render === "function"
             ? render(v, value, i)
             : Array.isArray(v)

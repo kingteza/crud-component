@@ -26,6 +26,11 @@ export type Purchase = {
   id: string | number;
   name: string;
   image: string;
+  helloId: string;
+  hello?: {
+    id: string;
+    name: string;
+  };
 };
 
 class TestUploadProvider extends FileUploadProvider {
@@ -63,6 +68,7 @@ function App() {
   const [data, setData] = useState<Purchase[]>([
     {
       id: "1",
+      helloId: "1",
       status: PurchaseStatus.CANCELLED,
       test: TestEnum.TEST,
       value: "test",
@@ -76,6 +82,7 @@ function App() {
       value: "sample data",
       name: "John Doe",
       image: "/400/300/200",
+      helloId: "1",
     },
     {
       id: "3",
@@ -84,6 +91,7 @@ function App() {
       value: "another record",
       name: "Jane Smith",
       image: "/500/400/300",
+      helloId: "1",
     },
     {
       id: "4",
@@ -92,6 +100,7 @@ function App() {
       value: "demo content",
       name: "Bob Johnson",
       image: "/300/250/150",
+      helloId: "2",
     },
     {
       id: "5",
@@ -100,13 +109,13 @@ function App() {
       value: "final example",
       name: "Alice Brown",
       image: "/600/500/400",
+      helloId: "3",
     },
   ]);
 
 
   return (
     <div className="">
-      <Play />
       <CrudComponent<Purchase>
         data={data}
         size="small"
@@ -169,6 +178,19 @@ function App() {
             label: "Name",
             aspectRatio: 1,
             provider: new TestUploadProvider("237", "200"),
+          },
+          {
+            type: "select",
+            name: {
+              upsertFieldName: 'helloId',
+              name: 'hello',
+            },
+            label: "Hello Field",
+            items: [
+              { value: "Hello", key: "1" },
+              { value: "World", key: "2" },
+              { value: "Nice", key: "3" },
+            ],
           },
           {
             type: "textarea",

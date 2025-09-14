@@ -20,6 +20,7 @@ import IdProps from "../types/Id";
 import { useTranslationLib } from "../locale";
 import { TextAreaBasedFieldProps } from "./CrudTextAreaComponent";
 import { SizeType } from "antd/es/config-provider/SizeContext";
+import CrudUtil from "src/util/CrudUtil";
 
 export type SelectFieldItem = {
   key?: string | number;
@@ -79,7 +80,13 @@ export type CrudFieldGrid = {
 export interface SelectCrudField<
   T,
   ItemType extends SelectFieldItem = SelectFieldItem
-> extends InitialCrudField<T> {
+> extends Omit<InitialCrudField<T>, "name"> {
+  name:
+    | InitialCrudField<T>["name"]
+    | {
+        name:  keyof T | (string | number)[];
+        upsertFieldName:  keyof T | (string | number)[]; // The field name that will be used in create or update
+      };
   type: "select";
   placeholder?: string;
   /**
@@ -165,7 +172,6 @@ export interface TextBasedFieldProps<T> extends InitialCrudField<T> {
   type: "text" | "time" | "email" | "password";
   onChange?: (value: string, form: FormInstance<T>) => void;
 }
-
 
 export interface ColorPickerFieldProps<T>
   extends Omit<InitialCrudField<T>, "placeholder"> {
@@ -347,8 +353,9 @@ function CrudComponent<T, FormType = T>({
       const colorFields = fields.filter((e) => e.type === "color");
       const colorValues = {};
       colorFields.forEach((e) => {
-        const color = form.getFieldValue(e.name);
-        colorValues[e.name as any] =
+        const upsertFieldName = CrudUtil.getRealName(e.name, 'upsertFieldName');
+        const color = form.getFieldValue(upsertFieldName);
+        colorValues[upsertFieldName] =
           typeof color === "string"
             ? color
             : (color as Color)?.toHexString()?.toUpperCase();
@@ -401,32 +408,33 @@ function CrudComponent<T, FormType = T>({
         if (shouldSetUpdatingField) setPurpose("update");
         const _data = {};
         for (const e of fields) {
-          const dataField = data[e.name as any];
+          const upsertFieldName = CrudUtil.getRealName(e.name, 'upsertFieldName');
+          const dataField = data[upsertFieldName];
           if (isClone && e.type === "image") {
             const filePath = dataField;
             try {
               const clonedFilePath = await e.provider.clone(filePath);
-              _data[e.name as any] = clonedFilePath;
+              _data[upsertFieldName] = clonedFilePath;
               continue;
             } catch {
               continue;
             }
           }
           if (e.type === "date") {
-            if (dataField) _data[e.name as any] = dayjs(dataField);
+            if (dataField) _data[upsertFieldName] = dayjs(dataField);
           } else if (e.type === "select") {
             if (e.multiple && Array.isArray(dataField)) {
-              _data[e.name as any] = dataField.map(
+              _data[upsertFieldName] = dataField.map(
                 (x) => x[e.innerFieldId ?? "id"]
               );
             } else if (dataField && typeof dataField === "object")
-              _data[e.name as any] = dataField[e.innerFieldId ?? "id"];
+              _data[upsertFieldName] = dataField[e.innerFieldId ?? "id"];
             else if (
               (dataField && typeof dataField === "string") ||
               typeof dataField === "number"
             )
-              _data[e.name as any] = dataField;
-          } else _data[e.name as any] = dataField;
+              _data[upsertFieldName] = dataField;
+          } else _data[upsertFieldName] = dataField;
         }
         form.setFieldsValue(_data);
         setUpdatingValueForWizard(_data);

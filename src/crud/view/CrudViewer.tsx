@@ -43,7 +43,11 @@ import { useTranslationLib } from "../../locale";
 
 import IdProps from "../../types/Id";
 
-import { CrudFieldProps, CrudPaginateProps } from "../CrudComponent";
+import {
+  CrudFieldProps,
+  CrudPaginateProps,
+  InitialCrudField,
+} from "../CrudComponent";
 import CrudSearchComponent, {
   CrudSearchComponentProps,
 } from "../CrudSearchComponent";
@@ -51,6 +55,7 @@ import { CrudDecListView, DescListColumn } from "./CrudDecListView";
 import { getRendererValueCrudViewer } from "./CrudViewerUtil";
 import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 import { HolderOutlined } from "@ant-design/icons";
+import CrudUtil from "src/util/CrudUtil";
 
 // Create a stable table component that doesn't re-render unnecessarily
 const TableComponentMemo = React.memo(TableComponent) as typeof TableComponent;
@@ -137,15 +142,18 @@ function CrudViewer<T, FormType = T>({
   const columns = useMemo(
     () =>
       fields.map(
-        ({ hideInTable, hidden, width, name, label, halign, ...props }) => ({
-          title: label,
-          width,
-          key: name,
-          dataIndex: name,
-          hidden: hideInTable || hidden,
-          align: halign ?? (props.type === "number" ? "right" : undefined),
-          render: getRendererValueCrudViewer(props as any),
-        })
+        ({ hideInTable, hidden, width, label, halign, ...props }) => {
+          const realName = CrudUtil.getRealName(props.name);
+          return ({
+            title: label,
+            width,
+            key: realName,
+            dataIndex: realName,
+            hidden: hideInTable || hidden,
+            align: halign ?? (props.type === "number" ? "right" : undefined),
+            render: getRendererValueCrudViewer(props as any),
+          });
+        }
       ) as TableComponentColumnProp<T>,
     [fields]
   );
@@ -246,8 +254,7 @@ function CrudViewer<T, FormType = T>({
   const onDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
-      if(draggable?.onDragEnd)
-        draggable?.onDragEnd(event);
+      if (draggable?.onDragEnd) draggable?.onDragEnd(event);
       if (active.id !== over?.id) {
         const activeIndex = dataSource.findIndex(
           (record) => record[idField] === active.id
@@ -276,13 +283,16 @@ function CrudViewer<T, FormType = T>({
     },
     [dataSource, idField, draggable]
   );
-
+  
   const viewTitleValue = useMemo(() => {
     let tempViewTitleValue =
       typeof viewable === "string" ? (openView?.[viewable] as any) : undefined;
 
     if (typeof tempViewTitleValue === "object") {
-      const field = fields.find((e) => e.name === viewable);
+      const field = fields.find((e) => {
+        const realName = CrudUtil.getRealName(e.name);
+        return realName === viewable;
+      });
       tempViewTitleValue = getRendererValueCrudViewer(field!)(
         tempViewTitleValue,
         openView!,

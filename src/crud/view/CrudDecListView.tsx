@@ -9,8 +9,9 @@ import React, { useMemo } from "react";
 import { useTranslationLib } from "../../locale";
 
 
-import { CrudFieldProps } from "../CrudComponent";
+import { CrudFieldProps, InitialCrudField } from "../CrudComponent";
 import { getRendererValueCrudViewer } from "./CrudViewerUtil";
+import CrudUtil from "src/util/CrudUtil";
 
 export type DescListColumn =
   | number
@@ -40,15 +41,18 @@ export function CrudDecListView<T>({
   const _fields: DescPropsNullable[] = useMemo(() => {
     const list: DescPropsNullable[] = fields
       .filter(({ hidden, hideInDescList }) => !hidden && !hideInDescList)
-      .map((e, i) => ({
-        label: e.label,
-        noFormatting: true,
-        value: getRendererValueCrudViewer(e)(
-          data?.[e.name as any],
-          data as any,
-          i
-        ),
-      }));
+      .map((e, i) => {
+        const upsertFieldName = CrudUtil.getRealName(e.name);
+        return ({
+          label: e.label,
+          noFormatting: true,
+          value: getRendererValueCrudViewer(e)(
+            data?.[upsertFieldName],
+            data as any,
+            i
+          ),
+        });
+      });
     if (action) list.push({ label: t('str.action'), value: action });
     return list;
   }, [action, data, fields, t]);

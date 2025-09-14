@@ -3,7 +3,7 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 import { ColorPicker, Form, Radio, Select, Tag } from "antd";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { useTranslationLib } from "../locale";
 
@@ -13,6 +13,7 @@ import {
   CrudFieldProps,
   DateBasedFieldProps,
   EnumCrudField,
+  InitialCrudField,
   NumberBasedFieldProps,
   SelectCrudField,
   TextBasedFieldProps,
@@ -30,6 +31,7 @@ import {
   TooltipComponent,
 } from "../common";
 import CrudTextAreaComponent from "./CrudTextAreaComponent";
+import CrudUtil from "src/util/CrudUtil";
 
 export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
   const {
@@ -64,7 +66,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
   const { t } = useTranslationLib();
   if (readonly || hidden) return <></>;
   if (customFormFieldRender) {
-    return customFormFieldRender(form, props0);
+    return customFormFieldRender(form, props0 as any);
   }
   switch (type) {
     case "text":
@@ -329,7 +331,9 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
   }
 }
 
-export function SelectCrudFieldComponent<T>(props: Readonly<SelectCrudField<T>>) {
+export function SelectCrudFieldComponent<T>(
+  props: Readonly<SelectCrudField<T>>
+) {
   const {
     items = [],
     loading,
@@ -353,7 +357,9 @@ export function SelectCrudFieldComponent<T>(props: Readonly<SelectCrudField<T>>)
   } = props;
   const form = (props as any).form;
   const [typing, setTyping] = useState("");
-  const value = Form.useWatch(name, form);
+  const realName = useMemo(() => CrudUtil.getRealName(name), [name]);
+  const upsertFieldName = useMemo(() => CrudUtil.getRealName(name, 'upsertFieldName'), [name]);
+  const value = Form.useWatch(realName, form);
 
   const [first, setFirst] = useState(true);
   useEffect(() => {
@@ -361,7 +367,7 @@ export function SelectCrudFieldComponent<T>(props: Readonly<SelectCrudField<T>>)
       onSet?.(value, items, form);
       setFirst(false);
     }
-  }, [first, form, items, name, onSet, value]);
+  }, [first, form, items, realName, onSet, value]);
 
   useEffect(() => {
     if (value) {
@@ -375,7 +381,6 @@ export function SelectCrudFieldComponent<T>(props: Readonly<SelectCrudField<T>>)
     },
     [form, onSearch, searchOnType, updatingValue]
   );
-
   return (
     <SelectComponent
       {...props}
@@ -411,7 +416,7 @@ export function SelectCrudFieldComponent<T>(props: Readonly<SelectCrudField<T>>)
       }
       mode={multiple ? "multiple" : undefined}
       className={["w-100", fieldClassName].join(" ")}
-      name={name as any}
+      name={upsertFieldName}
       items={items}
       required={required}
       tooltip={fieldTooltip}
