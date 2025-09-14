@@ -1,0 +1,940 @@
+---
+alwaysApply: true
+---
+
+# @kingteza/crud-component Cursor Rules
+
+This file provides comprehensive rules and examples for using the @kingteza/crud-component library, a React CRUD component library built with Ant Design and TypeScript.
+
+## Library Overview
+
+The @kingteza/crud-component library provides:
+- **CrudComponent**: Main component for creating, reading, updating, and deleting data
+- **Common Components**: Reusable UI components (buttons, forms, tables, etc.)
+- **Utility Functions**: Date, number, image, and validation utilities
+- **Internationalization**: Built-in i18n support with i18next
+- **Type Safety**: Full TypeScript support with comprehensive type definitions
+
+## Installation & Setup
+
+```bash
+npm install @kingteza/crud-component
+npm install antd@^5.22.6 react@^18.3.1 react-dom@^18.3.1 react-router-dom@^7.0.0
+```
+
+### Required Setup
+
+```typescript
+import { setupI18n } from '@kingteza/crud-component';
+
+// Initialize i18n (required before using components)
+setupI18n();
+
+// Or with custom options
+setupI18n({
+  language: 'en',
+  translations: {
+    en: {
+      'crud-component': {
+        // your custom translations
+      }
+    }
+  }
+});
+```
+
+## Main Components
+
+### CrudComponent
+
+The main component for CRUD operations. Always use with proper TypeScript generics.
+
+```typescript
+import { CrudComponent } from '@kingteza/crud-component';
+
+// Define your data type
+interface User {
+  id: string | number;
+  name: string;
+  email: string;
+  status: 'active' | 'inactive';
+  createdAt: Date;
+}
+
+// Use with proper typing
+<CrudComponent<User>
+  data={users}
+  fields={userFields}
+  onCreate={handleCreate}
+  onUpdate={handleUpdate}
+  onDelete={handleDelete}
+  onHide={handleHide}
+/>
+```
+
+### Field Types
+
+The library supports 13 different field types. Always specify the correct type and required properties:
+
+#### 1. Text Fields
+```typescript
+// Basic text field
+{
+  type: "text",
+  name: "name",
+  label: "Full Name",
+  required: true,
+  placeholder: "Enter full name"
+}
+
+// Email field
+{
+  type: "email",
+  name: "email",
+  label: "Email Address",
+  required: true,
+  rules: [{ type: 'email', message: 'Invalid email' }]
+}
+
+// Password field
+{
+  type: "password",
+  name: "password",
+  label: "Password",
+  required: true,
+  rules: [{ min: 8, message: 'Password must be at least 8 characters' }]
+}
+```
+
+#### 2. Number Field
+```typescript
+{
+  type: "number",
+  name: "age",
+  label: "Age",
+  allowMinus: false,
+  formatted: true, // Shows comma-separated numbers
+  int: true, // Integer only
+  placeholder: "Enter age"
+}
+```
+
+#### 3. Date Field
+```typescript
+{
+  type: "date",
+  name: "birthDate",
+  label: "Birth Date",
+  format: "YYYY-MM-DD",
+  disableToday: true,
+  disabledFutureDays: true,
+  range: false // Set to true for date range picker
+}
+```
+
+#### 4. Time Field
+```typescript
+{
+  type: "time",
+  name: "appointmentTime",
+  label: "Appointment Time",
+  use12Hours: true,
+  format: "h:mm A",
+  range: false
+}
+```
+
+#### 5. Textarea Field
+```typescript
+// Regular textarea
+{
+  type: "textarea",
+  name: "description",
+  label: "Description",
+  rows: 4,
+  truncated: 3 // Show only 3 lines in table view
+}
+
+// Rich text editor
+{
+  type: "textarea",
+  name: "content",
+  label: "Content",
+  rich: true, // Enables rich text editor
+  truncated: 4
+}
+```
+
+#### 6. Select Field
+```typescript
+// Static options
+{
+  type: "select",
+  name: "category",
+  label: "Category",
+  items: [
+    { value: "tech", label: "Technology" },
+    { value: "business", label: "Business" },
+    { value: "health", label: "Health" }
+  ],
+  placeholder: "Select category"
+}
+
+// Dynamic options with search
+{
+  type: "select",
+  name: "userId",
+  label: "User",
+  onSearch: async (keyword, form) => {
+    const users = await fetchUsers(keyword);
+    return users.map(user => ({ value: user.id, label: user.name }));
+  },
+  searchOnType: true,
+  multiple: true
+}
+```
+
+#### 7. Enum Field
+```typescript
+// Using enum object
+enum Status {
+  ACTIVE = "active",
+  INACTIVE = "inactive",
+  PENDING = "pending"
+}
+
+{
+  type: "enum",
+  name: "status",
+  label: "Status",
+  enum: Status,
+  radio: true, // Use radio buttons instead of select
+  tagRender: {
+    active: { color: "green" },
+    inactive: { color: "red" },
+    pending: { color: "orange" }
+  },
+  translation: {
+    active: "Active",
+    inactive: "Inactive", 
+    pending: "Pending"
+  }
+  // OR if enum values match translation keys (Recommended):
+  // translation: translations.type.status
+}
+```
+
+#### 8. Checkbox Field
+```typescript
+{
+  type: "checkbox",
+  name: "isActive",
+  label: "Active Status",
+  onChange: (value, form) => {
+    // Handle checkbox change
+  }
+}
+```
+
+#### 9. Color Picker Field
+```typescript
+{
+  type: "color",
+  name: "themeColor",
+  label: "Theme Color",
+  innerProps: {
+    // Additional ColorPicker props
+  }
+}
+```
+
+#### 10. Image Field
+```typescript
+// Requires FileUploadProvider implementation
+class MyUploadProvider extends FileUploadProvider {
+  async upload(file: UploadFile, filePath: string): Promise<string> {
+    // Implement upload logic
+    return "uploaded-file-url";
+  }
+  
+  async delete(filePath: string): Promise<boolean> {
+    // Implement delete logic
+    return true;
+  }
+  
+  async getRealUrl(filePath: string): Promise<string> {
+    // Return actual file URL
+    return filePath;
+  }
+}
+
+{
+  type: "image",
+  name: "avatar",
+  label: "Profile Picture",
+  aspectRatio: 1, // Square aspect ratio
+  provider: new MyUploadProvider("user", "avatar")
+}
+```
+
+#### 11. File Field
+```typescript
+{
+  type: "file",
+  name: "document",
+  label: "Document",
+  accept: ".pdf,.doc,.docx",
+  multiple: false,
+  provider: new MyUploadProvider("documents", "files")
+}
+```
+
+#### 12. Object Field
+```typescript
+{
+  type: "object",
+  name: "metadata",
+  label: "Metadata",
+  render: (value, obj, index) => (
+    <div>
+      <strong>Type:</strong> {value?.type}
+      <br />
+      <strong>Size:</strong> {value?.size}
+    </div>
+  )
+}
+```
+
+### Common Field Properties
+
+All fields support these common properties:
+
+```typescript
+{
+  // Required
+  type: "text" | "email" | "password" | "number" | "date" | "time" | 
+        "textarea" | "select" | "enum" | "checkbox" | "color" | 
+        "image" | "file" | "object",
+  name: "fieldName", // Must match your data type key
+  label: "Field Label",
+  
+  // Optional
+  required: boolean,
+  hidden: boolean,
+  readonly: boolean,
+  updatable: boolean,
+  placeholder: string,
+  fieldTooltip: string,
+  fieldClassName: string,
+  hideInTable: boolean,
+  hideInDescList: boolean,
+  width: number | string,
+  halign: "left" | "right",
+  rules: Rule[], // Ant Design validation rules
+  grid: {
+    xs?: number;
+    sm?: number;
+    md?: number;
+    lg?: number;
+    xl?: number;
+  },
+  onChange: (value: any, form: FormInstance) => void,
+  customFormFieldRender: (form: FormInstance, props: any) => ReactElement
+}
+```
+
+### CrudComponent Props
+
+```typescript
+interface CrudComponentProps<T, FormType = T> {
+  // Required
+  fields: CrudFieldProps<T>[];
+  data: T[] | undefined;
+  
+  // Optional CRUD operations
+  onCreate?: (data: FormType) => Promise<any>;
+  onUpdate?: (data: FormType & { id: any }) => Promise<any>;
+  onDelete?: (id: any) => Promise<any>;
+  onHide?: (id: any) => Promise<any>;
+  
+  // Loading states
+  loadingData?: boolean;
+  isCreating?: boolean;
+  isUpdating?: boolean;
+  isDeleting?: boolean;
+  isHiding?: boolean;
+  
+  // Configuration
+  idField?: string; // Default: "id"
+  grid?: boolean; // Use grid layout for forms
+  viewable?: boolean | keyof T; // Enable view modal
+  cloneable?: boolean; // Enable clone functionality
+  fullWidthModal?: boolean; // Default: true
+  
+  // Pagination
+  paginateProps?: {
+    page: number;
+    pageSize: number;
+    count: number;
+    setPage: (page: number) => void;
+  };
+  
+  // Search and filtering
+  searchable?: boolean;
+  searchFields?: string[];
+  
+  // Import/Export
+  importable?: {
+    onImport: (data: any[]) => Promise<any>;
+    templateFields: string[];
+  };
+  onPrint?: () => void;
+  printing?: boolean;
+  
+  // Drag and drop
+  draggable?: {
+    onDragEnd: (event: DragEndEvent) => void;
+    columnLabel?: string;
+    tooltip?: string;
+  };
+  
+  // Wizard support
+  wizard?: Array<{
+    title: string;
+    icon?: ReactElement;
+    formBuilder?: FormBuilderFunc<T>;
+    grid?: boolean;
+  }>;
+  
+  // Custom actions
+  extraAction?: (item: T) => ReactElement;
+  extraView?: (item: T) => ReactElement;
+  onClickNew?: () => void;
+  
+  // Styling
+  size?: "small" | "middle" | "large";
+  minusHeight?: string; // For table height calculation
+  className?: string;
+}
+```
+
+## Common Components
+
+### Buttons
+```typescript
+import { 
+  NewButton, 
+  PrintButton, 
+  RefreshButton, 
+  ExportButton,
+  ImportButton,
+  ButtonComponent 
+} from '@kingteza/crud-component/common';
+
+// Usage
+<NewButton onClick={handleNew} />
+<PrintButton onClick={handlePrint} loading={printing} />
+<RefreshButton onClick={handleRefresh} />
+<ExportButton onClick={handleExport} />
+<ImportButton onClick={handleImport} />
+
+// Custom button
+<ButtonComponent 
+  type="primary" 
+  onClick={handleClick}
+  to="/path" // For navigation
+  tooltip="Click me"
+>
+  Custom Button
+</ButtonComponent>
+```
+
+### Form Components
+```typescript
+import { 
+  TextField, 
+  NumberTextField, 
+  SelectComponent,
+  DatePickerComponent,
+  TimePickerComponent,
+  CheckBoxComponent 
+} from '@kingteza/crud-component/common';
+
+// Usage in custom forms
+<TextField
+  name="name"
+  label="Name"
+  required
+  placeholder="Enter name"
+  rules={[{ required: true, message: 'Name is required' }]}
+/>
+
+<NumberTextField
+  name="age"
+  label="Age"
+  moneyField={true} // Comma-separated numbers
+  min={0}
+/>
+
+<SelectComponent
+  name="category"
+  label="Category"
+  options={[
+    { value: 'tech', label: 'Technology' },
+    { value: 'business', label: 'Business' }
+  ]}
+  placeholder="Select category"
+/>
+```
+
+### Table Components
+```typescript
+import { TableComponent } from '@kingteza/crud-component/common';
+
+<TableComponent
+  dataSource={data}
+  columns={columns}
+  loading={loading}
+  pagination={{
+    current: page,
+    pageSize: pageSize,
+    total: total,
+    onChange: setPage
+  }}
+  scroll={{ y: 400 }}
+  size="small"
+/>
+```
+
+## Utility Functions
+
+### DateUtil
+```typescript
+import { DateUtil } from '@kingteza/crud-component/util';
+
+// Date formatting
+DateUtil.format(date, 'YYYY-MM-DD');
+DateUtil.formatDate(date);
+DateUtil.formatDateTime(date);
+
+// Date manipulation
+DateUtil.addDays(date, 7);
+DateUtil.subtractDays(date, 3);
+DateUtil.startOfDay(date);
+DateUtil.endOfDay(date);
+
+// Date validation
+DateUtil.isValid(date);
+DateUtil.isToday(date);
+DateUtil.isFuture(date);
+DateUtil.isPast(date);
+```
+
+### NumberUtil
+```typescript
+import { NumberUtil } from '@kingteza/crud-component/util';
+
+// Number formatting
+NumberUtil.toMoney(1234.56); // "1,234.56"
+NumberUtil.round(3.14159, 2); // 3.14
+NumberUtil.toInt("123.45"); // 123
+
+// Number validation
+NumberUtil.withoutNan(value);
+NumberUtil.removeTrailingZeros(3.1400); // 3.14
+```
+
+### ValidationUtil
+```typescript
+import { ValidationUtil } from '@kingteza/crud-component/util';
+
+// Pre-built validation rules
+const rules = [
+  ValidationUtil.required,
+  ValidationUtil.maxValidation(100),
+  ValidationUtil.positiveNumberValidation,
+  ValidationUtil.emailValidation,
+  ValidationUtil.phoneValidation,
+  ValidationUtil.nicValidation,
+  ValidationUtil.passwordValidation
+];
+```
+
+### ImageUtil
+```typescript
+import { ImageUtil } from '@kingteza/crud-component/util';
+
+// Image processing
+const resizedImage = await ImageUtil.resizeImage(file);
+const imageData = await ImageUtil.getImageData(imageUrl);
+```
+
+## Advanced Features
+
+### Custom Form Builder
+```typescript
+const customFormBuilder: FormBuilderFunc<User> = (form, helpers) => {
+  return (
+    <div>
+      <h3>Custom Form</h3>
+      <Form.Item name="name" label="Name">
+        <Input />
+      </Form.Item>
+      {helpers.isAllFieldsHidden('email') && (
+        <Form.Item name="email" label="Email">
+          <Input />
+        </Form.Item>
+      )}
+    </div>
+  );
+};
+
+<CrudComponent
+  fields={fields}
+  data={data}
+  formBuilder={customFormBuilder}
+/>
+```
+
+### Wizard Forms
+```typescript
+const wizardSteps = [
+  {
+    title: "Basic Info",
+    icon: <UserOutlined />,
+    formBuilder: (form, helpers) => (
+      <div>
+        <Form.Item name="name" label="Name">
+          <Input />
+        </Form.Item>
+      </div>
+    )
+  },
+  {
+    title: "Details",
+    icon: <InfoOutlined />,
+    formBuilder: (form, helpers) => (
+      <div>
+        <Form.Item name="description" label="Description">
+          <Input.TextArea />
+        </Form.Item>
+      </div>
+    )
+  }
+];
+
+<CrudComponent
+  fields={fields}
+  data={data}
+  wizard={wizardSteps}
+/>
+```
+
+### Import/Export
+```typescript
+<CrudComponent
+  fields={fields}
+  data={data}
+  importable={{
+    onImport: async (importedData) => {
+      // Handle imported data
+      await saveImportedData(importedData);
+    },
+    templateFields: ['name', 'email', 'status']
+  }}
+  onPrint={() => {
+    // Handle print functionality
+    window.print();
+  }}
+/>
+```
+
+### Drag and Drop
+```typescript
+<CrudComponent
+  fields={fields}
+  data={data}
+  draggable={{
+    onDragEnd: (event) => {
+      const { active, over } = event;
+      if (active.id !== over?.id) {
+        // Handle reordering
+        const newOrder = reorderItems(data, active.id, over.id);
+        setData(newOrder);
+      }
+    },
+    columnLabel: "Drag",
+    tooltip: "Drag to reorder"
+  }}
+/>
+```
+
+## Best Practices
+
+### 1. Type Safety
+Always use proper TypeScript generics:
+```typescript
+// ✅ Good
+<CrudComponent<User>
+  data={users}
+  fields={userFields}
+  onCreate={handleCreate}
+/>
+
+// ❌ Bad
+<CrudComponent
+  data={users}
+  fields={userFields}
+  onCreate={handleCreate}
+/>
+```
+
+### 2. Field Naming
+Ensure field names match your data type keys:
+```typescript
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+// ✅ Good
+const fields = [
+  { type: "text", name: "name", label: "Name" },
+  { type: "email", name: "email", label: "Email" }
+];
+
+// ❌ Bad
+const fields = [
+  { type: "text", name: "userName", label: "Name" }, // Doesn't match User interface
+  { type: "email", name: "emailAddress", label: "Email" }
+];
+```
+
+### 3. Error Handling
+Always handle async operations properly:
+```typescript
+const handleCreate = async (data: User) => {
+  try {
+    setCreating(true);
+    const newUser = await createUser(data);
+    setUsers(prev => [...prev, newUser]);
+  } catch (error) {
+    message.error('Failed to create user');
+  } finally {
+    setCreating(false);
+  }
+};
+```
+
+### 4. Enum Translation Best Practices
+When using enum fields, prefer the simplified translation approach when enum values match translation keys:
+
+```typescript
+// ✅ Recommended: Direct translation object
+{
+  type: "enum",
+  name: "roundingRule",
+  label: t(translations.str.roundingRule),
+  enum: RoundingRuleEnum,
+  required: true,
+  translation: translations.type.roundingRule  // Simple and clean
+}
+
+// ❌ Avoid: Manual mapping when not needed
+{
+  type: "enum",
+  name: "roundingRule",
+  label: t(translations.str.roundingRule),
+  enum: RoundingRuleEnum,
+  required: true,
+  translation: {
+    [RoundingRuleEnum.NEAREST_DECIMAL]: t(translations.type.roundingRule.NEAREST_DECIMAL),
+    [RoundingRuleEnum.NEAREST_INTEGER]: t(translations.type.roundingRule.NEAREST_INTEGER),
+    // ... unnecessary manual mapping
+  }
+}
+```
+
+**Benefits of Direct Translation Object:**
+- Cleaner, more maintainable code
+- Automatic mapping when enum values match translation keys
+- Less prone to errors
+- Easier to add new enum values
+
+### 5. Performance Optimization
+Use proper loading states and memoization:
+```typescript
+const CrudComponentMemo = React.memo(CrudComponent);
+
+// Use loading states
+<CrudComponentMemo
+  data={users}
+  fields={userFields}
+  loadingData={loading}
+  isCreating={creating}
+  isUpdating={updating}
+  isDeleting={deleting}
+  onCreate={handleCreate}
+  onUpdate={handleUpdate}
+  onDelete={handleDelete}
+/>
+```
+
+### 5. Responsive Design
+Use grid properties for responsive forms:
+```typescript
+const fields = [
+  {
+    type: "text",
+    name: "name",
+    label: "Name",
+    grid: { xs: 24, sm: 12, md: 8 }
+  },
+  {
+    type: "email",
+    name: "email", 
+    label: "Email",
+    grid: { xs: 24, sm: 12, md: 8 }
+  }
+];
+
+<CrudComponent
+  fields={fields}
+  data={data}
+  grid={true} // Enable grid layout
+/>
+```
+
+## Common Patterns
+
+### 1. Basic CRUD Implementation
+```typescript
+const UserManagement = () => {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [updating, setUpdating] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const fields: CrudFieldProps<User>[] = [
+    {
+      type: "text",
+      name: "name",
+      label: "Name",
+      required: true
+    },
+    {
+      type: "email",
+      name: "email",
+      label: "Email",
+      required: true,
+      rules: [{ type: 'email' }]
+    },
+    {
+      type: "select",
+      name: "role",
+      label: "Role",
+      items: [
+        { value: "admin", label: "Admin" },
+        { value: "user", label: "User" }
+      ]
+    }
+  ];
+
+  const handleCreate = async (data: User) => {
+    setCreating(true);
+    try {
+      const newUser = await createUser(data);
+      setUsers(prev => [...prev, newUser]);
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const handleUpdate = async (data: User & { id: any }) => {
+    setUpdating(true);
+    try {
+      const updatedUser = await updateUser(data);
+      setUsers(prev => prev.map(u => u.id === data.id ? updatedUser : u));
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const handleDelete = async (id: any) => {
+    setDeleting(true);
+    try {
+      await deleteUser(id);
+      setUsers(prev => prev.filter(u => u.id !== id));
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  return (
+    <CrudComponent<User>
+      data={users}
+      fields={fields}
+      loadingData={loading}
+      isCreating={creating}
+      isUpdating={updating}
+      isDeleting={deleting}
+      onCreate={handleCreate}
+      onUpdate={handleUpdate}
+      onDelete={handleDelete}
+    />
+  );
+};
+```
+
+### 2. Search and Filter
+```typescript
+<CrudComponent<User>
+  data={filteredUsers}
+  fields={fields}
+  searchable={true}
+  searchFields={['name', 'email']}
+  onSearch={handleSearch}
+/>
+```
+
+### 3. Pagination
+```typescript
+const [pagination, setPagination] = useState({
+  page: 1,
+  pageSize: 10,
+  total: 0
+});
+
+<CrudComponent<User>
+  data={users}
+  fields={fields}
+  paginateProps={{
+    page: pagination.page,
+    pageSize: pagination.pageSize,
+    count: pagination.total,
+    setPage: (page) => setPagination(prev => ({ ...prev, page }))
+  }}
+/>
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **i18n not initialized**: Always call `setupI18n()` before using components
+2. **Type errors**: Ensure field names match your data type keys
+3. **Missing peer dependencies**: Install required Ant Design and React versions
+4. **File upload issues**: Implement proper FileUploadProvider
+5. **Form validation**: Use proper validation rules and error handling
+
+### Debug Tips
+
+1. Check browser console for TypeScript errors
+2. Verify field types and names match your data structure
+3. Ensure all required props are provided
+4. Check network requests for API calls
+5. Use React DevTools to inspect component state
+
+This comprehensive guide should help you effectively use the @kingteza/crud-component library in your projects. Always refer to the official documentation for the most up-to-date information.

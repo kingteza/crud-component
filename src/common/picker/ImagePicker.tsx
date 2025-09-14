@@ -34,7 +34,7 @@ import ImageUtil from "../../util/ImageUtil";
 import FlipHIcon from "src/icons/FlipHIcon";
 import FlipVIcon from "src/icons/FlipVIcon";
 
-const BUTTON_STATE = 'crud-component.image-picker.button-state';
+const BUTTON_STATE = "crud-component.image-picker.button-state";
 
 function getBase64(file) {
   return new Promise<string>((resolve, reject) => {
@@ -429,64 +429,59 @@ export const UploadComponent: FC<{
   listType = "picture",
 }) => {
   return (
-    <>
-      {/* Upload component from antd and cropping using cropperjs */}
-      <Upload
-        accept="image/x-png,image/gif,image/jpeg"
-        key={fileList.length}
-        fileList={fileList}
-        defaultFileList={fileList}
-        onChange={() => {
-          // setFileList(props.fileList);
-        }}
-        className={
-          (fileList.length >= maxCount ? " hide-upload " : "") + " mb-0"
-        }
-        multiple={false}
-        onPreview={!hidePreview ? handlePreview : undefined}
-        onDrop={(file) => {
-          // if (!file.isCropped) onChangeFile(file);
-          // else setFileList([file]);
-          onChangeFile(file.dataTransfer.files.item(0));
-          return false;
-        }}
-        listType={listType}
-        showUploadList={!hidePreview}
-        onRemove={(file) => {
-          const filtered = fileList.filter((f) => file.uid !== f.uid);
-          onRemove?.(file);
-          setFileList(filtered);
-        }}
-        beforeUpload={async (file: any) => {
-          // if (!file.isCropped) onChangeFile(file);
-          // else setFileList([file]);
-          onChangeFile(file);
-          return false;
-        }}
-        // height={100}
-        maxCount={maxCount}
-      >
-        {showLoadingIndicator && <LoadingOutlined />}
-        {
-          <div className="d-flex flex-column">
-            {fileList.length < maxCount &&
-              (listType === "picture-circle" ? (
-                <UploadOutlined />
-              ) : (
-                <ButtonComponent
-                  loading={loading}
-                  tooltip={!showButtonText ? _buttonTitle : undefined}
-                  size={buttonSize as any}
-                  icon={icon}
-                  type={!showButtonText ? "text" : (buttonType as any)}
-                >
-                  {showButtonText ? _buttonTitle : undefined}
-                </ButtonComponent>
-              ))}
-          </div>
-        }
-      </Upload>
-    </>
+    <Upload
+      accept="image/x-png,image/gif,image/jpeg"
+      key={fileList.length}
+      fileList={fileList}
+      defaultFileList={fileList}
+      onChange={() => {
+        // setFileList(props.fileList);
+      }}
+      className={(fileList.length >= maxCount ? " hide-upload " : "") + " mb-0"}
+      multiple={false}
+      onPreview={!hidePreview ? handlePreview : undefined}
+      onDrop={(file) => {
+        // if (!file.isCropped) onChangeFile(file);
+        // else setFileList([file]);
+        onChangeFile(file.dataTransfer.files.item(0));
+        return false;
+      }}
+      listType={listType}
+      showUploadList={!hidePreview}
+      onRemove={(file) => {
+        const filtered = fileList.filter((f) => file.uid !== f.uid);
+        onRemove?.(file);
+        setFileList(filtered);
+      }}
+      beforeUpload={async (file: any) => {
+        // if (!file.isCropped) onChangeFile(file);
+        // else setFileList([file]);
+        onChangeFile(file);
+        return false;
+      }}
+      // height={100}
+      maxCount={maxCount}
+    >
+      {showLoadingIndicator && <LoadingOutlined />}
+      {
+        <div className="d-flex flex-column">
+          {fileList.length < maxCount &&
+            (listType === "picture-circle" ? (
+              <UploadOutlined />
+            ) : (
+              <ButtonComponent
+                loading={loading}
+                tooltip={!showButtonText ? _buttonTitle : undefined}
+                size={buttonSize as any}
+                icon={icon}
+                type={!showButtonText ? "text" : (buttonType as any)}
+              >
+                {showButtonText ? _buttonTitle : undefined}
+              </ButtonComponent>
+            ))}
+        </div>
+      }
+    </Upload>
   );
 };
 

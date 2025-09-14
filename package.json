@@ -1,7 +1,7 @@
 {
   "name": "@kingteza/crud-component",
   "private": false,
-  "version": "1.0.52",
+  "version": "1.0.56",
   "description": "React CRUD component library with Ant Design",
   "keywords": [
     "react",
@@ -25,8 +25,9 @@
     "/crud/",
     "/common/",
     "/types/",
+    "/icons/",
+    "/hooks/",
     "/util/",
-    "/_virtual/",
     "/locale/",
     "/README.md"
   ],
@@ -38,6 +39,7 @@
     "build": "npm run clean && tsc && vite build && cp package.json README.md .npmignore dist/",
     "publish-npm": "yarn build && cd dist && npm whoami >/dev/null 2>&1 || npm login && npm publish",
     "lint": "eslint .",
+    "tsc": "tsc",
     "preview": "vite preview"
   },
   "exports": {
