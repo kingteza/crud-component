@@ -15,8 +15,8 @@ import { RefSelectProps } from "antd/lib/select";
 import { ReactElement, useCallback } from "react";
 import { useTranslationLib } from "../../locale";
 
-
 import TooltipComponent from "../tooltip/TooltipComponent";
+import { ValidationUtil } from "src/util";
 
 export type SelectTagRenderProps = SelectProps["tagRender"];
 
@@ -56,7 +56,7 @@ function SelectComponent<T = any>({
   filterOption,
   tagRender,
   ...props
-}: SelectComponentProps<T>) {
+}: Readonly<SelectComponentProps<T>>) {
   const { t } = useTranslationLib();
   const _itemBuilder = useCallback(
     (value) => {
@@ -76,6 +76,7 @@ function SelectComponent<T = any>({
     },
     [nameFieldInArray]
   );
+  const label0 = label ?? placeholder ?? "";
   return (
     <ConfigProvider
       renderEmpty={
@@ -88,14 +89,10 @@ function SelectComponent<T = any>({
           name={props.name}
           help={props.help}
           className={props.className}
+          required={required}
           rules={[
             ...rules,
-            {
-              required,
-              message: `${label ?? placeholder ?? ""} ${t(
-                "err.validation.required"
-              )}`,
-            },
+            ...(required ? ValidationUtil.required(label0 as string) : []),
           ]}
         >
           <Select
@@ -145,11 +142,12 @@ function SelectComponent<T = any>({
                 }
               })
             }
-            dropdownRender={dropdownRender}
+            popupRender={dropdownRender}
           >
             {children === null
               ? undefined
-              : children ?? (items && items?.map(itemBuilder ?? _itemBuilder))}
+              : children ??
+                (items ? items?.map(itemBuilder ?? _itemBuilder) : <></>)}
           </Select>
         </Form.Item>
       </TooltipComponent>

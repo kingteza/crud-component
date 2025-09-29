@@ -166,6 +166,7 @@ function App() {
             name: "test",
             label: "Name",
             enum: TestEnum,
+            required: true,
             tagRender: {
               TEST: { color: "red" },
               TEST2: { color: "blue" },
@@ -181,11 +182,9 @@ function App() {
           },
           {
             type: "select",
-            name: {
-              upsertFieldName: 'helloId',
-              name: 'hello',
-            },
+            name: ['s', 'hello'],
             label: "Hello Field",
+            required: true,
             items: [
               { value: "Hello", key: "1" },
               { value: "World", key: "2" },
