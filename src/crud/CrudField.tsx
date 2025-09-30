@@ -5,7 +5,7 @@
 import { ColorPicker, Form, Radio, Select, Tag } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Highlighter from "react-highlight-words";
-import { useTranslationLib } from "../locale";
+import { useTranslationLib, useTranslationLibNoNS } from "../locale";
 
 import {
   CheckboxBasedFieldProps,
@@ -63,7 +63,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
     }
   }, [form, props, type, props?.updatingValue]);
 
-  const { t } = useTranslationLib();
+  const { t } = useTranslationLibNoNS();
   if (readonly || hidden) return <></>;
   if (customFormFieldRender) {
     return customFormFieldRender(form, props0 as any);

@@ -68,6 +68,10 @@ export const useTranslationLib = (options?: Omit<UseTranslationOptions<string>, 
   return useTranslation(TRANSLATION_NAMESPACE, { ...options, i18n: i18nInstance });
 };
 
+export const useTranslationLibNoNS = (options?: Omit<UseTranslationOptions<string>, "i18n">) => {
+  return useTranslation(undefined, { ...options, i18n: i18nInstance });
+};
+
 export const t = (key: string, options?: any) => {
   return i18nInstance?.t(key, {
     ns: TRANSLATION_NAMESPACE,
