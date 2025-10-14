@@ -78,3 +78,15 @@ export const t = (key: string, options?: any) => {
     ...options,
   });
 };
+
+
+export const tWithOrWithoutNS = (key: string, options?: any) => {
+  const value = t(key, options);
+  if (value) {
+    return value;
+  }
+  return i18nInstance?.t(key, {
+    ns: undefined,
+    ...options,
+  });
+};

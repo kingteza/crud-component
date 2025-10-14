@@ -14,7 +14,7 @@ import { ImageCrudCellValue, ImageCrudField } from "../ImageCrudField";
 
 import DateUtil from "../../util/DateUtil";
 import NumberUtil from "../../util/NumberUtil";
-import { t } from "../../locale";
+import { t, tWithOrWithoutNS } from "../../locale";
 import { TextAreaBasedFieldProps } from "../CrudTextAreaComponent";
 import CrudUtil from "src/util/CrudUtil";
 
@@ -29,6 +29,7 @@ export function getRendererValueCrudViewer<T>({
           typeof render === "function" ? render(e, value, i) : String()
       : type === "select"
       ? (e, value, i) => {
+          if(!e) return '-';
           const selectProps = props as any as SelectCrudField<{}>;
           const e0 = e || (selectProps.items ?? []).find(
                 (item) =>
@@ -55,6 +56,7 @@ export function getRendererValueCrudViewer<T>({
             : NumberUtil.toMoney(e)
       : type === "enum"
       ? (e, value, i) => {
+          if(!e) return '-';
           const propsEnum = props as any as EnumCrudField<{}>;
           if (typeof render === "function") {
             return render(e, value, i);
@@ -66,7 +68,7 @@ export function getRendererValueCrudViewer<T>({
                 <Space wrap>
                   {ar.map((item, index) => {
                     const tagProps = propsEnum.tagRender?.[item];
-                    const translatedValue = t(
+                    const translatedValue = tWithOrWithoutNS(
                       propsEnum?.translation?.[item ?? ""] ?? item
                     ) as any;
                     return tagProps ? (
@@ -81,7 +83,7 @@ export function getRendererValueCrudViewer<T>({
               );
             } else if (propsEnum?.translation) {
               return ar
-                ?.map((e) => t(propsEnum?.translation?.[e ?? ""] ?? e))
+                ?.map((e) => tWithOrWithoutNS(propsEnum?.translation?.[e ?? ""] ?? e))
                 .join(", ");
             } else {
               return ar?.join(", ");
@@ -89,7 +91,7 @@ export function getRendererValueCrudViewer<T>({
           }
 
           const val = propsEnum?.translation?.[e ?? ""] ?? e;
-          const v = t(val);
+          const v = tWithOrWithoutNS(val);
 
           if (typeof propsEnum.tagRender === "object") {
             const tagProps = propsEnum.tagRender[e];
@@ -119,6 +121,7 @@ export function getRendererValueCrudViewer<T>({
           )
       : type === "image"
       ? (e, value, i) => {
+          if(!e) return '-';
           return typeof render === "function" ? (
             render(e, value, i)
           ) : (
@@ -130,6 +133,7 @@ export function getRendererValueCrudViewer<T>({
         }
       : type === "file"
       ? (e, value, i) => {
+          if(!e) return '';
           return typeof render === "function" ? (
             render(e, value, i)
           ) : (
@@ -155,6 +159,7 @@ export function getRendererValueCrudViewer<T>({
         }
       : type === "color"
       ? (e, value, i) => {
+          if(!e) return '-';
           return typeof render === "function" ? (
             render(e, value, i)
           ) : typeof e === "string" && e.startsWith("#") ? (
@@ -167,6 +172,7 @@ export function getRendererValueCrudViewer<T>({
         }
       : type === "textarea"
       ? (e, value, i) => {
+          if(!e) return '-';
           const props0 = props as any as TextAreaBasedFieldProps<{}>;
           const truncated = props0.truncated ?? 1;
           return typeof render === "function" ? (
