@@ -66,11 +66,17 @@ export type CrudDragableProps<T> = {
   columnLabel?: string;
   tooltip?: string;
 };
+export type CrudViewableProps<T> =
+  | boolean
+  | keyof T
+  | {
+      onClick: (t: T) => void;
+    };
 
 export type CrudViewerProps<T, FormType> = {
   fields: CrudFieldProps<T>[];
   decListLayout?: "horizontal" | "vertical";
-  viewable?: boolean | keyof T;
+  viewable?: CrudViewableProps<T>;
   paginateProps?: CrudPaginateProps;
   onDelete?: (id: any) => Promise<any>;
   confirmDeleting?: boolean;
@@ -141,20 +147,18 @@ function CrudViewer<T, FormType = T>({
 
   const columns = useMemo(
     () =>
-      fields.map(
-        ({ hideInTable, hidden, width, label, halign, ...props }) => {
-          const realName = CrudUtil.getRealName(props.name);
-          return ({
-            title: label,
-            width,
-            key: realName,
-            dataIndex: realName,
-            hidden: hideInTable || hidden,
-            align: halign ?? (props.type === "number" ? "right" : undefined),
-            render: getRendererValueCrudViewer(props as any),
-          });
-        }
-      ) as TableComponentColumnProp<T>,
+      fields.map(({ hideInTable, hidden, width, label, halign, ...props }) => {
+        const realName = CrudUtil.getRealName(props.name);
+        return {
+          title: label,
+          width,
+          key: realName,
+          dataIndex: realName,
+          hidden: hideInTable || hidden,
+          align: halign ?? (props.type === "number" ? "right" : undefined),
+          render: getRendererValueCrudViewer(props as any),
+        };
+      }) as TableComponentColumnProp<T>,
     [fields]
   );
 
@@ -283,7 +287,7 @@ function CrudViewer<T, FormType = T>({
     },
     [dataSource, idField, draggable]
   );
-  
+
   const viewTitleValue = useMemo(() => {
     let tempViewTitleValue =
       typeof viewable === "string" ? (openView?.[viewable] as any) : undefined;
@@ -357,7 +361,16 @@ function CrudViewer<T, FormType = T>({
         width: actionWidth,
         render: (_, data: T) => (
           <>
-            {viewable && <ViewButtonTable value={data} onClick={setOpenView} />}
+            {viewable && (
+              <ViewButtonTable
+                value={data}
+                onClick={
+                  typeof viewable === "object"
+                    ? () => viewable.onClick?.(data)
+                    : setOpenView
+                }
+              />
+            )}
             {actions(data)}
           </>
         ),
@@ -423,29 +436,30 @@ function CrudViewer<T, FormType = T>({
 
   return (
     <div>
-      {viewable && (
-        <Modal
-          width={"100%"}
-          open={Boolean(openView)}
-          title={viewTitleValue ?? <div>&nbsp;</div>}
-          footer={<></>}
-          closable
-          onCancel={() => setOpenView(undefined)}
-        >
-          {Boolean(openView) && (
-            <div key={openView?.[idField]}>
-              <CrudDecListView
-                layout={decListLayout}
-                descListColumn={descListColumn}
-                data={openView}
-                fields={fields}
-                action={actions(openView!)}
-              />
-              {extraView?.(openView!)}
-            </div>
-          )}
-        </Modal>
-      )}
+      {typeof viewable === "boolean" ||
+        (typeof viewable === "string" && (
+          <Modal
+            width={"100%"}
+            open={Boolean(openView)}
+            title={viewTitleValue ?? <div>&nbsp;</div>}
+            footer={<></>}
+            closable
+            onCancel={() => setOpenView(undefined)}
+          >
+            {Boolean(openView) && (
+              <div key={openView?.[idField]}>
+                <CrudDecListView
+                  layout={decListLayout}
+                  descListColumn={descListColumn}
+                  data={openView}
+                  fields={fields}
+                  action={actions(openView!)}
+                />
+                {extraView?.(openView!)}
+              </div>
+            )}
+          </Modal>
+        ))}
       <CrudSearchComponent<T, FormType> fields={fields} {...props} />
       <VerticalSpace>
         {Boolean(onClickRefresh) && <RefreshButton onClick={onClickRefresh} />}

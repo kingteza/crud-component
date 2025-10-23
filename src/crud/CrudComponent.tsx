@@ -13,7 +13,7 @@ import { FileCrudField } from "./FileCrudField";
 import { ImageCrudField } from "./ImageCrudField";
 import CrudImportButton from "./import/CrudImportButton";
 import { CrudImportProps } from "./import/CrudImportComponent";
-import CrudViewer, { CrudDragableProps } from "./view/CrudViewer";
+import CrudViewer, { CrudDragableProps, CrudViewableProps } from "./view/CrudViewer";
 import { NewButton, PrintButton } from "../common";
 import { SelectTagRenderProps } from "../common/select/SelectComponent";
 import IdProps from "../types/Id";
@@ -303,7 +303,7 @@ export type CrudComponentProps<T, FormType = T> = {
   isHiding?: boolean;
   isDeleting?: boolean;
   isUpdating?: boolean;
-  viewable?: boolean | keyof T;
+  viewable?: CrudViewableProps<T>;
   extraAction?: (t: T) => ReactElement;
   paginateProps?: CrudPaginateProps;
   formBuilder?: FormBuilderFunc<T>;
