@@ -146,6 +146,7 @@ export function CrudFormFields<T>({
               const field = fields.filter((e) => ar.includes(e.name as any));
               return field.every((e) => e.hidden);
             },
+            purpose,
           })}
           <Form.Item hidden noStyle>
             <Input name={"id"} />

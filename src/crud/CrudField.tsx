@@ -73,7 +73,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
     case "email":
     case "password": {
       // case 'object': // Show the text field even if the type is object
-      const { onChange, placeholder } = props as TextBasedFieldProps<T>;
+      const { onChange, placeholder, addonAfter, addonBefore } = props as TextBasedFieldProps<T>;
       return (
         <TextField
           placeholder={placeholder}
@@ -87,11 +87,13 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
           label={label}
           className={fieldClassName}
           autoComplete={"new-password"}
+          addonAfter={addonAfter}
+          addonBefore={addonBefore}
         />
       );
     }
     case "number": {
-      const { onChange, placeholder, allowMinus } =
+      const { onChange, placeholder, allowMinus, min, max, addonAfter, addonBefore } =
         props as NumberBasedFieldProps<T>;
       return (
         <NumberTextField
@@ -105,7 +107,10 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
           required={required}
           tooltip={fieldTooltip}
           className={fieldClassName}
-          min={allowMinus ? null : undefined}
+          min={allowMinus ? null : min}
+          max={max}
+          addonAfter={addonAfter}
+          addonBefore={addonBefore}
           name={name as any}
           label={label}
         />
@@ -385,6 +390,7 @@ export function SelectCrudFieldComponent<T>(
     <SelectComponent
       {...props}
       maxTagCount="responsive"
+      
       maxTagPlaceholder={(omittedValues) => {
         return (
           <TooltipComponent

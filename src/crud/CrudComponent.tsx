@@ -4,7 +4,7 @@ import { Color } from "antd/es/color-picker";
 import { Rule } from "antd/es/form";
 import { FormInstance } from "antd/lib";
 import dayjs, { Dayjs } from "dayjs";
-import React, { ReactElement, useCallback, useEffect, useState } from "react";
+import React, { ReactElement, ReactNode, useCallback, useEffect, useState } from "react";
 
 import { CrudForm } from "./CrudForm";
 import CrudFormWizard from "./CrudFormWizard";
@@ -80,7 +80,7 @@ export type CrudFieldGrid = {
 export interface SelectCrudField<
   T,
   ItemType extends SelectFieldItem = SelectFieldItem
-> extends Omit<InitialCrudField<T>, "name"> {
+> extends Omit<InitialCrudField<T>, "name">, AddonFieldProps {
   name:
     | InitialCrudField<T>["name"]
     | {
@@ -160,6 +160,11 @@ export interface EnumCrudField<T> extends InitialCrudField<T> {
   onSearch?: (keyword: string, form: FormInstance<T>) => void;
 }
 
+export type AddonFieldProps = {
+  addonAfter?: ReactNode;
+  addonBefore?: ReactNode;
+}
+
 export interface ObjectCrudField<T> extends InitialCrudField<T> {
   type: "object";
 
@@ -167,7 +172,7 @@ export interface ObjectCrudField<T> extends InitialCrudField<T> {
   translation?: object;
 }
 
-export interface TextBasedFieldProps<T> extends InitialCrudField<T> {
+export interface TextBasedFieldProps<T> extends InitialCrudField<T>, AddonFieldProps {
   placeholder?: string;
   type: "text" | "time" | "email" | "password";
   onChange?: (value: string, form: FormInstance<T>) => void;
@@ -184,10 +189,12 @@ export interface CheckboxBasedFieldProps<T> extends InitialCrudField<T> {
   onChange?: (value: boolean, form: FormInstance<T>) => void;
 }
 
-export interface NumberBasedFieldProps<T> extends InitialCrudField<T> {
+export interface NumberBasedFieldProps<T> extends InitialCrudField<T>, AddonFieldProps {
   type: "number";
   placeholder?: string;
   allowMinus?: boolean;
+  min?: number;
+  max?: number;
   /**
    * If it is number field making this true will convert the value to comma separated number field
    */
@@ -245,6 +252,7 @@ export type FormBuilderFunc<T> = (
   otherUtils: {
     isAnyFieldHidden: (...name: Array<keyof T>) => boolean;
     isAllFieldsHidden: (...name: Array<keyof T>) => boolean;
+    purpose?: CrudPurpose;
   }
 ) => ReactElement;
 
