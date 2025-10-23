@@ -2,35 +2,40 @@
 alwaysApply: true
 ---
 
-# @kingteza/crud-component Cursor Rules
+# @kingteza/crud-component Library Documentation
 
-This file provides comprehensive rules and examples for using the @kingteza/crud-component library, a React CRUD component library built with Ant Design and TypeScript.
+## Overview
 
-## Library Overview
+The `@kingteza/crud-component` is a comprehensive React CRUD (Create, Read, Update, Delete) component library built with Ant Design and TypeScript. It provides a complete solution for building data management interfaces with minimal configuration.
 
-The @kingteza/crud-component library provides:
-- **CrudComponent**: Main component for creating, reading, updating, and deleting data
-- **Common Components**: Reusable UI components (buttons, forms, tables, etc.)
-- **Utility Functions**: Date, number, image, and validation utilities
+## Key Features
+
+- **Full CRUD Operations**: Create, Read, Update, Delete, and Hide operations
+- **13 Field Types**: Text, Email, Password, Number, Date, Time, Textarea, Select, Enum, Checkbox, Color, Image, File, Object
+- **TypeScript Support**: Full type safety with generics
 - **Internationalization**: Built-in i18n support with i18next
-- **Type Safety**: Full TypeScript support with comprehensive type definitions
+- **Responsive Design**: Mobile-first approach with grid layouts
+- **Advanced Features**: Wizards, Import/Export, Drag & Drop, Search, Pagination
+- **Customizable**: Extensive customization options for forms, tables, and actions
 
-## Installation & Setup
+## Installation
 
 ```bash
 npm install @kingteza/crud-component
 npm install antd@^5.22.6 react@^18.3.1 react-dom@^18.3.1 react-router-dom@^7.0.0
 ```
 
-### Required Setup
+## Setup
+
+### 1. Initialize i18n (Required)
 
 ```typescript
 import { setupI18n } from '@kingteza/crud-component';
 
-// Initialize i18n (required before using components)
+// Basic setup
 setupI18n();
 
-// Or with custom options
+// Advanced setup with custom translations
 setupI18n({
   language: 'en',
   translations: {
@@ -43,40 +48,107 @@ setupI18n({
 });
 ```
 
-## Main Components
-
-### CrudComponent
-
-The main component for CRUD operations. Always use with proper TypeScript generics.
+### 2. Basic Usage
 
 ```typescript
+import React, { useState } from 'react';
 import { CrudComponent } from '@kingteza/crud-component';
 
 // Define your data type
 interface User {
-  id: string | number;
+  id: string;
   name: string;
   email: string;
   status: 'active' | 'inactive';
   createdAt: Date;
 }
 
-// Use with proper typing
-<CrudComponent<User>
-  data={users}
-  fields={userFields}
-  onCreate={handleCreate}
-  onUpdate={handleUpdate}
-  onDelete={handleDelete}
-  onHide={handleHide}
-/>
+const UserManagement = () => {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [updating, setUpdating] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  // Define field configuration
+  const fields = [
+    {
+      type: "text" as const,
+      name: "name" as keyof User,
+      label: "Full Name",
+      required: true,
+      placeholder: "Enter full name"
+    },
+    {
+      type: "email" as const,
+      name: "email" as keyof User,
+      label: "Email Address",
+      required: true,
+      rules: [{ type: 'email' as const, message: 'Invalid email' }]
+    },
+    {
+      type: "enum" as const,
+      name: "status" as keyof User,
+      label: "Status",
+      enum: { active: "active", inactive: "inactive" },
+      translation: {
+        active: "Active",
+        inactive: "Inactive"
+      }
+    }
+  ];
+
+  // CRUD handlers
+  const handleCreate = async (data: User) => {
+    setCreating(true);
+    try {
+      const newUser = await createUser(data);
+      setUsers(prev => [...prev, newUser]);
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const handleUpdate = async (data: User & { id: string }) => {
+    setUpdating(true);
+    try {
+      const updatedUser = await updateUser(data);
+      setUsers(prev => prev.map(u => u.id === data.id ? updatedUser : u));
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    setDeleting(true);
+    try {
+      await deleteUser(id);
+      setUsers(prev => prev.filter(u => u.id !== id));
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  return (
+    <CrudComponent<User>
+      data={users}
+      fields={fields}
+      loadingData={loading}
+      isCreating={creating}
+      isUpdating={updating}
+      isDeleting={deleting}
+      onCreate={handleCreate}
+      onUpdate={handleUpdate}
+      onDelete={handleDelete}
+    />
+  );
+};
 ```
 
-### Field Types
+## Field Types Reference
 
-The library supports 13 different field types. Always specify the correct type and required properties:
+### 1. Text Fields
 
-#### 1. Text Fields
 ```typescript
 // Basic text field
 {
@@ -87,7 +159,7 @@ The library supports 13 different field types. Always specify the correct type a
   placeholder: "Enter full name"
 }
 
-// Email field
+// Email field with validation
 {
   type: "email",
   name: "email",
@@ -106,7 +178,8 @@ The library supports 13 different field types. Always specify the correct type a
 }
 ```
 
-#### 2. Number Field
+### 2. Number Field
+
 ```typescript
 {
   type: "number",
@@ -115,11 +188,14 @@ The library supports 13 different field types. Always specify the correct type a
   allowMinus: false,
   formatted: true, // Shows comma-separated numbers
   int: true, // Integer only
-  placeholder: "Enter age"
+  placeholder: "Enter age",
+  min: 0,
+  max: 120
 }
 ```
 
-#### 3. Date Field
+### 3. Date Field
+
 ```typescript
 {
   type: "date",
@@ -132,7 +208,8 @@ The library supports 13 different field types. Always specify the correct type a
 }
 ```
 
-#### 4. Time Field
+### 4. Time Field
+
 ```typescript
 {
   type: "time",
@@ -144,7 +221,8 @@ The library supports 13 different field types. Always specify the correct type a
 }
 ```
 
-#### 5. Textarea Field
+### 5. Textarea Field
+
 ```typescript
 // Regular textarea
 {
@@ -165,7 +243,8 @@ The library supports 13 different field types. Always specify the correct type a
 }
 ```
 
-#### 6. Select Field
+### 6. Select Field
+
 ```typescript
 // Static options
 {
@@ -194,7 +273,8 @@ The library supports 13 different field types. Always specify the correct type a
 }
 ```
 
-#### 7. Enum Field
+### 7. Enum Field
+
 ```typescript
 // Using enum object
 enum Status {
@@ -219,12 +299,11 @@ enum Status {
     inactive: "Inactive", 
     pending: "Pending"
   }
-  // OR if enum values match translation keys (Recommended):
-  // translation: translations.type.status
 }
 ```
 
-#### 8. Checkbox Field
+### 8. Checkbox Field
+
 ```typescript
 {
   type: "checkbox",
@@ -236,7 +315,8 @@ enum Status {
 }
 ```
 
-#### 9. Color Picker Field
+### 9. Color Picker Field
+
 ```typescript
 {
   type: "color",
@@ -248,7 +328,8 @@ enum Status {
 }
 ```
 
-#### 10. Image Field
+### 10. Image Field
+
 ```typescript
 // Requires FileUploadProvider implementation
 class MyUploadProvider extends FileUploadProvider {
@@ -277,7 +358,8 @@ class MyUploadProvider extends FileUploadProvider {
 }
 ```
 
-#### 11. File Field
+### 11. File Field
+
 ```typescript
 {
   type: "file",
@@ -289,7 +371,8 @@ class MyUploadProvider extends FileUploadProvider {
 }
 ```
 
-#### 12. Object Field
+### 12. Object Field
+
 ```typescript
 {
   type: "object",
@@ -305,43 +388,7 @@ class MyUploadProvider extends FileUploadProvider {
 }
 ```
 
-### Common Field Properties
-
-All fields support these common properties:
-
-```typescript
-{
-  // Required
-  type: "text" | "email" | "password" | "number" | "date" | "time" | 
-        "textarea" | "select" | "enum" | "checkbox" | "color" | 
-        "image" | "file" | "object",
-  name: "fieldName", // Must match your data type key
-  label: "Field Label",
-  
-  // Optional
-  required: boolean,
-  hidden: boolean,
-  readonly: boolean,
-  updatable: boolean,
-  placeholder: string,
-  fieldTooltip: string,
-  fieldClassName: string,
-  hideInTable: boolean,
-  hideInDescList: boolean,
-  width: number | string,
-  halign: "left" | "right",
-  rules: Rule[], // Ant Design validation rules
-  grid: {
-    xs?: number;
-    sm?: number;
-    md?: number;
-    lg?: number;
-    xl?: number;
-  },
-  onChange: (value: any, form: FormInstance) => void,
-  customFormFieldRender: (form: FormInstance, props: any) => ReactElement
-}
-```
+## Component Props
 
 ### CrudComponent Props
 
@@ -418,160 +465,48 @@ interface CrudComponentProps<T, FormType = T> {
 }
 ```
 
-## Common Components
+### Common Field Properties
 
-### Buttons
+All fields support these common properties:
+
 ```typescript
-import { 
-  NewButton, 
-  PrintButton, 
-  RefreshButton, 
-  ExportButton,
-  ImportButton,
-  ButtonComponent 
-} from '@kingteza/crud-component/common';
-
-// Usage
-<NewButton onClick={handleNew} />
-<PrintButton onClick={handlePrint} loading={printing} />
-<RefreshButton onClick={handleRefresh} />
-<ExportButton onClick={handleExport} />
-<ImportButton onClick={handleImport} />
-
-// Custom button
-<ButtonComponent 
-  type="primary" 
-  onClick={handleClick}
-  to="/path" // For navigation
-  tooltip="Click me"
->
-  Custom Button
-</ButtonComponent>
-```
-
-### Form Components
-```typescript
-import { 
-  TextField, 
-  NumberTextField, 
-  SelectComponent,
-  DatePickerComponent,
-  TimePickerComponent,
-  CheckBoxComponent 
-} from '@kingteza/crud-component/common';
-
-// Usage in custom forms
-<TextField
-  name="name"
-  label="Name"
-  required
-  placeholder="Enter name"
-  rules={[{ required: true, message: 'Name is required' }]}
-/>
-
-<NumberTextField
-  name="age"
-  label="Age"
-  moneyField={true} // Comma-separated numbers
-  min={0}
-/>
-
-<SelectComponent
-  name="category"
-  label="Category"
-  options={[
-    { value: 'tech', label: 'Technology' },
-    { value: 'business', label: 'Business' }
-  ]}
-  placeholder="Select category"
-/>
-```
-
-### Table Components
-```typescript
-import { TableComponent } from '@kingteza/crud-component/common';
-
-<TableComponent
-  dataSource={data}
-  columns={columns}
-  loading={loading}
-  pagination={{
-    current: page,
-    pageSize: pageSize,
-    total: total,
-    onChange: setPage
-  }}
-  scroll={{ y: 400 }}
-  size="small"
-/>
-```
-
-## Utility Functions
-
-### DateUtil
-```typescript
-import { DateUtil } from '@kingteza/crud-component/util';
-
-// Date formatting
-DateUtil.format(date, 'YYYY-MM-DD');
-DateUtil.formatDate(date);
-DateUtil.formatDateTime(date);
-
-// Date manipulation
-DateUtil.addDays(date, 7);
-DateUtil.subtractDays(date, 3);
-DateUtil.startOfDay(date);
-DateUtil.endOfDay(date);
-
-// Date validation
-DateUtil.isValid(date);
-DateUtil.isToday(date);
-DateUtil.isFuture(date);
-DateUtil.isPast(date);
-```
-
-### NumberUtil
-```typescript
-import { NumberUtil } from '@kingteza/crud-component/util';
-
-// Number formatting
-NumberUtil.toMoney(1234.56); // "1,234.56"
-NumberUtil.round(3.14159, 2); // 3.14
-NumberUtil.toInt("123.45"); // 123
-
-// Number validation
-NumberUtil.withoutNan(value);
-NumberUtil.removeTrailingZeros(3.1400); // 3.14
-```
-
-### ValidationUtil
-```typescript
-import { ValidationUtil } from '@kingteza/crud-component/util';
-
-// Pre-built validation rules
-const rules = [
-  ValidationUtil.required,
-  ValidationUtil.maxValidation(100),
-  ValidationUtil.positiveNumberValidation,
-  ValidationUtil.emailValidation,
-  ValidationUtil.phoneValidation,
-  ValidationUtil.nicValidation,
-  ValidationUtil.passwordValidation
-];
-```
-
-### ImageUtil
-```typescript
-import { ImageUtil } from '@kingteza/crud-component/util';
-
-// Image processing
-const resizedImage = await ImageUtil.resizeImage(file);
-const imageData = await ImageUtil.getImageData(imageUrl);
+{
+  // Required
+  type: "text" | "email" | "password" | "number" | "date" | "time" | 
+        "textarea" | "select" | "enum" | "checkbox" | "color" | 
+        "image" | "file" | "object",
+  name: "fieldName", // Must match your data type key
+  label: "Field Label",
+  
+  // Optional
+  required: boolean,
+  hidden: boolean,
+  readonly: boolean,
+  updatable: boolean,
+  placeholder: string,
+  fieldTooltip: string,
+  fieldClassName: string,
+  hideInTable: boolean,
+  hideInDescList: boolean,
+  width: number | string,
+  halign: "left" | "right",
+  rules: Rule[], // Ant Design validation rules
+  grid: {
+    xs?: number;
+    sm?: number;
+    md?: number;
+    lg?: number;
+    xl?: number;
+  },
+  onChange: (value: any, form: FormInstance) => void,
+  customFormFieldRender: (form: FormInstance, props: any) => ReactElement
+}
 ```
 
 ## Advanced Features
 
-### Custom Form Builder
+### 1. Custom Form Builder
+
 ```typescript
 const customFormBuilder: FormBuilderFunc<User> = (form, helpers) => {
   return (
@@ -596,7 +531,8 @@ const customFormBuilder: FormBuilderFunc<User> = (form, helpers) => {
 />
 ```
 
-### Wizard Forms
+### 2. Wizard Forms
+
 ```typescript
 const wizardSteps = [
   {
@@ -630,7 +566,8 @@ const wizardSteps = [
 />
 ```
 
-### Import/Export
+### 3. Import/Export
+
 ```typescript
 <CrudComponent
   fields={fields}
@@ -649,7 +586,8 @@ const wizardSteps = [
 />
 ```
 
-### Drag and Drop
+### 4. Drag and Drop
+
 ```typescript
 <CrudComponent
   fields={fields}
@@ -669,19 +607,143 @@ const wizardSteps = [
 />
 ```
 
+### 5. Search and Filtering
+
+```typescript
+<CrudComponent
+  fields={fields}
+  data={data}
+  searchable={true}
+  searchFields={['name', 'email', 'status']}
+  onSearch={handleSearch}
+/>
+```
+
+### 6. Pagination
+
+```typescript
+const [pagination, setPagination] = useState({
+  page: 1,
+  pageSize: 10,
+  total: 0
+});
+
+<CrudComponent
+  fields={fields}
+  data={data}
+  paginateProps={{
+    page: pagination.page,
+    pageSize: pagination.pageSize,
+    count: pagination.total,
+    setPage: (page) => setPagination(prev => ({ ...prev, page }))
+  }}
+/>
+```
+
+## Common Components
+
+### Buttons
+
+```typescript
+import { 
+  NewButton, 
+  PrintButton, 
+  RefreshButton, 
+  ExportButton,
+  ImportButton,
+  ButtonComponent 
+} from '@kingteza/crud-component/common';
+
+// Usage
+<NewButton onClick={handleNew} />
+<PrintButton onClick={handlePrint} loading={printing} />
+<RefreshButton onClick={handleRefresh} />
+<ExportButton onClick={handleExport} />
+<ImportButton onClick={handleImport} />
+```
+
+### Form Components
+
+```typescript
+import { 
+  TextField, 
+  NumberTextField, 
+  SelectComponent,
+  DatePickerComponent,
+  TimePickerComponent,
+  CheckBoxComponent 
+} from '@kingteza/crud-component/common';
+
+// Usage in custom forms
+<TextField
+  name="name"
+  label="Name"
+  required
+  placeholder="Enter name"
+  rules={[{ required: true, message: 'Name is required' }]}
+/>
+```
+
+## Utility Functions
+
+### DateUtil
+
+```typescript
+import { DateUtil } from '@kingteza/crud-component/util';
+
+// Date formatting
+DateUtil.format(date, 'YYYY-MM-DD');
+DateUtil.formatDate(date);
+DateUtil.formatDateTime(date);
+
+// Date manipulation
+DateUtil.addDays(date, 7);
+DateUtil.subtractDays(date, 3);
+DateUtil.startOfDay(date);
+DateUtil.endOfDay(date);
+```
+
+### NumberUtil
+
+```typescript
+import { NumberUtil } from '@kingteza/crud-component/util';
+
+// Number formatting
+NumberUtil.toMoney(1234.56); // "1,234.56"
+NumberUtil.round(3.14159, 2); // 3.14
+NumberUtil.toInt("123.45"); // 123
+```
+
+### ValidationUtil
+
+```typescript
+import { ValidationUtil } from '@kingteza/crud-component/util';
+
+// Pre-built validation rules
+const rules = [
+  ValidationUtil.required,
+  ValidationUtil.maxValidation(100),
+  ValidationUtil.positiveNumberValidation,
+  ValidationUtil.emailValidation,
+  ValidationUtil.phoneValidation,
+  ValidationUtil.nicValidation,
+  ValidationUtil.passwordValidation
+];
+```
+
 ## Best Practices
 
 ### 1. Type Safety
-Always use proper TypeScript generics:
+
 ```typescript
-// ✅ Good
+// ✅ Good - Always use generics
 <CrudComponent<User>
   data={users}
   fields={userFields}
   onCreate={handleCreate}
 />
 
-// ❌ Bad
+// ❌ Bad - Missing type safety
 <CrudComponent
   data={users}
   fields={userFields}
@@ -690,7 +752,7 @@ Always use proper TypeScript generics:
 ```
 
 ### 2. Field Naming
-Ensure field names match your data type keys:
+
 ```typescript
 interface User {
   id: string;
@@ -698,21 +760,21 @@ interface User {
   email: string;
 }
 
-// ✅ Good
+// ✅ Good - Field names match interface
 const fields = [
   { type: "text", name: "name", label: "Name" },
   { type: "email", name: "email", label: "Email" }
 ];
 
-// ❌ Bad
+// ❌ Bad - Field names don't match interface
 const fields = [
-  { type: "text", name: "userName", label: "Name" }, // Doesn't match User interface
+  { type: "text", name: "userName", label: "Name" },
   { type: "email", name: "emailAddress", label: "Email" }
 ];
 ```
 
 ### 3. Error Handling
-Always handle async operations properly:
+
 ```typescript
 const handleCreate = async (data: User) => {
   try {
@@ -727,43 +789,8 @@ const handleCreate = async (data: User) => {
 };
 ```
 
-### 4. Enum Translation Best Practices
-When using enum fields, prefer the simplified translation approach when enum values match translation keys:
+### 4. Performance Optimization
 
-```typescript
-// ✅ Recommended: Direct translation object
-{
-  type: "enum",
-  name: "roundingRule",
-  label: t(translations.str.roundingRule),
-  enum: RoundingRuleEnum,
-  required: true,
-  translation: translations.type.roundingRule  // Simple and clean
-}
-
-// ❌ Avoid: Manual mapping when not needed
-{
-  type: "enum",
-  name: "roundingRule",
-  label: t(translations.str.roundingRule),
-  enum: RoundingRuleEnum,
-  required: true,
-  translation: {
-    [RoundingRuleEnum.NEAREST_DECIMAL]: t(translations.type.roundingRule.NEAREST_DECIMAL),
-    [RoundingRuleEnum.NEAREST_INTEGER]: t(translations.type.roundingRule.NEAREST_INTEGER),
-    // ... unnecessary manual mapping
-  }
-}
-```
-
-**Benefits of Direct Translation Object:**
-- Cleaner, more maintainable code
-- Automatic mapping when enum values match translation keys
-- Less prone to errors
-- Easier to add new enum values
-
-### 5. Performance Optimization
-Use proper loading states and memoization:
 ```typescript
 const CrudComponentMemo = React.memo(CrudComponent);
 
@@ -782,7 +809,7 @@ const CrudComponentMemo = React.memo(CrudComponent);
 ```
 
 ### 5. Responsive Design
-Use grid properties for responsive forms:
+
 ```typescript
 const fields = [
   {
@@ -808,7 +835,8 @@ const fields = [
 
 ## Common Patterns
 
-### 1. Basic CRUD Implementation
+### 1. Complete CRUD Implementation
+
 ```typescript
 const UserManagement = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -888,37 +916,6 @@ const UserManagement = () => {
 };
 ```
 
-### 2. Search and Filter
-```typescript
-<CrudComponent<User>
-  data={filteredUsers}
-  fields={fields}
-  searchable={true}
-  searchFields={['name', 'email']}
-  onSearch={handleSearch}
-/>
-```
-
-### 3. Pagination
-```typescript
-const [pagination, setPagination] = useState({
-  page: 1,
-  pageSize: 10,
-  total: 0
-});
-
-<CrudComponent<User>
-  data={users}
-  fields={fields}
-  paginateProps={{
-    page: pagination.page,
-    pageSize: pagination.pageSize,
-    count: pagination.total,
-    setPage: (page) => setPagination(prev => ({ ...prev, page }))
-  }}
-/>
-```
-
 ## Troubleshooting
 
 ### Common Issues
@@ -937,4 +934,45 @@ const [pagination, setPagination] = useState({
 4. Check network requests for API calls
 5. Use React DevTools to inspect component state
 
-This comprehensive guide should help you effectively use the @kingteza/crud-component library in your projects. Always refer to the official documentation for the most up-to-date information.
+## API Reference
+
+### Exported Types
+
+```typescript
+// Main component
+export { CrudComponent } from '@kingteza/crud-component';
+
+// Field types
+export type { CrudFieldProps } from '@kingteza/crud-component';
+
+// Action types
+export type { CrudActionsProps } from '@kingteza/crud-component';
+
+// Modal types
+export type { CrudModalProps, CrudModalRef } from '@kingteza/crud-component';
+
+// Utility types
+export type { 
+  CheckboxBasedFieldProps,
+  ColorPickerFieldProps,
+  CrudComponentProps,
+  CrudFieldGrid,
+  CrudPaginateProps,
+  CrudPurpose,
+  CrudWizardProp,
+  DateBasedFieldProps,
+  EnumCrudField,
+  FormBuilderFunc,
+  FormBuilderFunc0,
+  GetFormFieldOptions,
+  InitialCrudField,
+  NumberBasedFieldProps,
+  ObjectCrudField,
+  SelectCrudField,
+  SelectFieldItem,
+  TextBasedFieldProps,
+  TimeBasedFieldProps,
+} from '@kingteza/crud-component';
+```
+
+This documentation provides a comprehensive guide for using the @kingteza/crud-component library. The library is designed to be intuitive and powerful, allowing developers to create sophisticated data management interfaces with minimal configuration while maintaining full type safety and customization options.
