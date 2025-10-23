@@ -22,7 +22,7 @@ import {
   ViewButtonTable,
   ButtonComponent,
 } from "../../common";
-import CrudActions, { CrudActionsProps } from "../actions/CrudActions";
+import CrudActions, { CrudActionsProps } from "../actions";
 
 import TableComponent, {
   TableComponentColumnProp,

@@ -1,26 +1,31 @@
-import { ColorPickerProps, Form, Modal, Space, Spin } from "antd";
-
-import { Color } from "antd/es/color-picker";
+import { ColorPickerProps, Form, Space } from "antd";
 import { Rule } from "antd/es/form";
 import { FormInstance } from "antd/lib";
-import dayjs, { Dayjs } from "dayjs";
-import React, { ReactElement, ReactNode, useCallback, useEffect, useState } from "react";
+import { Dayjs } from "dayjs";
+import React, {
+  ReactElement,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+  useRef,
+} from "react";
 
-import { CrudForm } from "./CrudForm";
-import CrudFormWizard from "./CrudFormWizard";
 import { CrudSearchComponentProps } from "./CrudSearchComponent";
+import CrudModal, { CrudModalRef } from "./modal";
 import { FileCrudField } from "./FileCrudField";
 import { ImageCrudField } from "./ImageCrudField";
 import CrudImportButton from "./import/CrudImportButton";
 import { CrudImportProps } from "./import/CrudImportComponent";
-import CrudViewer, { CrudDragableProps, CrudViewableProps } from "./view/CrudViewer";
+import CrudViewer, {
+  CrudDragableProps,
+  CrudViewableProps,
+} from "./view/CrudViewer";
 import { NewButton, PrintButton } from "../common";
 import { SelectTagRenderProps } from "../common/select/SelectComponent";
 import IdProps from "../types/Id";
-import { useTranslationLib } from "../locale";
 import { TextAreaBasedFieldProps } from "./CrudTextAreaComponent";
 import { SizeType } from "antd/es/config-provider/SizeContext";
-import CrudUtil from "src/util/CrudUtil";
 
 export type SelectFieldItem = {
   key?: string | number;
@@ -80,12 +85,13 @@ export type CrudFieldGrid = {
 export interface SelectCrudField<
   T,
   ItemType extends SelectFieldItem = SelectFieldItem
-> extends Omit<InitialCrudField<T>, "name">, AddonFieldProps {
+> extends Omit<InitialCrudField<T>, "name">,
+    AddonFieldProps {
   name:
     | InitialCrudField<T>["name"]
     | {
-        name:  keyof T | (string | number)[];
-        upsertFieldName:  keyof T | (string | number)[]; // The field name that will be used in create or update
+        name: keyof T | (string | number)[];
+        upsertFieldName: keyof T | (string | number)[]; // The field name that will be used in create or update
       };
   type: "select";
   placeholder?: string;
@@ -163,7 +169,7 @@ export interface EnumCrudField<T> extends InitialCrudField<T> {
 export type AddonFieldProps = {
   addonAfter?: ReactNode;
   addonBefore?: ReactNode;
-}
+};
 
 export interface ObjectCrudField<T> extends InitialCrudField<T> {
   type: "object";
@@ -172,7 +178,9 @@ export interface ObjectCrudField<T> extends InitialCrudField<T> {
   translation?: object;
 }
 
-export interface TextBasedFieldProps<T> extends InitialCrudField<T>, AddonFieldProps {
+export interface TextBasedFieldProps<T>
+  extends InitialCrudField<T>,
+    AddonFieldProps {
   placeholder?: string;
   type: "text" | "time" | "email" | "password";
   onChange?: (value: string, form: FormInstance<T>) => void;
@@ -189,7 +197,9 @@ export interface CheckboxBasedFieldProps<T> extends InitialCrudField<T> {
   onChange?: (value: boolean, form: FormInstance<T>) => void;
 }
 
-export interface NumberBasedFieldProps<T> extends InitialCrudField<T>, AddonFieldProps {
+export interface NumberBasedFieldProps<T>
+  extends InitialCrudField<T>,
+    AddonFieldProps {
   type: "number";
   placeholder?: string;
   allowMinus?: boolean;
@@ -348,121 +358,25 @@ function CrudComponent<T, FormType = T>({
   size,
   ...props
 }: CrudComponentProps<T, FormType>) {
-  const { t } = useTranslationLib();
+  const modalRef = useRef<CrudModalRef<T>>(null);
 
-  const [openModal, setOpenModal] = useState(false);
-
-  const [updatingField, setUpdatingField] = useState<T>();
-  const [updatingValueWizard, setUpdatingValueForWizard] = useState<any>();
-  const [form] = useForm();
-  const _onSave = useCallback(
-    async (x?: any) => {
-      const field = wizard ? x : await form.validateFields();
-      const colorFields = fields.filter((e) => e.type === "color");
-      const colorValues = {};
-      colorFields.forEach((e) => {
-        const upsertFieldName = CrudUtil.getRealName(e.name, 'upsertFieldName');
-        const color = form.getFieldValue(upsertFieldName);
-        colorValues[upsertFieldName] =
-          typeof color === "string"
-            ? color
-            : (color as Color)?.toHexString()?.toUpperCase();
-      });
-      Object.assign(field, colorValues);
-      if (updatingField && onUpdate) {
-        await onUpdate({
-          ...field,
-          [idField]: updatingField[idField],
-        });
-        setUpdatingField(undefined);
-      } else if (!updatingField && onCreate) {
-        await onCreate(field);
-      }
-      setUpdatingValueForWizard(undefined);
-      form.resetFields();
-      setOpenModal(false);
-    },
-    [fields, form, idField, onCreate, onUpdate, updatingField, wizard]
-  );
-
-  const [blockSubmitButton, setBlockSubmitButton] = useState(false);
-  const [blockCancelButton, setBlockCancelButton] = useState(false);
-
-  useEffect(() => {
-    if (openModal) {
-      setBlockSubmitButton(false);
-      setBlockCancelButton(false);
-    } else {
-      setPurpose(undefined);
-    }
-  }, [openModal]);
-
-  const onUploading = useCallback(async (p) => {
-    setBlockSubmitButton(p);
-    setBlockCancelButton(true);
+  const handleNew = useCallback(() => {
+    modalRef.current?.create();
   }, []);
-
-  const _onDeleteFile = useCallback(async () => {
-    setBlockCancelButton(true);
-  }, []);
-
-  const [updating, setUpdating] = useState(false);
 
   const onClickUpdate = useCallback(
     async (data: T, shouldSetUpdatingField = true, isClone = false) => {
-      try {
-        setUpdating(true);
-        setOpenModal(true);
-        if (shouldSetUpdatingField) setPurpose("update");
-        const _data = {};
-        for (const e of fields) {
-          const upsertFieldName = CrudUtil.getRealName(e.name, 'upsertFieldName');
-          const dataField = data[upsertFieldName];
-          if (isClone && e.type === "image") {
-            const filePath = dataField;
-            try {
-              const clonedFilePath = await e.provider.clone(filePath);
-              _data[upsertFieldName] = clonedFilePath;
-              continue;
-            } catch {
-              continue;
-            }
-          }
-          if (e.type === "date") {
-            if (dataField) _data[upsertFieldName] = dayjs(dataField);
-          } else if (e.type === "select") {
-            if (e.multiple && Array.isArray(dataField)) {
-              _data[upsertFieldName] = dataField.map(
-                (x) => x[e.innerFieldId ?? "id"]
-              );
-            } else if (dataField && typeof dataField === "object")
-              _data[upsertFieldName] = dataField[e.innerFieldId ?? "id"];
-            else if (
-              (dataField && typeof dataField === "string") ||
-              typeof dataField === "number"
-            )
-              _data[upsertFieldName] = dataField;
-          } else _data[upsertFieldName] = dataField;
-        }
-        form.setFieldsValue(_data);
-        setUpdatingValueForWizard(_data);
-        if (shouldSetUpdatingField) setUpdatingField(data);
-      } finally {
-        setUpdating(false);
-      }
+      await modalRef.current?.update(data, shouldSetUpdatingField, isClone);
     },
-    [fields, form]
+    []
   );
 
-  const [purpose, setPurpose] = useState<CrudPurpose>();
   const onClickClone = useCallback(
     async (data: T) => {
-      setPurpose("clone");
       onClickUpdate(data, false, true);
     },
     [onClickUpdate]
   );
-
   return (
     <>
       <Space direction="vertical" className="w-100">
@@ -473,8 +387,7 @@ function CrudComponent<T, FormType = T>({
                 if (onClickNew) {
                   onClickNew();
                 } else {
-                  setOpenModal((e) => !e);
-                  setPurpose("new");
+                  handleNew();
                 }
               }}
               className="flex-1"
@@ -514,72 +427,19 @@ function CrudComponent<T, FormType = T>({
           extraView={extraView}
         />
       </Space>
-      <Modal
-        width={fullWidthModal ? "100%" : undefined}
-        title={t(purpose ?? "new")}
-        open={openModal}
-        confirmLoading={isCreating || isUpdating}
-        okText={t("str." + (purpose === "update" ? "update" : "save"))}
-        cancelText={t("str.cancel")}
-        cancelButtonProps={{
-          disabled: blockCancelButton,
-          hidden: Boolean(wizard),
-        }}
-        okButtonProps={{
-          disabled: blockSubmitButton,
-          hidden: Boolean(wizard),
-        }}
-        onCancel={async () => {
-          try {
-            if (purpose === "clone") {
-              const values = !wizard ? form.getFieldsValue() : updatingField;
-              const imageFields = fields.filter((e) => e.type === "image");
-              for (const field of imageFields) {
-                if (values[field.name]) {
-                  (field as ImageCrudField<T>).provider.delete(
-                    values[field.name]
-                  );
-                }
-              }
-            }
-          } finally {
-            //
-          }
-          if (!wizard) form.resetFields();
-          setUpdatingValueForWizard(undefined);
-          setUpdatingField(undefined);
-          setOpenModal(false);
-        }}
-        onOk={() => _onSave()}
-        destroyOnHidden
-      >
-        <Spin spinning={updating}>
-          {!wizard && (
-            <CrudForm
-              purpose={purpose}
-              fields={fields}
-              form={form}
-              formBuilder={formBuilder}
-              grid={grid}
-              onDeleteFile={_onDeleteFile}
-              onUploadFile={onUploading}
-            />
-          )}
-          {wizard && (
-            <CrudFormWizard<T>
-              submitting={isCreating || isUpdating}
-              className={"mt-2"}
-              onSave={_onSave}
-              updatingValue={updatingValueWizard}
-              fields={fields}
-              onDeleteFile={_onDeleteFile}
-              onUploadFile={onUploading}
-              purpose={purpose}
-              wizard={wizard}
-            />
-          )}
-        </Spin>
-      </Modal>
+      <CrudModal
+        ref={modalRef}
+        fields={fields}
+        wizard={wizard}
+        grid={grid}
+        fullWidthModal={fullWidthModal}
+        isCreating={isCreating}
+        isUpdating={isUpdating}
+        onCreate={onCreate}
+        onUpdate={onUpdate}
+        idField={idField}
+        formBuilder={formBuilder}
+      />
     </>
   );
 }

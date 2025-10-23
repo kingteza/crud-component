@@ -11,7 +11,8 @@ import { useTranslationLib } from "../../locale";
 import { CrudFieldProps } from "../CrudComponent";
 import { getRendererValueCrudViewer } from "./CrudViewerUtil";
 import CrudUtil from "src/util/CrudUtil";
-import CrudActions, { CrudActionsProps } from "../actions/CrudActions";
+import CrudActions, { CrudActionsProps } from "../actions";
+import { CrudModalProps } from "../modal";
 
 export type DescListColumn =
   | number
@@ -25,6 +26,7 @@ export interface CrudDecListViewProps<T, FormType = T>
   descListColumn?: DescListColumn;
   layout?: "horizontal" | "vertical";
   keepEmptyValues?: boolean;
+  inBuiltModalProps?: CrudModalProps<T, FormType>;
 }
 
 export function CrudDecListView<T, FormType = T>({
@@ -34,6 +36,7 @@ export function CrudDecListView<T, FormType = T>({
   descListColumn = { xs: 1, md: 3, sm: 2, lg: 4 },
   layout,
   keepEmptyValues,
+  inBuiltModalProps,
   ...crudActionsProps
 }: Readonly<CrudDecListViewProps<T, FormType>>) {
   const { t } = useTranslationLib();
@@ -56,7 +59,11 @@ export function CrudDecListView<T, FormType = T>({
 
     // Add actions if data exists and any action props are provided
     const actionComponent = data ? (
-      <CrudActions<T, FormType> data={data} {...crudActionsProps} />
+      <CrudActions<T, FormType>
+        data={data}
+        {...crudActionsProps}
+        inBuiltModalProps={inBuiltModalProps}
+      />
     ) : undefined;
     if (actionComponent) {
       list.push({

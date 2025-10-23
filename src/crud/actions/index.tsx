@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useCallback, useRef } from "react";
 import {
   CloneButtonTable,
   DeleteButtonTable,
@@ -7,6 +7,8 @@ import {
   UpdateButtonTable,
 } from "../../common";
 import IdProps from "../../types/Id";
+import { CrudModalProps, CrudModalRef } from "../modal";
+import { CrudModal } from "..";
 
 export interface CrudActionsProps<T, FormType> {
   idField?: string;
@@ -25,6 +27,8 @@ export interface CrudActionsProps<T, FormType> {
   recentUpdateOrDeleteId?: string;
   setRecentUpdateOrDeleteId?: (id: string) => void;
   setOpenView?: (data: T | undefined) => void;
+
+  inBuiltModalProps?: CrudModalProps<T, FormType>;
 }
 
 function CrudActions<T, FormType>({
@@ -45,28 +49,41 @@ function CrudActions<T, FormType>({
   recentUpdateOrDeleteId,
   setRecentUpdateOrDeleteId,
   setOpenView,
+  inBuiltModalProps,
 }: CrudActionsProps<T, FormType> & { data: T }) {
   const extra = extraAction?.(data);
-  
+  const modalRef = useRef<CrudModalRef<T>>(null);
+  const onClickUpdate0 = useCallback(
+    (e: T, shouldSetUpdatingField = true, isClone = false) => {
+      setRecentUpdateOrDeleteId?.(e[idField]);
+      if (inBuiltModalProps) {
+        modalRef.current?.update(e, shouldSetUpdatingField, isClone);
+      } else if (isClone) {
+        onClickClone?.(e);
+      } else {
+        onClickUpdate?.(e);
+      }
+      if (closeViewOnClickUpdate) setOpenView?.(undefined);
+    },
+    [inBuiltModalProps, onClickUpdate]
+  );
+
   return (Array.isArray(extra) ? extra?.filter(Boolean)?.length : extra) ||
     onUpdate ||
     onClickUpdate ||
     onClickClone ||
     onDelete ? (
     <>
+      {inBuiltModalProps && <CrudModal ref={modalRef} {...inBuiltModalProps} />}
       {extra}
-      {(onUpdate || onClickUpdate) && (
-        <UpdateButtonTable
-          value={data}
-          onClick={(e) => {
-            setRecentUpdateOrDeleteId?.(e[idField]);
-            onClickUpdate?.(data);
-            if (closeViewOnClickUpdate) setOpenView?.(undefined);
-          }}
-        />
+      {(onUpdate || onClickUpdate || inBuiltModalProps?.onUpdate) && (
+        <UpdateButtonTable value={data} onClick={(e) => onClickUpdate0(e)} />
       )}
-      {onClickClone && (
-        <CloneButtonTable value={data} onClick={(e) => onClickClone(e)} />
+      {(onClickClone || inBuiltModalProps?.onCreate) && (
+        <CloneButtonTable
+          value={data}
+          onClick={(e) => onClickUpdate0(e, false, true)}
+        />
       )}
       {onExport && (
         <ExportButton
