@@ -18,21 +18,16 @@ import {
 } from "@dnd-kit/sortable";
 import {
   VerticalSpace,
-  CloneButtonTable,
-  DeleteButtonTable,
-  ExportButton,
-  HideButtonTable,
   RefreshButton,
-  UpdateButtonTable,
   ViewButtonTable,
   ButtonComponent,
 } from "../../common";
+import CrudActions, { CrudActionsProps } from "../actions/CrudActions";
 
 import TableComponent, {
   TableComponentColumnProp,
 } from "../../common/table/table";
 import React, {
-  ReactElement,
   useCallback,
   useContext,
   useEffect,
@@ -41,13 +36,7 @@ import React, {
 } from "react";
 import { useTranslationLib } from "../../locale";
 
-import IdProps from "../../types/Id";
-
-import {
-  CrudFieldProps,
-  CrudPaginateProps,
-  InitialCrudField,
-} from "../CrudComponent";
+import { CrudFieldProps, CrudPaginateProps } from "../CrudComponent";
 import CrudSearchComponent, {
   CrudSearchComponentProps,
 } from "../CrudSearchComponent";
@@ -78,26 +67,13 @@ export type CrudViewerProps<T, FormType> = {
   decListLayout?: "horizontal" | "vertical";
   viewable?: CrudViewableProps<T>;
   paginateProps?: CrudPaginateProps;
-  onDelete?: (id: any) => Promise<any>;
-  confirmDeleting?: boolean;
-  confirmHiding?: boolean;
-  onHide?: (id: any) => Promise<any>;
-  onUpdate?: (t: FormType & IdProps) => Promise<any>;
-  onExport?: (t: T) => Promise<any>;
   data: T[] | undefined;
-  extraAction?: (t: T) => ReactElement | undefined | ReactElement[];
-  onClickUpdate?: (t: T) => void;
-  closeViewOnClickUpdate?: boolean;
-  isHiding?: boolean;
-  isDeleting?: boolean;
-  idField?: string;
   loadingData?: boolean;
   minusHeight?: string;
   scroll?: TableProps<T>["scroll"];
   className?: string;
   bordered?: boolean;
   size?: SizeType;
-  onClickClone?: (t: T) => Promise<any>;
   onClickRefresh?: () => void;
   expandable?: ExpandableConfig<T>;
   descListColumn?: DescListColumn;
@@ -106,7 +82,8 @@ export type CrudViewerProps<T, FormType> = {
   rowClassName?: TableProps<T>["rowClassName"];
   actionWidth?: string | number;
   draggable?: CrudDragableProps<T>;
-} & CrudSearchComponentProps<T, FormType>;
+} & CrudActionsProps<T, FormType> &
+  CrudSearchComponentProps<T, FormType>;
 
 function CrudViewer<T, FormType = T>({
   idField = "id",
@@ -181,79 +158,6 @@ function CrudViewer<T, FormType = T>({
       });
     }
   }, [data, idField, openView]);
-  const actions = useCallback(
-    (data: T) => {
-      const extra = extraAction?.(data);
-      return (Array.isArray(extra) ? extra?.filter(Boolean)?.length : extra) ||
-        onUpdate ||
-        onClickUpdate ||
-        onClickClone ||
-        onDelete ? (
-        <>
-          {extra}
-          {(onUpdate || onClickUpdate) && (
-            <UpdateButtonTable
-              value={data}
-              onClick={(e) => {
-                setRecentUpdateOrDeleteId(e[idField]);
-                onClickUpdate?.(data);
-                if (closeViewOnClickUpdate) setOpenView(undefined);
-              }}
-            />
-          )}
-          {onClickClone && (
-            <CloneButtonTable value={data} onClick={(e) => onClickClone(e)} />
-          )}
-          {onExport && (
-            <ExportButton
-              value={data}
-              onClick={async (data) => await onExport(data)}
-            />
-          )}
-          {onHide && (
-            <HideButtonTable
-              value={data}
-              disabled={isHiding}
-              shouldConfirm={confirmHiding}
-              loading={isHiding && data[idField] === recentUpdateOrDeleteId}
-              onClick={async (e) => {
-                setRecentUpdateOrDeleteId(e[idField]);
-                await onHide({ [idField]: e[idField] });
-              }}
-            />
-          )}
-          {onDelete && (
-            <DeleteButtonTable
-              value={data}
-              disabled={isDeleting}
-              shouldConfirm={confirmDeleting}
-              loading={isDeleting && data[idField] === recentUpdateOrDeleteId}
-              onClick={async (e) => {
-                setRecentUpdateOrDeleteId(e[idField]);
-                await onDelete({ [idField]: e[idField] });
-              }}
-            ></DeleteButtonTable>
-          )}
-        </>
-      ) : undefined;
-    },
-    [
-      closeViewOnClickUpdate,
-      confirmDeleting,
-      confirmHiding,
-      extraAction,
-      idField,
-      isDeleting,
-      isHiding,
-      onClickClone,
-      onClickUpdate,
-      onDelete,
-      onExport,
-      onHide,
-      onUpdate,
-      recentUpdateOrDeleteId,
-    ]
-  );
 
   const onDragEnd = useCallback(
     (event: DragEndEvent) => {
@@ -371,7 +275,25 @@ function CrudViewer<T, FormType = T>({
                 }
               />
             )}
-            {actions(data)}
+            <CrudActions<T, FormType>
+              data={data}
+              idField={idField}
+              extraAction={extraAction}
+              onUpdate={onUpdate}
+              onClickUpdate={onClickUpdate}
+              onClickClone={onClickClone}
+              onDelete={onDelete}
+              onHide={onHide}
+              onExport={onExport}
+              isHiding={isHiding}
+              isDeleting={isDeleting}
+              confirmHiding={confirmHiding}
+              confirmDeleting={confirmDeleting}
+              closeViewOnClickUpdate={closeViewOnClickUpdate}
+              recentUpdateOrDeleteId={recentUpdateOrDeleteId}
+              setRecentUpdateOrDeleteId={setRecentUpdateOrDeleteId}
+              setOpenView={setOpenView}
+            />
           </>
         ),
       });
@@ -386,7 +308,6 @@ function CrudViewer<T, FormType = T>({
     viewable,
     t,
     actionWidth,
-    actions,
   ]);
 
   // Memoize sortable items for DnD
@@ -448,12 +369,27 @@ function CrudViewer<T, FormType = T>({
           >
             {Boolean(openView) && (
               <div key={openView?.[idField]}>
-                <CrudDecListView
+                <CrudDecListView<T, FormType>
                   layout={decListLayout}
                   descListColumn={descListColumn}
                   data={openView}
                   fields={fields}
-                  action={actions(openView!)}
+                  idField={idField}
+                  extraAction={extraAction}
+                  onUpdate={onUpdate}
+                  onClickUpdate={onClickUpdate}
+                  onClickClone={onClickClone}
+                  onDelete={onDelete}
+                  onHide={onHide}
+                  onExport={onExport}
+                  isHiding={isHiding}
+                  isDeleting={isDeleting}
+                  confirmHiding={confirmHiding}
+                  confirmDeleting={confirmDeleting}
+                  closeViewOnClickUpdate={closeViewOnClickUpdate}
+                  recentUpdateOrDeleteId={recentUpdateOrDeleteId}
+                  setRecentUpdateOrDeleteId={setRecentUpdateOrDeleteId}
+                  setOpenView={setOpenView}
                 />
                 {extraView?.(openView!)}
               </div>

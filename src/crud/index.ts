@@ -69,4 +69,6 @@ export type {
   CrudImportProps,
 } from "./import/CrudImportComponent";
 export { default as CrudImportButton } from "./import/CrudImportButton";
+export { default as CrudActions } from "./actions/CrudActions";
+export type { CrudActionsProps } from "./actions/CrudActions";
 export * from './view';

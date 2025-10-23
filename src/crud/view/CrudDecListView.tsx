@@ -5,37 +5,37 @@
 
 import { Breakpoint } from "antd";
 import { DescList, DescPropsNullable } from "../../common";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { useTranslationLib } from "../../locale";
 
-
-import { CrudFieldProps, InitialCrudField } from "../CrudComponent";
+import { CrudFieldProps } from "../CrudComponent";
 import { getRendererValueCrudViewer } from "./CrudViewerUtil";
 import CrudUtil from "src/util/CrudUtil";
+import CrudActions, { CrudActionsProps } from "../actions/CrudActions";
 
 export type DescListColumn =
   | number
   | Partial<Record<Breakpoint, number>>
   | undefined;
-export interface CrudDecListViewProps<T> {
+export interface CrudDecListViewProps<T, FormType = T>
+  extends CrudActionsProps<T, FormType> {
   fields: CrudFieldProps<T>[];
   data: T | undefined;
   className?: string;
   descListColumn?: DescListColumn;
   layout?: "horizontal" | "vertical";
-  action?: React.JSX.Element;
   keepEmptyValues?: boolean;
 }
 
-export function CrudDecListView<T>({
+export function CrudDecListView<T, FormType = T>({
   className,
   fields,
   data,
   descListColumn = { xs: 1, md: 3, sm: 2, lg: 4 },
   layout,
-  action,
   keepEmptyValues,
-}: Readonly<CrudDecListViewProps<T>>) {
+  ...crudActionsProps
+}: Readonly<CrudDecListViewProps<T, FormType>>) {
   const { t } = useTranslationLib();
 
   const _fields: DescPropsNullable[] = useMemo(() => {
@@ -43,7 +43,7 @@ export function CrudDecListView<T>({
       .filter(({ hidden, hideInDescList }) => !hidden && !hideInDescList)
       .map((e, i) => {
         const upsertFieldName = CrudUtil.getRealName(e.name);
-        return ({
+        return {
           label: e.label,
           noFormatting: true,
           value: getRendererValueCrudViewer(e)(
@@ -51,11 +51,21 @@ export function CrudDecListView<T>({
             data as any,
             i
           ),
-        });
+        };
       });
-    if (action) list.push({ label: t('str.action'), value: action });
+
+    // Add actions if data exists and any action props are provided
+    const actionComponent = data ? (
+      <CrudActions<T, FormType> data={data} {...crudActionsProps} />
+    ) : undefined;
+    if (actionComponent) {
+      list.push({
+        label: t("str.action"),
+        value: actionComponent,
+      });
+    }
     return list;
-  }, [action, data, fields, t]);
+  }, [data, fields, t, crudActionsProps]);
 
   if (!data) return <></>;
   return (
