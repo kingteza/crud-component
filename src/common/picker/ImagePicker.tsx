@@ -160,7 +160,6 @@ const ImagePicker: FC<Props> = ({
       }) as RcFile;
       const fileResized: RcFile = await ImageUtil.resizeImage(file);
       const url = await getBase64(fileResized);
-      console.log({ url });
       const fl = {
         url,
         name,

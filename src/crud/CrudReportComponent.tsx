@@ -160,7 +160,6 @@ function CrudReportComponent<T, F = T>({
   useEffect(() => {
     const inSortBy = form.getFieldValue("sortBy" as any);
     if (!inSortBy && defaultSort) {
-      console.log(defaultSort.report?.defaultSort);
       form.setFieldsValue({
         sortBy: defaultSort.name as any,
         sortByType:

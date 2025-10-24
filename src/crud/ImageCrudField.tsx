@@ -109,7 +109,6 @@ export default function ImageCrudFieldComponent<T>({
         onUploading?.(false);
         formInstance.setFieldValue(name as any, finalPath);
       } else {
-        console.log(e);
         // We are removing
 
         const form = formInstance.getFieldsValue();

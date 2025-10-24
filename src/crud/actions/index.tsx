@@ -67,12 +67,6 @@ function CrudActions<T, FormType>({
     },
     [inBuiltModalProps, onClickUpdate]
   );
-  console.log({
-    onUpdate,
-    onClickUpdate,
-    onClickClone,
-    onDelete,
-  });
   return (Array.isArray(extra) ? extra?.filter(Boolean)?.length : extra) ||
     onUpdate ||
     onClickUpdate ||

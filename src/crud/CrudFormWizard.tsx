@@ -57,7 +57,6 @@ function CrudFormWizard<T>({
   return (
     <WizardViewForm
       onSubmit={(_, c) => {
-        console.log(c);
         onSave(c);
       }}
       className={className}

@@ -70,7 +70,6 @@ const TimePickerComponent: FC<TimeRangePickerProps | TimePickerProps> = ({
     () => (placeholder ? placeholder : range ? ["From", "To"] : "Select time"),
     [placeholder, range]
   );
-  console.log(placeHolder0);
   const Component = !range ? TimePicker : TimePicker.RangePicker;
 
   const disabledDate = useCallback(

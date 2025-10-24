@@ -79,7 +79,6 @@ export default function FileCrudFieldComponent<T>({
           const name0 = provider.generateFileName(fileName);
 
           const filePath = `${await provider.getInitialPath()}/${name0}.${extension}`;
-          console.log({ filePath });
           const finalPath = await provider.upload(
             { ...(file as any), originFileObj: file },
             filePath
@@ -120,7 +119,6 @@ export default function FileCrudFieldComponent<T>({
           const list = value.map(({ url, type, uid, name }) => {
             return { uid, url, type, response: uid, thumbUrl: url, name };
           });
-          console.log(list);
           return list as any;
         });
       });
