@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/kingteza/crud-component/compare/v1.2.0...v1.2.1) (2025-10-24)
+
+
+### Bug Fixes
+
+* add @semantic-release/npm plugin to update package.json version ([a20452f](https://github.com/kingteza/crud-component/commit/a20452fa5f783440c49e2a077558b974b1de8a70))
+
 # [1.2.0](https://github.com/kingteza/crud-component/compare/v1.1.0...v1.2.0) (2025-10-24)
 
 
