@@ -228,7 +228,6 @@ export function getRendererValueCrudViewer<T>({
           ) : (
             e
           );
-          console.log("component", component);
           return component;
         }
       : typeof render === "function"
