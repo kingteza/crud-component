@@ -86,6 +86,7 @@ export default function ImageCrudFieldComponent<T>({
   fieldClassName,
   hideLabel = false,
   listType,
+  fieldHelper: help,
 }: Readonly<_ImageCrudField<T>>) {
   const formInstance = Form.useFormInstance();
 
@@ -136,6 +137,7 @@ export default function ImageCrudFieldComponent<T>({
       label={hideLabel ? null : label}
       required={required}
       name={name as any}
+      help={help}
     >
       <ImagePicker
         noStyle

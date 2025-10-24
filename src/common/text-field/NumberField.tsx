@@ -49,6 +49,7 @@ const NumberTextField = forwardRef<HTMLInputElement, NumberTextFieldProps>(
       size,
       isInt = false,
       tooltip,
+      help,
       ...props
     },
     ref

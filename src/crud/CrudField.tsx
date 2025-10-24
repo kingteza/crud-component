@@ -46,6 +46,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
     fieldClassName,
     customFormFieldRender,
     fieldTooltip,
+    fieldHelper: help,
     ...props
   } = props0;
   const form = Form.useFormInstance();
@@ -89,6 +90,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
           autoComplete={"new-password"}
           addonAfter={addonAfter}
           addonBefore={addonBefore}
+          help={help}
         />
       );
     }
@@ -113,6 +115,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
           addonBefore={addonBefore}
           name={name as any}
           label={label}
+          help={help}
         />
       );
     }
@@ -144,6 +147,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
           disableToday={disableToday}
           disabledFutureDays={disabledFutureDays}
           disabledPastDays={disabledPastDays}
+          help={help}
         />
       );
     }
@@ -175,6 +179,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
           disableCurrent={disableCurrent}
           disabledFuture={disabledFuture}
           disabledPast={disabledPast}
+          help={help}
         />
       );
     }
@@ -222,6 +227,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
           updatable={updatable}
           readonly={readonly}
           fieldTooltip={fieldTooltip}
+          fieldHelper={help}
         />
       );
     }
@@ -246,6 +252,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
             rules={rules}
             label={label}
             className={["w-100", fieldClassName].join(" ")}
+            help={help}
           >
             <Radio.Group
               {...props}
@@ -289,6 +296,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
           tooltip={fieldTooltip}
           rules={rules}
           label={label}
+          help={help}
           disabled={!updatable}
           onSearch={onSearch ? (val) => onSearch(val, form) : undefined}
           allowClear
@@ -312,6 +320,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
           tooltip={fieldTooltip}
           disabled={!updatable}
           name={name as any}
+          help={help}
         />
       );
     }
@@ -328,6 +337,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
           updatable={updatable}
           readonly={readonly}
           fieldTooltip={fieldTooltip}
+          fieldHelper={help}
         />
       );
     }
@@ -504,6 +514,7 @@ export function ColorCrudFieldComponent<T>(props: ColorPickerFieldProps<T>) {
     updatable,
     label,
     name,
+    fieldHelper: help,
   } = props as ColorPickerFieldProps<T>;
 
   return (
@@ -513,6 +524,7 @@ export function ColorCrudFieldComponent<T>(props: ColorPickerFieldProps<T>) {
       required={required}
       rules={rules}
       tooltip={fieldTooltip}
+      help={help}
     >
       <ColorPicker
         disabledAlpha

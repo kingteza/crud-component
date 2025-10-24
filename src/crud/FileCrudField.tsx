@@ -55,6 +55,7 @@ export default function FileCrudFieldComponent<T>({
   rules,
   maxCount = 1,
   block,
+  fieldHelper: help,
   ...props
 }: Readonly<_FileCrudField<T>>) {
   const form = Form.useFormInstance();
@@ -147,6 +148,7 @@ export default function FileCrudFieldComponent<T>({
         ...(required ? ValidationUtil.required(label) : []),
         ...(rules ?? []),
       ]}
+      help={help}
     >
       <input hidden />
       <Upload

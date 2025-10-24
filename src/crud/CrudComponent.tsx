@@ -36,6 +36,7 @@ export type SelectFieldItem = {
 const { useForm } = Form;
 export interface InitialCrudField<T> {
   label: string;
+  fieldHelper?: ReactNode;
   updatingValue?: T;
   render?: (value: any, obj: T, index: number) => any;
   required?: boolean;
