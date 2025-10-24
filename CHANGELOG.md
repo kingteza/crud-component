@@ -1,3 +1,10 @@
+## [1.2.7](https://github.com/kingteza/crud-component/compare/v1.2.6...v1.2.7) (2025-10-24)
+
+
+### Bug Fixes
+
+* rename variable for clarity in CrudViewerUtil ([848c8aa](https://github.com/kingteza/crud-component/commit/848c8aaf815e7532a14457ea7d072dd25ee45389))
+
 ## [1.2.6](https://github.com/kingteza/crud-component/compare/v1.2.5...v1.2.6) (2025-10-24)
 
 
