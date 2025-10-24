@@ -1,5 +1,5 @@
 import { setupI18n } from "./locale";
-import { CrudComponent, FileUploadProvider } from ".";
+import { CrudComponent, CrudDecListView, FileUploadProvider } from ".";
 import { useState } from "react";
 import Play from "./Play";
 import { UploadFile } from "antd/lib";
@@ -37,23 +37,28 @@ class TestUploadProvider extends FileUploadProvider {
   public getInitialPath(): Promise<string> {
     return Promise.resolve("/");
   }
-  public async upload(file: UploadFile<any>, filePath: string): Promise<string> {
+  public async upload(
+    file: UploadFile<any>,
+    filePath: string
+  ): Promise<string> {
     // Create a download link for the blob
     if (file.originFileObj) {
       const url = URL.createObjectURL(file.originFileObj);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = file.name || 'cropped-image.jpg';
+      link.download = file.name || "cropped-image.jpg";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     }
-    
+
     // Return a placeholder URL for the component
-    return Promise.resolve(`https://picsum.photos/id${Math.floor(Math.random() * 1000)}/400/300`);
+    return Promise.resolve(
+      `https://picsum.photos/id${Math.floor(Math.random() * 1000)}/400/300`
+    );
   }
-  
+
   public delete(filePath: string): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
@@ -61,7 +66,7 @@ class TestUploadProvider extends FileUploadProvider {
     throw new Error("Method not implemented.");
   }
   public getRealUrl(filePath: string): Promise<string> {
-    return Promise.resolve('https://picsum.photos/id' + filePath);
+    return Promise.resolve("https://picsum.photos/id" + filePath);
   }
 }
 function App() {
@@ -112,8 +117,7 @@ function App() {
       helloId: "3",
     },
   ]);
-
-
+  const props = useWorkShiftCrudComponentProps();
   return (
     <div className="">
       <CrudComponent<Purchase>
@@ -182,7 +186,7 @@ function App() {
           },
           {
             type: "select",
-            name: ['s', 'hello'],
+            name: ["s", "hello"],
             label: "Hello Field",
             required: true,
             items: [
@@ -200,8 +204,125 @@ function App() {
           },
         ]}
       />
+      <CrudDecListView
+        data={{
+          id: "7cf42fbc-89a0-4e25-acdd-ab4ac2a0bd20",
+          name: "Main Shift",
+          description: "test",
+          startTime: "2025-10-23T02:30:52.025Z",
+          endTime: "2025-10-23T10:30:52.025Z",
+          gracePeriodForEndTimeMin: 15,
+          gracePeriodForStartTimeMin: 30,
+          shiftDurationHour: 8,
+          shiftDurationMin: 0,
+          orgId: "SG94436",
+          createdBy: "J0cMi0kA1jcBzJDv3eIvYWPOxKA2",
+          updatedBy: "J0cMi0kA1jcBzJDv3eIvYWPOxKA2",
+          createdAt: "2025-10-23T14:42:24.922Z",
+          updatedAt: "2025-10-23T14:42:24.922Z",
+        }}
+        fields={props.fields}
+        inBuiltModalProps={{
+          ...props,
+        }}
+      />
     </div>
   );
 }
 
 export default App;
+
+/* *****************************************************************************
+ Copyright (c) 2020-2025 Kingteza and/or its affiliates. All rights reserved.
+ KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+***************************************************************************** */
+
+const grid = {
+  md: 6,
+  xs: 24,
+};
+
+export const useWorkShiftCrudComponentProps = () => {
+  return {
+    onCreate: async (e: any) => {
+      console.log(e);
+    },
+    onUpdate: async (e: any) => {
+      console.log(e);
+    },
+    onDelete: async (e: any) => {
+      console.log(e);
+    },
+    isCreating: false,
+    isUpdating: false,
+    isDeleting: false,
+    fields: [
+      {
+        grid: grid,
+        name: "name",
+        label: "Name",
+        type: "text",
+        required: true,
+      },
+      {
+        grid: grid,
+        name: "description",
+        label: "Description",
+        type: "textarea",
+        hideInTable: true,
+      },
+      {
+        grid: grid,
+        name: "startTime",
+        label: "Shift Start Time",
+        type: "time",
+        format: "h:mm A",
+        use12Hours: true,
+        required: true,
+      },
+      {
+        grid: grid,
+        name: "endTime",
+        label: "Shift End Time",
+        type: "time",
+        format: "h:mm A",
+        use12Hours: true,
+        readonly: true,
+      },
+      {
+        grid: grid,
+        name: "shiftDurationHour",
+        label: "Shift Duration Hour",
+        type: "number",
+        int: true,
+        required: true,
+        hideInTable: true,
+      },
+      {
+        grid: grid,
+        name: "shiftDurationMin",
+        label: "Shift Duration Min",
+        type: "number",
+        int: true,
+        required: true,
+        hideInTable: true,
+        max: 59,
+      },
+      {
+        name: "gracePeriodForStartTimeMin",
+        label: "Grace Period For Start Time Min",
+        type: "number",
+        int: true,
+        required: true,
+      },
+      {
+        grid: grid,
+        name: "gracePeriodForEndTimeMin",
+        label: "Grace Period For End Time Min",
+        type: "number",
+        int: true,
+        required: true,
+      },
+    ],
+  };
+};

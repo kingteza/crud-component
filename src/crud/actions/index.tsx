@@ -67,12 +67,21 @@ function CrudActions<T, FormType>({
     },
     [inBuiltModalProps, onClickUpdate]
   );
-
+  console.log({
+    onUpdate,
+    onClickUpdate,
+    onClickClone,
+    onDelete,
+  });
   return (Array.isArray(extra) ? extra?.filter(Boolean)?.length : extra) ||
     onUpdate ||
     onClickUpdate ||
+    inBuiltModalProps?.onUpdate ||
     onClickClone ||
-    onDelete ? (
+    inBuiltModalProps?.onCreate ||
+    onDelete ||
+    onExport ||
+    onHide ? (
     <>
       {inBuiltModalProps && <CrudModal ref={modalRef} {...inBuiltModalProps} />}
       {extra}

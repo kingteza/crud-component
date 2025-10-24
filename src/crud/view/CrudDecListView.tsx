@@ -19,14 +19,14 @@ export type DescListColumn =
   | Partial<Record<Breakpoint, number>>
   | undefined;
 export interface CrudDecListViewProps<T, FormType = T>
-  extends CrudActionsProps<T, FormType> {
+  extends Omit<CrudActionsProps<T, FormType>, "inBuiltModalProps"> {
   fields: CrudFieldProps<T>[];
   data: T | undefined;
   className?: string;
   descListColumn?: DescListColumn;
   layout?: "horizontal" | "vertical";
   keepEmptyValues?: boolean;
-  inBuiltModalProps?: CrudModalProps<T, FormType>;
+  inBuiltModalProps?: Omit<CrudModalProps<T, FormType>, "fields">;
 }
 
 export function CrudDecListView<T, FormType = T>({
@@ -62,9 +62,12 @@ export function CrudDecListView<T, FormType = T>({
       <CrudActions<T, FormType>
         data={data}
         {...crudActionsProps}
-        inBuiltModalProps={inBuiltModalProps}
+        inBuiltModalProps={
+          inBuiltModalProps ? { ...inBuiltModalProps, fields } : undefined
+        }
       />
     ) : undefined;
+    
     if (actionComponent) {
       list.push({
         label: t("str.action"),

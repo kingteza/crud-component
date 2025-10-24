@@ -6,3 +6,7 @@
 .hide-upload div.ant-upload-select {
   display: none !important;
 }
+
+.max-width {
+  width: 100%;
+}

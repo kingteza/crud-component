@@ -143,7 +143,7 @@ const CrudModal = <T, FormType = T>(
               continue;
             }
           }
-          if (e.type === "date") {
+          if (e.type === "date" || e.type === "time") {
             if (dataField) _data[upsertFieldName] = dayjs(dataField);
           } else if (e.type === "select") {
             if (e.multiple && Array.isArray(dataField)) {
