@@ -270,6 +270,7 @@ export const useWorkShiftCrudComponentProps = () => {
         label: "Description",
         type: "textarea",
         hideInTable: true,
+        truncated: true,
       },
       {
         grid: grid,

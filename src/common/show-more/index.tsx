@@ -8,7 +8,6 @@ import "./style.css";
 
 // Create a wrapper component that fixes the type issues
 export const ShowMore: React.FC<ReactShowMoreTextProps> = (props) => {
-  // @ts-expect-error - Known issue with react-show-more-text types
   return <ReactShowMoreText {...props} />;
 };
 

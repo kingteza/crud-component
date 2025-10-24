@@ -74,6 +74,7 @@
     "papaparse": "^5.4.1",
     "path-browserify": "^1.0.1",
     "react-advanced-cropper": "^0.20.1",
+    "react-error-boundary": "^6.0.0",
     "react-highlight-words": "^0.20.0",
     "react-i18next": "^15.2.0",
     "react-quill": "^2.0.0",

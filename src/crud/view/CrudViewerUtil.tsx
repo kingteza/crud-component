@@ -1,3 +1,5 @@
+import { ErrorBoundary } from "react-error-boundary";
+
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { Tooltip, Avatar, Tag, Space } from "antd";
 import { ShowMore } from "../../common";
@@ -17,6 +19,7 @@ import NumberUtil from "../../util/NumberUtil";
 import { t, tWithOrWithoutNS } from "../../locale";
 import { TextAreaBasedFieldProps } from "../CrudTextAreaComponent";
 import CrudUtil from "src/util/CrudUtil";
+import { ErrorBoundaryComponent } from "src/common/error/ErrorBoundaryComponent";
 
 export function getRendererValueCrudViewer<T>({
   type,
@@ -29,13 +32,15 @@ export function getRendererValueCrudViewer<T>({
           typeof render === "function" ? render(e, value, i) : String()
       : type === "select"
       ? (e, value, i) => {
-          if(!e) return '-';
+          if (!e) return "-";
           const selectProps = props as any as SelectCrudField<{}>;
-          const e0 = e || (selectProps.items ?? []).find(
-                (item) =>
-                  item[selectProps.innerFieldId ?? "key"] ===
-                  value[CrudUtil.getRealName(props.name, "upsertFieldName")]
-              );
+          const e0 =
+            e ||
+            (selectProps.items ?? []).find(
+              (item) =>
+                item[selectProps.innerFieldId ?? "key"] ===
+                value[CrudUtil.getRealName(props.name, "upsertFieldName")]
+            );
           const v = selectProps.multiple
             ? Array.isArray(e0)
               ? e0.map((e) => e?.[selectProps.innerFieldLabel ?? "name"])
@@ -56,7 +61,7 @@ export function getRendererValueCrudViewer<T>({
             : NumberUtil.toMoney(e)
       : type === "enum"
       ? (e, value, i) => {
-          if(!e) return '-';
+          if (!e) return "-";
           const propsEnum = props as any as EnumCrudField<{}>;
           if (typeof render === "function") {
             return render(e, value, i);
@@ -65,26 +70,34 @@ export function getRendererValueCrudViewer<T>({
             const ar = Array.isArray(e) ? e : e ? [e] : [];
             if (typeof propsEnum.tagRender === "object") {
               return (
-                <Space wrap>
-                  {ar.map((item, index) => {
-                    const tagProps = propsEnum.tagRender?.[item];
-                    const translatedValue = tWithOrWithoutNS(
-                      propsEnum?.translation?.[item ?? ""] ?? item
-                    ) as any;
-                    return tagProps ? (
-                      <Tag key={index + item} color={tagProps.color}>
-                        {translatedValue}
-                      </Tag>
-                    ) : (
-                      translatedValue
-                    );
-                  })}
-                </Space>
+                <ErrorBoundaryComponent>
+                  <Space wrap>
+                    {ar.map((item, index) => {
+                      const tagProps = propsEnum.tagRender?.[item];
+                      const translatedValue = tWithOrWithoutNS(
+                        propsEnum?.translation?.[item ?? ""] ?? item
+                      ) as any;
+                      return tagProps ? (
+                        <Tag key={index + item} color={tagProps.color}>
+                          {translatedValue}
+                        </Tag>
+                      ) : (
+                        translatedValue
+                      );
+                    })}
+                  </Space>
+                </ErrorBoundaryComponent>
               );
             } else if (propsEnum?.translation) {
-              return ar
-                ?.map((e) => tWithOrWithoutNS(propsEnum?.translation?.[e ?? ""] ?? e))
-                .join(", ");
+              return (
+                <ErrorBoundaryComponent>
+                  {ar
+                    ?.map((e) =>
+                      tWithOrWithoutNS(propsEnum?.translation?.[e ?? ""] ?? e)
+                    )
+                    .join(", ")}
+                </ErrorBoundaryComponent>
+              );
             } else {
               return ar?.join(", ");
             }
@@ -108,7 +121,11 @@ export function getRendererValueCrudViewer<T>({
           const v = (props as any as DateBasedFieldProps<{}>)?.formatTime
             ? DateUtil.formatDateTime(e)
             : DateUtil.formatDate(e);
-          return typeof render === "function" ? render(e, value, i) : v;
+          return (
+            <ErrorBoundaryComponent>
+              {typeof render === "function" ? render(e, value, i) : v}
+            </ErrorBoundaryComponent>
+          );
         }
       : type === "checkbox"
       ? (e, value, i) =>
@@ -121,26 +138,34 @@ export function getRendererValueCrudViewer<T>({
           )
       : type === "image"
       ? (e, value, i) => {
-          if(!e) return '-';
-          return typeof render === "function" ? (
-            render(e, value, i)
-          ) : (
-            <ImageCrudCellValue
-              value={e}
-              provider={(props as ImageCrudField<T>).provider}
-            />
+          if (!e) return "-";
+          return (
+            <ErrorBoundaryComponent>
+              {typeof render === "function" ? (
+                render(e, value, i)
+              ) : (
+                <ImageCrudCellValue
+                  value={e}
+                  provider={(props as ImageCrudField<T>).provider}
+                />
+              )}
+            </ErrorBoundaryComponent>
           );
         }
       : type === "file"
       ? (e, value, i) => {
-          if(!e) return '';
-          return typeof render === "function" ? (
-            render(e, value, i)
-          ) : (
-            <FileCrudCellValue
-              value={e}
-              provider={(props as ImageCrudField<T>).provider}
-            />
+          if (!e) return "";
+          return (
+            <ErrorBoundaryComponent>
+              {typeof render === "function" ? (
+                render(e, value, i)
+              ) : (
+                <FileCrudCellValue
+                  value={e}
+                  provider={(props as ImageCrudField<T>).provider}
+                />
+              )}
+            </ErrorBoundaryComponent>
           );
         }
       : type === "time"
@@ -153,13 +178,18 @@ export function getRendererValueCrudViewer<T>({
             e,
             format || (use12Hours ? "hh:mm:ss A" : undefined)
           );
-          return typeof render === "function"
-            ? render(e, value, i)
-            : valueFormatted;
+
+          return (
+            <ErrorBoundaryComponent>
+              {typeof render === "function"
+                ? render(e, value, i)
+                : valueFormatted}
+            </ErrorBoundaryComponent>
+          );
         }
       : type === "color"
       ? (e, value, i) => {
-          if(!e) return '-';
+          if (!e) return "-";
           return typeof render === "function" ? (
             render(e, value, i)
           ) : typeof e === "string" && e.startsWith("#") ? (
@@ -172,31 +202,31 @@ export function getRendererValueCrudViewer<T>({
         }
       : type === "textarea"
       ? (e, value, i) => {
-          if(!e) return '-';
+          if (!e) return "-";
           const props0 = props as any as TextAreaBasedFieldProps<{}>;
           const truncated = props0.truncated ?? 1;
           return typeof render === "function" ? (
             render(e, value, i)
-          ) : !truncated ? (
-            props0.rich ? (
-              <div
-                style={{ all: "unset" }}
-                dangerouslySetInnerHTML={{ __html: e }}
-              ></div>
-            ) : (
-              e
-            )
+          ) : truncated ? (
+            <ErrorBoundaryComponent>
+              <ShowMore lines={truncated === true ? 1 : truncated}>
+                {props0.rich ? (
+                  <div
+                    style={{ all: "unset" }}
+                    dangerouslySetInnerHTML={{ __html: e }}
+                  ></div>
+                ) : (
+                  e
+                )}
+              </ShowMore>
+            </ErrorBoundaryComponent>
+          ) : props0.rich ? (
+            <div
+              style={{ all: "unset" }}
+              dangerouslySetInnerHTML={{ __html: e }}
+            ></div>
           ) : (
-            <ShowMore lines={truncated === true ? 1 : truncated}>
-              {props0.rich ? (
-                <div
-                  style={{ all: "unset" }}
-                  dangerouslySetInnerHTML={{ __html: e }}
-                ></div>
-              ) : (
-                e
-              )}
-            </ShowMore>
+            e
           );
         }
       : typeof render === "function"

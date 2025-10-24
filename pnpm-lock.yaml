@@ -53,6 +53,9 @@ importers:
       react-advanced-cropper:
         specifier: ^0.20.1
         version: 0.20.1(react@18.3.1)
+      react-error-boundary:
+        specifier: ^6.0.0
+        version: 6.0.0(react@18.3.1)
       react-highlight-words:
         specifier: ^0.20.0
         version: 0.20.0(react@18.3.1)
@@ -2835,6 +2838,11 @@ packages:
     resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
     peerDependencies:
       react: ^18.3.1
+
+  react-error-boundary@6.0.0:
+    resolution: {integrity: sha512-gdlJjD7NWr0IfkPlaREN2d9uUZUlksrfOx7SX62VRerwXbMY6ftGCIZua1VG1aXFNOimhISsTq+Owp725b9SiA==}
+    peerDependencies:
+      react: '>=16.13.1'
 
   react-highlight-words@0.20.0:
     resolution: {integrity: sha512-asCxy+jCehDVhusNmCBoxDf2mm1AJ//D+EzDx1m5K7EqsMBIHdZ5G4LdwbSEXqZq1Ros0G0UySWmAtntSph7XA==}
@@ -6282,6 +6290,11 @@ snapshots:
       loose-envify: 1.4.0
       react: 18.3.1
       scheduler: 0.23.2
+
+  react-error-boundary@6.0.0(react@18.3.1):
+    dependencies:
+      '@babel/runtime': 7.28.3
+      react: 18.3.1
 
   react-highlight-words@0.20.0(react@18.3.1):
     dependencies:
