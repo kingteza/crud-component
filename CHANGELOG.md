@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/kingteza/crud-component/compare/v1.2.7...v1.3.0) (2025-10-24)
+
+
+### Features
+
+* implement optimized ShowMore component with performance tracking ([2c71ff7](https://github.com/kingteza/crud-component/commit/2c71ff7b31fc9dc25ed3c6d2ac97f39bee63f682))
+
 ## [1.2.7](https://github.com/kingteza/crud-component/compare/v1.2.6...v1.2.7) (2025-10-24)
 
 
