@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/kingteza/crud-component/compare/v1.1.0...v1.2.0) (2025-10-24)
+
+
+### Features
+
+* add help and fieldHelper props to various CRUD components for enhanced user guidance ([cf497c8](https://github.com/kingteza/crud-component/commit/cf497c8d14220598443f515a4192a578c818bda2))
+
 # [1.1.0](https://github.com/kingteza/crud-component/compare/v1.0.66...v1.1.0) (2025-10-24)
 
 
