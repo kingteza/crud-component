@@ -19,17 +19,9 @@
     "url": "https://github.com/kingteza/crud-component"
   },
   "files": [
-    "/*.js",
-    "/*.cjs",
-    "/*.d.ts",
-    "/crud/",
-    "/common/",
-    "/types/",
-    "/icons/",
-    "/hooks/",
-    "/util/",
-    "/locale/",
-    "/README.md"
+    "dist/",
+    "README.md",
+    "package.json"
   ],
   "type": "module",
   "sideEffects": false,
