@@ -28,7 +28,7 @@
   "scripts": {
     "dev": "vite",
     "clean": "rm -rf dist",
-    "build": "npm run clean && tsc && vite build && cp package.json README.md .npmignore dist/",
+    "build": "npm run clean && tsc && vite build",
     "release": "semantic-release",
     "release:dry-run": "semantic-release --dry-run",
     "lint": "eslint .",
@@ -37,19 +37,19 @@
   },
   "exports": {
     ".": {
-      "types": "./index.d.ts",
-      "import": "./index.es.js",
-      "require": "./index.cjs.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js"
     },
     "./common": {
-      "types": "./common/index.d.ts",
-      "import": "./common/index.es.js",
-      "require": "./common/index.cjs.js"
+      "types": "./dist/common/index.d.ts",
+      "import": "./dist/common/index.es.js",
+      "require": "./dist/common/index.cjs.js"
     },
     "./util": {
-      "types": "./util/index.d.ts",
-      "import": "./util/index.es.js",
-      "require": "./util/index.cjs.js"
+      "types": "./dist/util/index.d.ts",
+      "import": "./dist/util/index.es.js",
+      "require": "./dist/util/index.cjs.js"
     }
   },
   "publishConfig": {
