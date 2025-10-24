@@ -37,7 +37,8 @@
     "dev": "vite",
     "clean": "rm -rf dist",
     "build": "npm run clean && tsc && vite build && cp package.json README.md .npmignore dist/",
-    "publish-npm": "yarn build && cd dist && npm whoami >/dev/null 2>&1 || npm login && npm publish",
+    "release": "semantic-release",
+    "release:dry-run": "semantic-release --dry-run",
     "lint": "eslint .",
     "tsc": "tsc",
     "preview": "vite preview"
@@ -61,6 +62,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node": ">=22.14.0"
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.2",
@@ -86,7 +90,12 @@
     "uuid": "^11.0.3"
   },
   "devDependencies": {
+    "@anolilab/semantic-release-pnpm": "^2.0.4",
     "@eslint/js": "^9.17.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/release-notes-generator": "^14.1.0",
     "@types/file-saver": "^2.0.7",
     "@types/papaparse": "^5.3.15",
     "@types/path-browserify": "^1.0.3",
@@ -103,6 +112,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.0.2",
+    "semantic-release": "^25.0.1",
     "tsup": "^8.3.5",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
