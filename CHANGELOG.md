@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/kingteza/crud-component/compare/v1.2.1...v1.2.2) (2025-10-24)
+
+
+### Bug Fixes
+
+* update package.json files field to include dist folder ([454d16e](https://github.com/kingteza/crud-component/commit/454d16e4c90d34d66160b387480e026b68c96cbb))
+
 ## [1.2.1](https://github.com/kingteza/crud-component/compare/v1.2.0...v1.2.1) (2025-10-24)
 
 
