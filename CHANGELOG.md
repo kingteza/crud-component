@@ -1,3 +1,10 @@
+## [1.2.5](https://github.com/kingteza/crud-component/compare/v1.2.4...v1.2.5) (2025-10-24)
+
+
+### Bug Fixes
+
+* add react-error-boundary for improved error handling ([1f514ac](https://github.com/kingteza/crud-component/commit/1f514ac64dadfad7cfbbea0adc8c4f5dbc541f45))
+
 ## [1.2.4](https://github.com/kingteza/crud-component/compare/v1.2.3...v1.2.4) (2025-10-24)
 
 
