@@ -1,8 +1,8 @@
 import { setupI18n } from "./locale";
 import { CrudComponent, CrudDecListView, FileUploadProvider } from ".";
 import { useState } from "react";
-import Play from "./Play";
 import { UploadFile } from "antd/lib";
+import { ShowMore } from "./common";
 
 // Initialize with your custom translations
 setupI18n();
@@ -120,6 +120,7 @@ function App() {
   const props = useWorkShiftCrudComponentProps();
   return (
     <div className="">
+      <ShowMoreTest />
       <CrudComponent<Purchase>
         data={data}
         size="small"
@@ -326,4 +327,55 @@ export const useWorkShiftCrudComponentProps = () => {
       },
     ],
   };
+};
+
+// ShowMore Test Component
+const ShowMoreTest = () => {
+  const longText = `This is a very long text that should be truncated after a few lines. 
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+  Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+  Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`;
+
+  return (
+    <div style={{ padding: "20px", maxWidth: "600px" }}>
+      <h3>ShowMore Component Test</h3>
+
+      <div style={{ marginBottom: "20px" }}>
+        <h4>Basic Usage (3 lines):</h4>
+        <ShowMore lines={3}>{longText}</ShowMore>
+      </div>
+
+      <div style={{ marginBottom: "20px" }}>
+        <h4>Custom Lines (2 lines):</h4>
+        <ShowMore lines={2} more="Read more" less="Read less">
+          {longText}
+        </ShowMore>
+      </div>
+
+      <div style={{ marginBottom: "20px" }}>
+        <h4>Keep New Lines:</h4>
+        <ShowMore lines={2} keepNewLines={true}>
+          {longText}
+        </ShowMore>
+      </div>
+
+      <div style={{ marginBottom: "20px" }}>
+        <h4>With Custom Width:</h4>
+        <ShowMore lines={3} width={300}>
+          {longText}
+        </ShowMore>
+      </div>
+
+      <div style={{ marginBottom: "20px" }}>
+        <h4>With Truncated Ending Component:</h4>
+        <ShowMore
+          lines={2}
+          truncatedEndingComponent={<span style={{ color: "red" }}>...</span>}
+        >
+          {longText}
+        </ShowMore>
+      </div>
+    </div>
+  );
 };
