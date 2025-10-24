@@ -1,3 +1,10 @@
+## [1.2.6](https://github.com/kingteza/crud-component/compare/v1.2.5...v1.2.6) (2025-10-24)
+
+
+### Bug Fixes
+
+* remove console.log statements for cleaner code ([1b5248c](https://github.com/kingteza/crud-component/commit/1b5248ca95481bc27e71c17f05d7e42e4432702e))
+
 ## [1.2.5](https://github.com/kingteza/crud-component/compare/v1.2.4...v1.2.5) (2025-10-24)
 
 
