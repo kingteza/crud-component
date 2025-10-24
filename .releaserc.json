@@ -23,5 +23,6 @@
         "pnpmPublishArgs": ["--access", "public"]
       }
     ]
-  ]
+  ],
+  "tagFormat": "v${version}"
 }
