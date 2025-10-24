@@ -1,3 +1,10 @@
+## [1.2.4](https://github.com/kingteza/crud-component/compare/v1.2.3...v1.2.4) (2025-10-24)
+
+
+### Bug Fixes
+
+* update types path in package.json to point to dist directory ([f82a762](https://github.com/kingteza/crud-component/commit/f82a76283bc5df564b2baf4131ecb082b29e49b0))
+
 ## [1.2.3](https://github.com/kingteza/crud-component/compare/v1.2.2...v1.2.3) (2025-10-24)
 
 
