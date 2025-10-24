@@ -205,7 +205,7 @@ export function getRendererValueCrudViewer<T>({
           if (!e) return "-";
           const props0 = props as any as TextAreaBasedFieldProps<{}>;
           const truncated = props0.truncated ?? 1;
-          return typeof render === "function" ? (
+          const component = typeof render === "function" ? (
             render(e, value, i)
           ) : truncated ? (
             <ErrorBoundaryComponent>
@@ -228,6 +228,8 @@ export function getRendererValueCrudViewer<T>({
           ) : (
             e
           );
+          console.log("component", component);
+          return component;
         }
       : typeof render === "function"
       ? render
