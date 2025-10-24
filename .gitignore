@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment and config files
+.npmrc
+.env
+.env.local
+.env.*.local
