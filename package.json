@@ -11,7 +11,7 @@
     "types",
     "typings"
   ],
-  "types": "./index.d.ts",
+  "types": "./dist/index.d.ts",
   "author": "Kingteza",
   "license": "MIT",
   "repository": {
