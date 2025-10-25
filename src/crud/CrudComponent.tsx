@@ -33,7 +33,6 @@ export type SelectFieldItem = {
   disabled?: boolean;
 };
 
-const { useForm } = Form;
 export interface InitialCrudField<T> {
   label: string;
   fieldHelper?: ReactNode;
@@ -196,6 +195,7 @@ export interface ColorPickerFieldProps<T>
 export interface CheckboxBasedFieldProps<T> extends InitialCrudField<T> {
   type: "checkbox";
   onChange?: (value: boolean, form: FormInstance<T>) => void;
+  switch?: boolean;
 }
 
 export interface NumberBasedFieldProps<T>

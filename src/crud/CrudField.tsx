@@ -310,7 +310,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
       );
     }
     case "checkbox": {
-      const { onChange } = props as CheckboxBasedFieldProps<T>;
+      const { onChange, switch: asASwitch } = props as CheckboxBasedFieldProps<T>;
       return (
         <CheckBoxComponent
           className={fieldClassName}
@@ -321,6 +321,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
           disabled={!updatable}
           name={name as any}
           help={help}
+          switch={asASwitch}
         />
       );
     }
