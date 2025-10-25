@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/kingteza/crud-component/compare/v1.3.0...v1.4.0) (2025-10-25)
+
+
+### Features
+
+* enhance CheckboxBasedFieldProps with switch property ([7444d91](https://github.com/kingteza/crud-component/commit/7444d9140a15e3a1e109071936fe13a496904963))
+
 # [1.3.0](https://github.com/kingteza/crud-component/compare/v1.2.7...v1.3.0) (2025-10-24)
 
 
