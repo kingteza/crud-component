@@ -1,3 +1,10 @@
+## [1.4.3](https://github.com/kingteza/crud-component/compare/v1.4.2...v1.4.3) (2025-10-26)
+
+
+### Bug Fixes
+
+* improve translation handling in tWithOrWithoutNS function ([30d374a](https://github.com/kingteza/crud-component/commit/30d374abda6555cb1cc807b4760fc8cfc05a8923))
+
 ## [1.4.2](https://github.com/kingteza/crud-component/compare/v1.4.1...v1.4.2) (2025-10-26)
 
 
