@@ -194,6 +194,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
           name={name as never}
           label={label}
           rules={rules}
+          fieldHelper={help}
           fieldClassName={fieldClassName}
           onRemoved={(props as ImageCrudField<T>).onRemoved}
           onUploading={(props as ImageCrudField<T>).onUploading}
@@ -208,6 +209,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
           name={name as never}
           label={label}
           rules={rules}
+          fieldHelper={help}
           fieldClassName={fieldClassName}
           onRemoved={(props as FileCrudField<T>).onRemoved}
           onUploading={(props as FileCrudField<T>).onUploading}
@@ -224,6 +226,7 @@ export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
           rules={rules}
           fieldClassName={fieldClassName}
           form={form}
+          help={help}
           updatable={updatable}
           readonly={readonly}
           fieldTooltip={fieldTooltip}

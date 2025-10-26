@@ -55,6 +55,7 @@ function SelectComponent<T = any>({
   tooltip,
   filterOption,
   tagRender,
+  help,
   ...props
 }: Readonly<SelectComponentProps<T>>) {
   const { t } = useTranslationLib();
@@ -87,7 +88,7 @@ function SelectComponent<T = any>({
         <Form.Item
           label={label}
           name={props.name}
-          help={props.help}
+          help={help}
           className={props.className}
           required={required}
           rules={[

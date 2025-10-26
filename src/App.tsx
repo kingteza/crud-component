@@ -147,6 +147,7 @@ function App() {
             type: "enum",
             name: "status",
             label: "Name",
+            fieldHelper: 'This is a field helper',
             enum: PurchaseStatus,
             tagRender: {
               PENDING: { color: "red" },
@@ -169,6 +170,7 @@ function App() {
           {
             type: "enum",
             name: "test",
+            fieldHelper: 'This is a field helper',
             label: "Name",
             enum: TestEnum,
             required: true,
@@ -190,6 +192,7 @@ function App() {
             name: ["s", "hello"],
             label: "Hello Field",
             required: true,
+            fieldHelper: 'This is a field helper',
             items: [
               { value: "Hello", key: "1" },
               { value: "World", key: "2" },
@@ -199,6 +202,7 @@ function App() {
           {
             type: "textarea",
             name: "name",
+            fieldHelper: 'This is a field helper',
             label: "Rich Text Area",
             rich: true,
             truncated: 4,

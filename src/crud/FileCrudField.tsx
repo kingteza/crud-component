@@ -18,7 +18,7 @@ import { Form, Modal, Upload, UploadProps } from "antd";
 import { UploadFile } from "antd/lib";
 
 import mime from "mime";
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslationLib } from "../locale";
 
 
@@ -41,6 +41,7 @@ export interface _FileCrudField<T> extends InitialCrudField<T> {
   accept?: string;
   maxCount?: number;
   block?: boolean;
+  help?: ReactNode;
 }
 
 export default function FileCrudFieldComponent<T>({

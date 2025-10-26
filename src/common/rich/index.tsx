@@ -6,10 +6,11 @@ import 'react-quill/dist/quill.snow.css';
 import './style.css';
 import { Form } from "antd";
 import { Rule } from "antd/es/form";
-import React, { FC, Suspense, useEffect, useMemo, useState } from "react";
+import React, { FC, ReactNode, Suspense, useEffect, useMemo, useState } from "react";
 import { ValidationUtil } from "src/util";
 
 export interface RichTextEditorProps {
+  help?: ReactNode;
   label?: string;
   name: string;
   required?: boolean;
@@ -31,6 +32,7 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
   required,
   rules = [],
   disabled,
+  help,
 }) => {
   const form = Form.useFormInstance();
   const [editorValue, setEditorValue] = useState("");
@@ -103,7 +105,7 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
     [required, rules, label]
   );
   return (
-    <Form.Item name={name} label={label} rules={rules0}>
+    <Form.Item help={help} name={name} label={label} rules={rules0}>
       <Suspense fallback={<div>Loading editor...</div>}>
         <ReactQuill
           readOnly={disabled}

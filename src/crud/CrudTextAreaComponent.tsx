@@ -47,6 +47,7 @@ const CrudTextAreaComponent = <T,>({
         required={required}
         rules={rules}
         disabled={!updatable}
+        help={props.fieldHelper}
       />
     );
   } else {
@@ -67,6 +68,7 @@ const CrudTextAreaComponent = <T,>({
         className={fieldClassName}
         rows={rows}
         cols={cols}
+        help={props.fieldHelper}
       />
     );
   }
