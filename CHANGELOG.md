@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/kingteza/crud-component/compare/v1.4.0...v1.4.1) (2025-10-26)
+
+
+### Bug Fixes
+
+* add field helper support across various components ([d916364](https://github.com/kingteza/crud-component/commit/d916364cb0dd367292080b25cebbebabe3a7d458))
+
 # [1.4.0](https://github.com/kingteza/crud-component/compare/v1.3.0...v1.4.0) (2025-10-25)
 
 
