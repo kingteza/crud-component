@@ -82,7 +82,7 @@ export const t = (key: string, options?: any) => {
 
 export const tWithOrWithoutNS = (key: string, options?: any, fallback?: string) => {
   const value = t(key, options);
-  if (value) {
+  if (value && key && value !== key) {
     return value;
   }
   if(fallback) {
