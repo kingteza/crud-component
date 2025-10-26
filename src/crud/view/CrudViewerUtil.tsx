@@ -75,7 +75,9 @@ export function getRendererValueCrudViewer<T>({
                     {ar.map((item, index) => {
                       const tagProps = propsEnum.tagRender?.[item];
                       const translatedValue = tWithOrWithoutNS(
-                        propsEnum?.translation?.[item ?? ""] ?? item
+                        propsEnum?.translation?.[item ?? ""] ?? item,
+                        undefined,
+                        item
                       ) as any;
                       return tagProps ? (
                         <Tag key={index + item} color={tagProps.color}>
@@ -93,7 +95,11 @@ export function getRendererValueCrudViewer<T>({
                 <ErrorBoundaryComponent>
                   {ar
                     ?.map((e) =>
-                      tWithOrWithoutNS(propsEnum?.translation?.[e ?? ""] ?? e)
+                      tWithOrWithoutNS(
+                        propsEnum?.translation?.[e ?? ""] ?? e,
+                        undefined,
+                        e
+                      ) as string
                     )
                     .join(", ")}
                 </ErrorBoundaryComponent>
@@ -104,7 +110,7 @@ export function getRendererValueCrudViewer<T>({
           }
 
           const val = propsEnum?.translation?.[e ?? ""] ?? e;
-          const v = tWithOrWithoutNS(val);
+          const v = tWithOrWithoutNS(val, undefined, e) as string;
 
           if (typeof propsEnum.tagRender === "object") {
             const tagProps = propsEnum.tagRender[e];
@@ -205,29 +211,30 @@ export function getRendererValueCrudViewer<T>({
           if (!e) return "-";
           const props0 = props as any as TextAreaBasedFieldProps<{}>;
           const truncated = props0.truncated ?? 1;
-          const component = typeof render === "function" ? (
-            render(e, value, i)
-          ) : truncated ? (
-            <ErrorBoundaryComponent>
-              <ShowMore lines={truncated === true ? 1 : truncated}>
-                {props0.rich ? (
-                  <div
-                    style={{ all: "unset" }}
-                    dangerouslySetInnerHTML={{ __html: e }}
-                  ></div>
-                ) : (
-                  e
-                )}
-              </ShowMore>
-            </ErrorBoundaryComponent>
-          ) : props0.rich ? (
-            <div
-              style={{ all: "unset" }}
-              dangerouslySetInnerHTML={{ __html: e }}
-            ></div>
-          ) : (
-            e
-          );
+          const component =
+            typeof render === "function" ? (
+              render(e, value, i)
+            ) : truncated ? (
+              <ErrorBoundaryComponent>
+                <ShowMore lines={truncated === true ? 1 : truncated}>
+                  {props0.rich ? (
+                    <div
+                      style={{ all: "unset" }}
+                      dangerouslySetInnerHTML={{ __html: e }}
+                    ></div>
+                  ) : (
+                    e
+                  )}
+                </ShowMore>
+              </ErrorBoundaryComponent>
+            ) : props0.rich ? (
+              <div
+                style={{ all: "unset" }}
+                dangerouslySetInnerHTML={{ __html: e }}
+              ></div>
+            ) : (
+              e
+            );
           return component;
         }
       : typeof render === "function"

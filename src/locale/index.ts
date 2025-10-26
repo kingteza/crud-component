@@ -80,10 +80,13 @@ export const t = (key: string, options?: any) => {
 };
 
 
-export const tWithOrWithoutNS = (key: string, options?: any) => {
+export const tWithOrWithoutNS = (key: string, options?: any, fallback?: string) => {
   const value = t(key, options);
   if (value) {
     return value;
+  }
+  if(fallback) {
+    return fallback;
   }
   return i18nInstance?.t(key, {
     ns: undefined,
