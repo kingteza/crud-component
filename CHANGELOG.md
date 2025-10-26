@@ -1,3 +1,10 @@
+## [1.4.2](https://github.com/kingteza/crud-component/compare/v1.4.1...v1.4.2) (2025-10-26)
+
+
+### Bug Fixes
+
+* enhance translation utility in CrudViewerUtil ([949acaf](https://github.com/kingteza/crud-component/commit/949acaf37ed21a88c8a83208bc2ed8e74ac3b614))
+
 ## [1.4.1](https://github.com/kingteza/crud-component/compare/v1.4.0...v1.4.1) (2025-10-26)
 
 
