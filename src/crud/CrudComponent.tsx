@@ -26,6 +26,8 @@ import { SelectTagRenderProps } from "../common/select/SelectComponent";
 import IdProps from "../types/Id";
 import { TextAreaBasedFieldProps } from "./CrudTextAreaComponent";
 import { SizeType } from "antd/es/config-provider/SizeContext";
+import { Copyable } from "src/util/CopyUtil";
+
 
 export type SelectFieldItem = {
   key?: string | number;
@@ -86,7 +88,8 @@ export interface SelectCrudField<
   T,
   ItemType extends SelectFieldItem = SelectFieldItem
 > extends Omit<InitialCrudField<T>, "name">,
-    AddonFieldProps {
+    AddonFieldProps,
+    Copyable<false> {
   name:
     | InitialCrudField<T>["name"]
     | {
@@ -141,7 +144,7 @@ export interface SelectCrudField<
   ) => void;
 }
 
-export interface EnumCrudField<T> extends InitialCrudField<T> {
+export interface EnumCrudField<T> extends InitialCrudField<T>, Copyable<false> {
   type: "enum";
   placeholder?: string;
   name: keyof T; // Ensure `name` corresponds to a key in T
@@ -171,7 +174,7 @@ export type AddonFieldProps = {
   addonBefore?: ReactNode;
 };
 
-export interface ObjectCrudField<T> extends InitialCrudField<T> {
+export interface ObjectCrudField<T> extends InitialCrudField<T>, Copyable<true> {
   type: "object";
 
   render: (value: any, obj: T, index: number) => any;
@@ -180,14 +183,14 @@ export interface ObjectCrudField<T> extends InitialCrudField<T> {
 
 export interface TextBasedFieldProps<T>
   extends InitialCrudField<T>,
-    AddonFieldProps {
+    AddonFieldProps, Copyable<false> {
   placeholder?: string;
   type: "text" | "time" | "email" | "password";
   onChange?: (value: string, form: FormInstance<T>) => void;
 }
 
 export interface ColorPickerFieldProps<T>
-  extends Omit<InitialCrudField<T>, "placeholder"> {
+  extends Omit<InitialCrudField<T>, "placeholder">, Copyable<false> {
   type: "color";
   innerProps?: ColorPickerProps;
 }
@@ -200,7 +203,7 @@ export interface CheckboxBasedFieldProps<T> extends InitialCrudField<T> {
 
 export interface NumberBasedFieldProps<T>
   extends InitialCrudField<T>,
-    AddonFieldProps {
+    AddonFieldProps, Copyable<false> {
   type: "number";
   placeholder?: string;
   allowMinus?: boolean;
@@ -214,7 +217,7 @@ export interface NumberBasedFieldProps<T>
   onChange?: (value: number, form: FormInstance<T>) => void;
 }
 
-export interface DateBasedFieldProps<T> extends InitialCrudField<T> {
+export interface DateBasedFieldProps<T> extends InitialCrudField<T>, Copyable<false> {
   type: "date";
   format?: string;
   placeholder?: string;
@@ -233,7 +236,7 @@ export interface DateBasedFieldProps<T> extends InitialCrudField<T> {
   onChange?: (value: Dayjs | undefined, form: FormInstance<T>) => void;
 }
 
-export interface TimeBasedFieldProps<T> extends InitialCrudField<T> {
+export interface TimeBasedFieldProps<T> extends InitialCrudField<T>, Copyable<false> {
   type: "time";
   placeholder?: string;
   use12Hours?: boolean;

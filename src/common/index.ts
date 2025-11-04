@@ -9,7 +9,6 @@ export * from "./picker";
 export * from "./radio";
 export * from "./report";
 export * from "./select";
-export * from "./show-more";
 export * from "./tab";
 export * from "./table";
 export * from "./tag";

@@ -2,7 +2,6 @@ import { setupI18n } from "./locale";
 import { CrudComponent, CrudDecListView, FileUploadProvider } from ".";
 import { useState } from "react";
 import { UploadFile } from "antd/lib";
-import { ShowMore } from "./common";
 
 // Initialize with your custom translations
 setupI18n();
@@ -147,7 +146,7 @@ function App() {
             type: "enum",
             name: "status",
             label: "Name",
-            fieldHelper: 'This is a field helper',
+            fieldHelper: "This is a field helper",
             enum: PurchaseStatus,
             tagRender: {
               PENDING: { color: "red" },
@@ -170,7 +169,7 @@ function App() {
           {
             type: "enum",
             name: "test",
-            fieldHelper: 'This is a field helper',
+            fieldHelper: "This is a field helper",
             label: "Name",
             enum: TestEnum,
             required: true,
@@ -192,7 +191,7 @@ function App() {
             name: ["s", "hello"],
             label: "Hello Field",
             required: true,
-            fieldHelper: 'This is a field helper',
+            fieldHelper: "This is a field helper",
             items: [
               { value: "Hello", key: "1" },
               { value: "World", key: "2" },
@@ -202,7 +201,7 @@ function App() {
           {
             type: "textarea",
             name: "name",
-            fieldHelper: 'This is a field helper',
+            fieldHelper: "This is a field helper",
             label: "Rich Text Area",
             rich: true,
             truncated: 4,
@@ -268,6 +267,7 @@ export const useWorkShiftCrudComponentProps = () => {
         label: "Name",
         type: "text",
         required: true,
+        copyable: true,
       },
       {
         grid: grid,
@@ -276,6 +276,7 @@ export const useWorkShiftCrudComponentProps = () => {
         type: "textarea",
         hideInTable: true,
         truncated: true,
+        copyable: true,
       },
       {
         grid: grid,
@@ -285,6 +286,7 @@ export const useWorkShiftCrudComponentProps = () => {
         format: "h:mm A",
         use12Hours: true,
         required: true,
+        copyable: true,
       },
       {
         grid: grid,
@@ -294,6 +296,7 @@ export const useWorkShiftCrudComponentProps = () => {
         format: "h:mm A",
         use12Hours: true,
         readonly: true,
+        copyable: true,
       },
       {
         grid: grid,
@@ -303,6 +306,7 @@ export const useWorkShiftCrudComponentProps = () => {
         int: true,
         required: true,
         hideInTable: true,
+        copyable: true,
       },
       {
         grid: grid,
@@ -313,6 +317,7 @@ export const useWorkShiftCrudComponentProps = () => {
         required: true,
         hideInTable: true,
         max: 59,
+        copyable: true,
       },
       {
         name: "gracePeriodForStartTimeMin",
@@ -320,6 +325,7 @@ export const useWorkShiftCrudComponentProps = () => {
         type: "number",
         int: true,
         required: true,
+        copyable: true,
       },
       {
         grid: grid,
@@ -328,6 +334,7 @@ export const useWorkShiftCrudComponentProps = () => {
         type: "number",
         int: true,
         required: true,
+        copyable: true,
       },
     ],
   };
@@ -344,42 +351,6 @@ const ShowMoreTest = () => {
   return (
     <div style={{ padding: "20px", maxWidth: "600px" }}>
       <h3>ShowMore Component Test</h3>
-
-      <div style={{ marginBottom: "20px" }}>
-        <h4>Basic Usage (3 lines):</h4>
-        <ShowMore lines={3}>{longText}</ShowMore>
-      </div>
-
-      <div style={{ marginBottom: "20px" }}>
-        <h4>Custom Lines (2 lines):</h4>
-        <ShowMore lines={2} more="Read more" less="Read less">
-          {longText}
-        </ShowMore>
-      </div>
-
-      <div style={{ marginBottom: "20px" }}>
-        <h4>Keep New Lines:</h4>
-        <ShowMore lines={2} keepNewLines={true}>
-          {longText}
-        </ShowMore>
-      </div>
-
-      <div style={{ marginBottom: "20px" }}>
-        <h4>With Custom Width:</h4>
-        <ShowMore lines={3} width={300}>
-          {longText}
-        </ShowMore>
-      </div>
-
-      <div style={{ marginBottom: "20px" }}>
-        <h4>With Truncated Ending Component:</h4>
-        <ShowMore
-          lines={2}
-          truncatedEndingComponent={<span style={{ color: "red" }}>...</span>}
-        >
-          {longText}
-        </ShowMore>
-      </div>
     </div>
   );
 };

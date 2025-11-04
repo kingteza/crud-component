@@ -4,6 +4,7 @@ import { Form } from "antd";
 import { InitialCrudField } from "./CrudComponent";
 import { FormInstance } from "antd/lib";
 import CrudUtil from "src/util/CrudUtil";
+import { Copyable } from "src/util/CopyUtil";
 
 interface InitialTextAreaProps<T> extends InitialCrudField<T> {
   type: "textarea";
@@ -26,7 +27,7 @@ interface RichTextAreaProps<T> extends InitialTextAreaProps<T> {
 }
 
 export type TextAreaBasedFieldProps<T> = TextAreaProps<T> &
-  RichTextAreaProps<T>;
+  RichTextAreaProps<T> & Copyable<false>;
 
 const CrudTextAreaComponent = <T,>({
   onChange,

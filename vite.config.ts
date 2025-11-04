@@ -36,7 +36,6 @@ export default defineConfig({
         "react-responsive",
         "react-router",
         "react-router-dom",
-        "react-show-more-text",
         "uuid",
         "file-saver",
         "mime",

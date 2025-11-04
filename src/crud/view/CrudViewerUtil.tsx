@@ -1,14 +1,15 @@
 import { ErrorBoundary } from "react-error-boundary";
 
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
-import { Tooltip, Avatar, Tag, Space } from "antd";
-import { ShowMore } from "../../common";
+import { Tooltip, Avatar, Tag, Space, Typography } from "antd";
 import {
+  ColorPickerFieldProps,
   CrudFieldProps,
   DateBasedFieldProps,
   EnumCrudField,
   NumberBasedFieldProps,
   SelectCrudField,
+  TextBasedFieldProps,
   TimeBasedFieldProps,
 } from "../CrudComponent";
 import { FileCrudCellValue } from "../FileCrudField";
@@ -20,6 +21,11 @@ import { t, tWithOrWithoutNS } from "../../locale";
 import { TextAreaBasedFieldProps } from "../CrudTextAreaComponent";
 import CrudUtil from "src/util/CrudUtil";
 import { ErrorBoundaryComponent } from "src/common/error/ErrorBoundaryComponent";
+import {
+  Copyable,
+  copyableFn,
+  CopyToClipboardButtonWrapper,
+} from "src/util/CopyUtil";
 
 export function getRendererValueCrudViewer<T>({
   type,
@@ -28,8 +34,14 @@ export function getRendererValueCrudViewer<T>({
 }: CrudFieldProps<T>) {
   try {
     return type === "object"
-      ? (e, value, i) =>
-          typeof render === "function" ? render(e, value, i) : String()
+      ? (e, value, i) => (
+          <CopyToClipboardButtonWrapper
+            copyable={(props as any).copyable}
+            value={e}
+          >
+            {typeof render === "function" ? render(e, value, i) : String()}
+          </CopyToClipboardButtonWrapper>
+        )
       : type === "select"
       ? (e, value, i) => {
           if (!e) return "-";
@@ -46,66 +58,117 @@ export function getRendererValueCrudViewer<T>({
               ? e0.map((e) => e?.[selectProps.innerFieldLabel ?? "name"])
               : undefined
             : e0?.[selectProps.innerFieldLabel ?? "value"];
-          return typeof render === "function"
-            ? render(v, value, i)
-            : Array.isArray(v)
-            ? v.join(", ")
-            : v;
+          return (
+            <Typography.Text copyable={copyableFn(selectProps.copyable, v)}>
+              {typeof render === "function"
+                ? render(v, value, i)
+                : Array.isArray(v)
+                ? v.join(", ")
+                : v}
+            </Typography.Text>
+          );
         }
       : type === "number"
-      ? (e, value, i) =>
-          typeof render === "function"
-            ? render(e, value, i)
-            : (props as NumberBasedFieldProps<T>)?.int
-            ? NumberUtil.toInt(e, (props as NumberBasedFieldProps<T>).formatted)
-            : NumberUtil.toMoney(e)
+      ? (e, value, i) => {
+          const numberProps = props as NumberBasedFieldProps<T>;
+          return (
+            <Typography.Text copyable={copyableFn(numberProps.copyable, e)}>
+              {typeof render === "function"
+                ? render(e, value, i)
+                : numberProps.int
+                ? NumberUtil.toInt(e, numberProps.formatted)
+                : NumberUtil.toMoney(e)}
+            </Typography.Text>
+          );
+        }
       : type === "enum"
       ? (e, value, i) => {
           if (!e) return "-";
           const propsEnum = props as any as EnumCrudField<{}>;
           if (typeof render === "function") {
-            return render(e, value, i);
+            return (
+              <CopyToClipboardButtonWrapper
+                copyable={propsEnum.copyable}
+                value={e}
+              >
+                {render(e, value, i)}
+              </CopyToClipboardButtonWrapper>
+            );
           }
           if (propsEnum.multiple) {
-            const ar = Array.isArray(e) ? e : e ? [e] : [];
+            const ar = (Array.isArray(e) ? e : e ? [e] : []).map((item) => {
+              const tagProps = propsEnum.tagRender?.[item];
+              const translatedValue = tWithOrWithoutNS(
+                propsEnum?.translation?.[item ?? ""] ?? item,
+                undefined,
+                item
+              ) as any;
+              return {
+                tagProps,
+                translatedValue,
+                item,
+              };
+            });
             if (typeof propsEnum.tagRender === "object") {
               return (
-                <ErrorBoundaryComponent>
-                  <Space wrap>
-                    {ar.map((item, index) => {
-                      const tagProps = propsEnum.tagRender?.[item];
-                      const translatedValue = tWithOrWithoutNS(
-                        propsEnum?.translation?.[item ?? ""] ?? item,
-                        undefined,
-                        item
-                      ) as any;
-                      return tagProps ? (
-                        <Tag key={index + item} color={tagProps.color}>
-                          {translatedValue}
-                        </Tag>
-                      ) : (
-                        translatedValue
-                      );
-                    })}
-                  </Space>
-                </ErrorBoundaryComponent>
+                <CopyToClipboardButtonWrapper
+                  copyable={propsEnum.copyable}
+                  value={() => {
+                    return ar
+                      .map(
+                        ({ translatedValue, item }) => translatedValue ?? item
+                      )
+                      .join(", ");
+                  }}
+                >
+                  <ErrorBoundaryComponent>
+                    <Space wrap>
+                      {ar.map(({ tagProps, translatedValue, item }, index) => {
+                        return tagProps ? (
+                          <Tag key={index + item} color={tagProps.color}>
+                            {translatedValue}
+                          </Tag>
+                        ) : (
+                          translatedValue
+                        );
+                      })}
+                    </Space>
+                  </ErrorBoundaryComponent>
+                </CopyToClipboardButtonWrapper>
               );
             } else if (propsEnum?.translation) {
               return (
-                <ErrorBoundaryComponent>
-                  {ar
-                    ?.map((e) =>
-                      tWithOrWithoutNS(
-                        propsEnum?.translation?.[e ?? ""] ?? e,
-                        undefined,
-                        e
-                      ) as string
-                    )
-                    .join(", ")}
-                </ErrorBoundaryComponent>
+                <CopyToClipboardButtonWrapper
+                  copyable={propsEnum.copyable}
+                  value={() => {
+                    return ar
+                      .map(
+                        ({ translatedValue, item }) => translatedValue ?? item
+                      )
+                      .join(", ");
+                  }}
+                >
+                  <ErrorBoundaryComponent>
+                    {ar
+                      ?.map(
+                        ({ translatedValue, item }) =>
+                          translatedValue ?? (item as string)
+                      )
+                      .join(", ")}
+                  </ErrorBoundaryComponent>
+                </CopyToClipboardButtonWrapper>
               );
             } else {
-              return ar?.join(", ");
+              const text = ar
+                .map(({ translatedValue, item }) => translatedValue ?? item)
+                .join(", ");
+              return (
+                <Typography.Text
+                  copyable={copyableFn(propsEnum.copyable, text)}
+                >
+                  {text}
+                </Typography.Text>
+              );
             }
           }
 
@@ -115,22 +178,39 @@ export function getRendererValueCrudViewer<T>({
           if (typeof propsEnum.tagRender === "object") {
             const tagProps = propsEnum.tagRender[e];
             if (tagProps) {
-              return <Tag color={tagProps.color}>{v as any}</Tag>;
+              return (
+                <CopyToClipboardButtonWrapper
+                  copyable={propsEnum.copyable}
+                  value={v}
+                >
+                  <Tag color={tagProps.color}>{v as any}</Tag>
+                </CopyToClipboardButtonWrapper>
+              );
             }
           }
 
-          return v;
+          return (
+            <Typography.Text copyable={copyableFn(propsEnum.copyable, v)}>
+              {v}
+            </Typography.Text>
+          );
         }
       : type === "date"
       ? (e, value, i) => {
           if (!e) return "-";
-          const v = (props as any as DateBasedFieldProps<{}>)?.formatTime
+          const propsDate = props as any as DateBasedFieldProps<{}>;
+          const v = propsDate.formatTime
             ? DateUtil.formatDateTime(e)
             : DateUtil.formatDate(e);
           return (
-            <ErrorBoundaryComponent>
-              {typeof render === "function" ? render(e, value, i) : v}
-            </ErrorBoundaryComponent>
+            <CopyToClipboardButtonWrapper
+              copyable={propsDate.copyable}
+              value={v}
+            >
+              <ErrorBoundaryComponent>
+                {typeof render === "function" ? render(e, value, i) : v}
+              </ErrorBoundaryComponent>
+            </CopyToClipboardButtonWrapper>
           );
         }
       : type === "checkbox"
@@ -177,33 +257,45 @@ export function getRendererValueCrudViewer<T>({
       : type === "time"
       ? (e, value, i) => {
           if (!e) return "-";
-          const format = (props as any as TimeBasedFieldProps<{}>)?.format;
-          const use12Hours = (props as any as TimeBasedFieldProps<{}>)
-            ?.use12Hours;
+          const props0 = props as any as TimeBasedFieldProps<{}>;
+          const format = props0.format;
+          const use12Hours = props0.use12Hours;
           const valueFormatted = DateUtil.formatTime(
             e,
             format || (use12Hours ? "hh:mm:ss A" : undefined)
           );
 
           return (
-            <ErrorBoundaryComponent>
-              {typeof render === "function"
-                ? render(e, value, i)
-                : valueFormatted}
-            </ErrorBoundaryComponent>
+            <CopyToClipboardButtonWrapper
+              copyable={props0.copyable}
+              value={valueFormatted}
+            >
+              <ErrorBoundaryComponent>
+                {typeof render === "function"
+                  ? render(e, value, i)
+                  : valueFormatted}
+              </ErrorBoundaryComponent>
+            </CopyToClipboardButtonWrapper>
           );
         }
       : type === "color"
       ? (e, value, i) => {
+          const props0 = props as any as ColorPickerFieldProps<T>;
           if (!e) return "-";
-          return typeof render === "function" ? (
-            render(e, value, i)
-          ) : typeof e === "string" && e.startsWith("#") ? (
-            <Tooltip title={e}>
-              <Avatar style={{ backgroundColor: e }}></Avatar>
-            </Tooltip>
-          ) : (
-            String(e)
+          return (
+            <CopyToClipboardButtonWrapper copyable={props0.copyable} value={e}>
+              <ErrorBoundaryComponent>
+                {typeof render === "function" ? (
+                  render(e, value, i)
+                ) : typeof e === "string" && e.startsWith("#") ? (
+                  <Tooltip title={e}>
+                    <Avatar style={{ backgroundColor: e }}></Avatar>
+                  </Tooltip>
+                ) : (
+                  String(e)
+                )}
+              </ErrorBoundaryComponent>
+            </CopyToClipboardButtonWrapper>
           );
         }
       : type === "textarea"
@@ -211,12 +303,26 @@ export function getRendererValueCrudViewer<T>({
           if (!e) return "-";
           const props0 = props as any as TextAreaBasedFieldProps<{}>;
           const truncated = props0.truncated ?? 1;
+          const isVeryShort = typeof e === "string" && e.split(" ").length < 10;
           const component =
             typeof render === "function" ? (
-              render(e, value, i)
+              <CopyToClipboardButtonWrapper
+                copyable={props0.copyable}
+                value={e}
+              >
+                {render(e, value, i)}
+              </CopyToClipboardButtonWrapper>
             ) : truncated ? (
               <ErrorBoundaryComponent>
-                <ShowMore lines={truncated === true ? 1 : truncated}>
+                <Typography.Paragraph
+                  ellipsis={
+                    !isVeryShort && {
+                      rows: truncated === true ? 1 : truncated,
+                      expandable: "collapsible",
+                    }
+                  }
+                  copyable={copyableFn(props0.copyable, e)}
+                >
                   {props0.rich ? (
                     <div
                       style={{ all: "unset" }}
@@ -225,21 +331,38 @@ export function getRendererValueCrudViewer<T>({
                   ) : (
                     e
                   )}
-                </ShowMore>
+                </Typography.Paragraph>
               </ErrorBoundaryComponent>
             ) : props0.rich ? (
-              <div
-                style={{ all: "unset" }}
-                dangerouslySetInnerHTML={{ __html: e }}
-              ></div>
+              <CopyToClipboardButtonWrapper
+                copyable={props0.copyable}
+                value={e}
+              >
+                <div
+                  style={{ all: "unset" }}
+                  dangerouslySetInnerHTML={{ __html: e }}
+                ></div>
+              </CopyToClipboardButtonWrapper>
             ) : (
-              e
+              <CopyToClipboardButtonWrapper
+                copyable={props0.copyable}
+                value={e}
+              >
+                {e}
+              </CopyToClipboardButtonWrapper>
             );
           return component;
         }
       : typeof render === "function"
       ? render
-      : (e, value, i) => e;
+      : (e, value, i) => {
+          const textProps = props as TextBasedFieldProps<T>;
+          return (
+            <Typography.Text copyable={copyableFn(textProps.copyable, e)}>
+              {e}
+            </Typography.Text>
+          );
+        };
   } catch (e) {
     console.warn(
       "An error occurred while rendering the value for field: " +
