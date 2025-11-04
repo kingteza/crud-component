@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/kingteza/crud-component/compare/v1.4.3...v1.5.0) (2025-11-04)
+
+
+### Features
+
+* remove ShowMore component and update related imports ([3d2635f](https://github.com/kingteza/crud-component/commit/3d2635f807cfcd69c882d363f9b4b0b6ae28de80))
+
 ## [1.4.3](https://github.com/kingteza/crud-component/compare/v1.4.2...v1.4.3) (2025-10-26)
 
 
