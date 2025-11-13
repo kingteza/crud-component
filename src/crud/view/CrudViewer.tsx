@@ -49,6 +49,8 @@ import CrudUtil from "src/util/CrudUtil";
 // Create a stable table component that doesn't re-render unnecessarily
 const TableComponentMemo = React.memo(TableComponent) as typeof TableComponent;
 
+type TableRowSelection<T> = TableProps<T>['rowSelection'];
+
 export type CrudDragableProps<T> = {
   onDragEnd?: (event: DragEndEvent) => void;
   onDrag?: (params: { newOrder: T[] }) => void;
@@ -76,6 +78,7 @@ export type CrudViewerProps<T, FormType> = {
   size?: SizeType;
   onClickRefresh?: () => void;
   expandable?: ExpandableConfig<T>;
+  rowSelection?: TableRowSelection<T>;
   descListColumn?: DescListColumn;
   extraView?: (t: T) => React.ReactElement;
   scrollToTop?: boolean;
@@ -118,6 +121,7 @@ function CrudViewer<T, FormType = T>({
   rowClassName,
   actionWidth = 190,
   draggable,
+  rowSelection,
   ...props
 }: CrudViewerProps<T, FormType>) {
   const { t } = useTranslationLib();
@@ -214,6 +218,7 @@ function CrudViewer<T, FormType = T>({
   // Memoize table props to prevent unnecessary re-renders
   const tableProps = useMemo(
     () => ({
+      rowSelection,
       rowClassName,
       className,
       scroll:
@@ -224,7 +229,7 @@ function CrudViewer<T, FormType = T>({
       size,
       expandable,
     }),
-    [rowClassName, className, scroll, minusHeight, bordered, size, expandable]
+    [rowSelection, rowClassName, className, scroll, minusHeight, bordered, size, expandable]
   );
 
   // Memoize pagination props separately
