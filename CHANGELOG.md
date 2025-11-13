@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/kingteza/crud-component/compare/v1.5.0...v1.6.0) (2025-11-13)
+
+
+### Features
+
+* add row selection support to CrudViewer component ([bb2f343](https://github.com/kingteza/crud-component/commit/bb2f343f0381ae3fbf3d0b724ac1bca4c7edd213))
+
 # [1.5.0](https://github.com/kingteza/crud-component/compare/v1.4.3...v1.5.0) (2025-11-04)
 
 
