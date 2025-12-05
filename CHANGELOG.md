@@ -1,3 +1,11 @@
+## [1.6.4](https://github.com/kingteza/crud-component/compare/v1.6.3...v1.6.4) (2025-12-05)
+
+
+### Bug Fixes
+
+* Fixed TS error ([aa38888](https://github.com/kingteza/crud-component/commit/aa388884c70f2003ac108c41899e3e521f6b74a8))
+* update default generic type for CrudField component ([2870c33](https://github.com/kingteza/crud-component/commit/2870c331382d300e461c08a571f7bd93442ad491))
+
 ## [1.6.3](https://github.com/kingteza/crud-component/compare/v1.6.2...v1.6.3) (2025-12-05)
 
 
