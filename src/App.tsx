@@ -1,7 +1,13 @@
 import { setupI18n } from "./locale";
-import { CrudComponent, CrudDecListView, FileUploadProvider } from ".";
+import {
+  CrudComponent,
+  CrudDecListView,
+  CrudField,
+  FileUploadProvider,
+} from ".";
 import { useState } from "react";
 import { UploadFile } from "antd/lib";
+import { Form } from "antd";
 
 // Initialize with your custom translations
 setupI18n();
@@ -120,6 +126,17 @@ function App() {
   return (
     <div className="">
       <ShowMoreTest />
+      <Form>
+        <CrudField
+          type="number"
+          fieldClassName="mb-0 w-32"
+          min={0}
+          label=""
+          placeholder="Min Advance Notice Days"
+          name="minAdvanceNoticeDays"
+          required
+        />
+      </Form>
       <CrudComponent<Purchase>
         data={data}
         size="small"
