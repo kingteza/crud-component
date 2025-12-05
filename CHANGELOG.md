@@ -1,3 +1,10 @@
+## [1.6.2](https://github.com/kingteza/crud-component/compare/v1.6.1...v1.6.2) (2025-12-05)
+
+
+### Bug Fixes
+
+* improve required field validation message formatting in TimePicker, SelectComponent, and TextField components ([fbf6c15](https://github.com/kingteza/crud-component/commit/fbf6c15181ef73f5e615446c46e0610c28f045b8))
+
 ## [1.6.1](https://github.com/kingteza/crud-component/compare/v1.6.0...v1.6.1) (2025-12-05)
 
 
