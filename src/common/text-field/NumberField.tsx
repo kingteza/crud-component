@@ -61,7 +61,7 @@ const NumberTextField = forwardRef<HTMLInputElement, NumberTextFieldProps>(
         ...rules,
         {
           required,
-          message: `${label ?? placeholder ?? ""} ${t(
+          message: `${label ? label : placeholder ? placeholder : ""} ${t(
             'err.validation.required'
           )}`,
         },
