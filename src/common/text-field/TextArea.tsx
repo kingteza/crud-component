@@ -65,7 +65,7 @@ const TextAreaComponent: React.FC<TextFieldProps> = ({
         onPressEnter={(e) =>
           onEnterInternalTextField(e, nextFocus, form, onEnter)
         }
-        placeholder={placeholder ?? (label as any)}
+        placeholder={placeholder ? placeholder : (label as any)}
       />
     </Form.Item>
   );

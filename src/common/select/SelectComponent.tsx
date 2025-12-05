@@ -106,7 +106,7 @@ function SelectComponent<T = any>({
             className={`max-width ${readOnly ? "readOnly" : ""}`}
             {...props}
             tagRender={tagRender}
-            placeholder={placeholder ?? (label as any)}
+            placeholder={placeholder ? placeholder : (label as any)}
             filterOption={
               filterOption ??
               ((input, option) => {

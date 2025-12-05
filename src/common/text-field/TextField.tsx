@@ -109,7 +109,7 @@ const TextField: React.FC<TextFieldProps> = ({
     autoComplete: autoComplete,
     onPressEnter: (e) => onEnterInternalTextField(e, nextFocus, form, onEnter),
     type: type as any,
-    placeholder: placeholder ?? (label as any),
+    placeholder: placeholder ? placeholder : (label as any),
   };
   const Component = type == "password" ? Input.Password : Input;
   return (

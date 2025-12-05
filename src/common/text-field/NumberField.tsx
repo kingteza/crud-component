@@ -110,7 +110,7 @@ const NumberTextField = forwardRef<HTMLInputElement, NumberTextFieldProps>(
                 ? (value) => value?.replace(/\$\s?|(,*)/g, "")
                 : undefined
             }
-            placeholder={placeholder ?? (label as any)}
+            placeholder={placeholder ? placeholder : (label as any)}
           />
         </Form.Item>
       </TooltipComponent>
