@@ -270,19 +270,28 @@ export type FormBuilderFunc<T> = (
   }
 ) => ReactElement;
 
-export type CrudFieldProps<T> =
-  | SelectCrudField<T>
-  | TextBasedFieldProps<T>
-  | TextAreaBasedFieldProps<T>
-  | ImageCrudField<T>
-  | EnumCrudField<T>
-  | DateBasedFieldProps<T>
-  | TimeBasedFieldProps<T>
-  | ObjectCrudField<T>
-  | NumberBasedFieldProps<T>
-  | CheckboxBasedFieldProps<T>
-  | ColorPickerFieldProps<T>
-  | FileCrudField<T>;
+// Create a type mapping that explicitly links each type string to its interface
+type CrudFieldTypeMap<T> = {
+  select: SelectCrudField<T>;
+  text: TextBasedFieldProps<T>;
+  email: TextBasedFieldProps<T>;
+  password: TextBasedFieldProps<T>;
+  time: TextBasedFieldProps<T>;
+  textarea: TextAreaBasedFieldProps<T>;
+  enum: EnumCrudField<T>;
+  date: DateBasedFieldProps<T>;
+  number: NumberBasedFieldProps<T>;
+  checkbox: CheckboxBasedFieldProps<T>;
+  color: ColorPickerFieldProps<T>;
+  object: ObjectCrudField<T>;
+  file: FileCrudField<T>;
+  image: ImageCrudField<T>;
+};
+
+// Create the discriminated union using a mapped type
+export type CrudFieldProps<T> = {
+  [K in keyof CrudFieldTypeMap<T>]: CrudFieldTypeMap<T>[K] & { readonly type: K };
+}[keyof CrudFieldTypeMap<T>];
 
 export type CrudPaginateProps =
   | false
