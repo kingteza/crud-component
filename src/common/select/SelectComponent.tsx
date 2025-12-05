@@ -77,7 +77,7 @@ function SelectComponent<T = any>({
     },
     [nameFieldInArray]
   );
-  const label0 = label ?? placeholder ?? "";
+  const label0 = label ? label : placeholder ? placeholder : "";
   return (
     <ConfigProvider
       renderEmpty={

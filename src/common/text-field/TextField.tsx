@@ -80,7 +80,7 @@ const TextField: React.FC<TextFieldProps> = ({
       ...rules,
       {
         required,
-        message: `${label ?? placeholder ?? ""} ${t(
+        message: `${label ? label : placeholder ? placeholder : ""} ${t(
           'err.validation.required'
         )}`,
       },
