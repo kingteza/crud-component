@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/kingteza/crud-component/compare/v1.6.0...v1.6.1) (2025-12-05)
+
+
+### Bug Fixes
+
+* improve required field validation message formatting in NumberField component ([590b9f6](https://github.com/kingteza/crud-component/commit/590b9f68fd7f6a05cf803c48e1b2ef845a11e6b5))
+
 # [1.6.0](https://github.com/kingteza/crud-component/compare/v1.5.0...v1.6.0) (2025-11-13)
 
 
