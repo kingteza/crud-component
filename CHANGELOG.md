@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/kingteza/crud-component/compare/v1.6.2...v1.6.3) (2025-12-05)
+
+
+### Bug Fixes
+
+* update placeholder assignment in multiple components for consistency ([5bdddb0](https://github.com/kingteza/crud-component/commit/5bdddb0887e9fad05f6698636cb19a8188d86673))
+
 ## [1.6.2](https://github.com/kingteza/crud-component/compare/v1.6.1...v1.6.2) (2025-12-05)
 
 
