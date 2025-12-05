@@ -33,7 +33,7 @@ import {
 import CrudTextAreaComponent from "./CrudTextAreaComponent";
 import CrudUtil from "src/util/CrudUtil";
 
-export default function CrudField<T>(props0: Readonly<CrudFieldProps<T>>) {
+export default function CrudField<T = any>(props0: Readonly<CrudFieldProps<T>>) {
   const {
     label,
     name,
