@@ -62,7 +62,8 @@ export {
 } from "./FileCrudField";
 
 export type { FileCrudField as FileCrudFieldProps } from "./FileCrudField";
-
+export { default as CrudTextAreaComponent } from "./CrudTextAreaComponent";
+export type { TextAreaBasedFieldProps } from "./CrudTextAreaComponent";
 export { default as CrudImportComponent } from "./import/CrudImportComponent";
 export type {
   CrudImportComponentProps,
