@@ -321,6 +321,7 @@ export type CrudComponentProps<T, FormType = T> = {
   onHide?: (id: any) => Promise<any>;
   onDelete?: (id: any) => Promise<any>;
   onUpdate?: (t: FormType & IdProps) => Promise<any>;
+  onClickUpdate?: (t: T) => Promise<any>;
   loadingData?: boolean;
   isCreating?: boolean;
   isHiding?: boolean;
@@ -347,6 +348,7 @@ function CrudComponent<T, FormType = T>({
   onDelete,
   onHide,
   onUpdate,
+  onClickUpdate,
   fields,
   data,
   grid,
@@ -377,7 +379,7 @@ function CrudComponent<T, FormType = T>({
     modalRef.current?.create();
   }, []);
 
-  const onClickUpdate = useCallback(
+  const onClickUpdate0 = useCallback(
     async (data: T, shouldSetUpdatingField = true, isClone = false) => {
       await modalRef.current?.update(data, shouldSetUpdatingField, isClone);
     },
@@ -386,9 +388,9 @@ function CrudComponent<T, FormType = T>({
 
   const onClickClone = useCallback(
     async (data: T) => {
-      onClickUpdate(data, false, true);
+      onClickUpdate0(data, false, true);
     },
-    [onClickUpdate]
+    [onClickUpdate0]
   );
   return (
     <>
@@ -429,7 +431,7 @@ function CrudComponent<T, FormType = T>({
           idField={idField}
           isDeleting={isDeleting}
           loadingData={loadingData}
-          onClickUpdate={onUpdate ? onClickUpdate : undefined}
+          onClickUpdate={onClickUpdate ? onClickUpdate : onUpdate ? onClickUpdate0 : undefined}
           onHide={onHide}
           isHiding={isHiding}
           onDelete={onDelete}
