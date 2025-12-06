@@ -74,4 +74,5 @@ export { default as CrudActions } from "./actions";
 export type { CrudActionsProps } from "./actions";
 export { default as CrudModal } from "./modal";
 export type { CrudModalProps, CrudModalRef } from "./modal";
+export type * from "src/util";
 export * from './view';

@@ -25,7 +25,7 @@ import {
   Copyable,
   copyableFn,
   CopyToClipboardButtonWrapper,
-} from "src/util/CopyUtil";
+} from "src/util/CopyUtilComponent";
 
 export function getRendererValueCrudViewer<T>({
   type,

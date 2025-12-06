@@ -1,8 +1,6 @@
-import { CopyOutlined } from "@ant-design/icons";
-import { Space, Typography } from "antd";
+import { Typography } from "antd";
 import { CopyConfig } from "antd/es/typography/Base";
 import { FC, PropsWithChildren } from "react";
-import { ButtonComponent } from "src/common";
 
 export interface CopyProps {
   onCopy: (value: any) => any;

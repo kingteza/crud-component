@@ -4,7 +4,7 @@ import { Form } from "antd";
 import { InitialCrudField } from "./CrudComponent";
 import { FormInstance } from "antd/lib";
 import CrudUtil from "src/util/CrudUtil";
-import { Copyable } from "src/util/CopyUtil";
+import { Copyable } from ".";
 
 interface InitialTextAreaProps<T> extends InitialCrudField<T> {
   type: "textarea";
@@ -27,7 +27,8 @@ interface RichTextAreaProps<T> extends InitialTextAreaProps<T> {
 }
 
 export type TextAreaBasedFieldProps<T> = TextAreaProps<T> &
-  RichTextAreaProps<T> & Copyable<false>;
+  RichTextAreaProps<T> &
+  Copyable<false>;
 
 const CrudTextAreaComponent = <T,>({
   onChange,
@@ -39,7 +40,7 @@ const CrudTextAreaComponent = <T,>({
   ...props
 }: TextAreaBasedFieldProps<T>) => {
   const form = Form.useFormInstance();
-  const realName = CrudUtil.getRealName(name, 'upsertFieldName');
+  const realName = CrudUtil.getRealName(name, "upsertFieldName");
   if (props.rich) {
     return (
       <RichTextEditor
