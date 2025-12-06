@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/kingteza/crud-component/compare/v1.8.0...v1.8.1) (2025-12-06)
+
+
+### Bug Fixes
+
+* change onClickUpdate prop type in CrudComponent ([2e409aa](https://github.com/kingteza/crud-component/commit/2e409aa07098f01c26b604545be96571ae1935c0))
+
 # [1.8.0](https://github.com/kingteza/crud-component/compare/v1.7.3...v1.8.0) (2025-12-06)
 
 
