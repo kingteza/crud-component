@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/kingteza/crud-component/compare/v1.7.1...v1.7.2) (2025-12-06)
+
+
+### Bug Fixes
+
+* correct formatting in CopyUtilComponent ([f42d2d1](https://github.com/kingteza/crud-component/commit/f42d2d1c83ad69764bc25f97a58efe862b45c423))
+
 ## [1.7.1](https://github.com/kingteza/crud-component/compare/v1.7.0...v1.7.1) (2025-12-06)
 
 
