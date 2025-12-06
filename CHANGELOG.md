@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/kingteza/crud-component/compare/v1.7.0...v1.7.1) (2025-12-06)
+
+
+### Bug Fixes
+
+* update import path for TextAreaBasedFieldProps ([b6a0808](https://github.com/kingteza/crud-component/commit/b6a08086614cd7e0b14ccf014ff3e10ada7fafff))
+
 # [1.7.0](https://github.com/kingteza/crud-component/compare/v1.6.4...v1.7.0) (2025-12-06)
 
 
