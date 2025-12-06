@@ -24,7 +24,7 @@ import CrudViewer, {
 import { NewButton, PrintButton } from "../common";
 import { SelectTagRenderProps } from "../common/select/SelectComponent";
 import IdProps from "../types/Id";
-import { TextAreaBasedFieldProps } from "./CrudTextAreaComponent";
+import { TextAreaBasedFieldProps } from ".";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import { Copyable } from "src/util/CopyUtil";
 
