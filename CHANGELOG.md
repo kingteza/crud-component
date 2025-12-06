@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/kingteza/crud-component/compare/v1.6.4...v1.7.0) (2025-12-06)
+
+
+### Features
+
+* add CrudTextAreaComponent and its type definition ([8cca3c2](https://github.com/kingteza/crud-component/commit/8cca3c26ba9715ab1bc7369b6e5c82e872cfa889))
+
 ## [1.6.4](https://github.com/kingteza/crud-component/compare/v1.6.3...v1.6.4) (2025-12-05)
 
 
