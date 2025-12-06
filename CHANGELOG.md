@@ -1,3 +1,10 @@
+## [1.7.3](https://github.com/kingteza/crud-component/compare/v1.7.2...v1.7.3) (2025-12-06)
+
+
+### Bug Fixes
+
+* update import path for Copyable in CrudTextAreaComponent ([dddedb1](https://github.com/kingteza/crud-component/commit/dddedb1313f0a506b12e5c4d21f596938cf1f81c))
+
 ## [1.7.2](https://github.com/kingteza/crud-component/compare/v1.7.1...v1.7.2) (2025-12-06)
 
 
