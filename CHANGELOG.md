@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/kingteza/crud-component/compare/v1.7.3...v1.8.0) (2025-12-06)
+
+
+### Features
+
+* add onClickUpdate prop and refactor update handling in CrudComponent ([34c923d](https://github.com/kingteza/crud-component/commit/34c923d54c790145db96309f073a337ed87e6788))
+
 ## [1.7.3](https://github.com/kingteza/crud-component/compare/v1.7.2...v1.7.3) (2025-12-06)
 
 
