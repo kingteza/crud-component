@@ -4,7 +4,7 @@ import { Form } from "antd";
 import { InitialCrudField } from "./CrudComponent";
 import { FormInstance } from "antd/lib";
 import CrudUtil from "src/util/CrudUtil";
-import { Copyable } from ".";
+import { Copyable } from "../util/CopyUtilComponent";
 
 interface InitialTextAreaProps<T> extends InitialCrudField<T> {
   type: "textarea";
