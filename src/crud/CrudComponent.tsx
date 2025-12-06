@@ -321,7 +321,7 @@ export type CrudComponentProps<T, FormType = T> = {
   onHide?: (id: any) => Promise<any>;
   onDelete?: (id: any) => Promise<any>;
   onUpdate?: (t: FormType & IdProps) => Promise<any>;
-  onClickUpdate?: (t: T) => Promise<any>;
+  onClickUpdate?: (t: T) => void;
   loadingData?: boolean;
   isCreating?: boolean;
   isHiding?: boolean;
