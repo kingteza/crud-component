@@ -43,7 +43,7 @@ export const CopyToClipboardButtonWrapper: FC<
                 return typeof value === "function" ? await value() : value;
               },
             }
-          : undefined
+          : undefined 
       }
     >
       {children}
