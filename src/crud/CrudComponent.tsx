@@ -147,7 +147,6 @@ export interface SelectCrudField<
 export interface EnumCrudField<T> extends InitialCrudField<T>, Copyable<false> {
   type: "enum";
   placeholder?: string;
-  name: keyof T; // Ensure `name` corresponds to a key in T
   // enum: T[keyof T]
   //   | (T[keyof T] extends string | number | symbol
   //       ? Record<string, T[keyof T]>

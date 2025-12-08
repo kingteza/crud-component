@@ -146,6 +146,9 @@ function App() {
           },
           columnLabel: "Drag",
         }}
+        onClickUpdate={()=> {
+          alert("onClickUpdate");
+        }}
         onDelete={async (e) => {
           console.log(e);
           setData(data.filter((e) => e.id !== (e as any)));
@@ -154,10 +157,10 @@ function App() {
           console.log(e);
           setData((data) => [...data, { ...e, id: String(Math.random()) }]);
         }}
-        onUpdate={async (x) => {
-          console.log(x);
-          setData(data.map((e) => (e.id === x.id ? x : e)));
-        }}
+        // onUpdate={async (x) => {
+        //   console.log(x);
+        //   setData(data.map((e) => (e.id === x.id ? x : e)));
+        // }}
         fields={[
           {
             type: "enum",
