@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/kingteza/crud-component/compare/v1.8.1...v1.9.0) (2025-12-08)
+
+
+### Features
+
+* add onClickUpdate handler and comment out onUpdate logic in App component ([3523089](https://github.com/kingteza/crud-component/commit/3523089b9bfb46c1ac3b95fe5ded4bf7c5665f93))
+
 ## [1.8.1](https://github.com/kingteza/crud-component/compare/v1.8.0...v1.8.1) (2025-12-06)
 
 
