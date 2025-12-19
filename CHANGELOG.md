@@ -1,3 +1,10 @@
+## [1.10.2](https://github.com/kingteza/crud-component/compare/v1.10.1...v1.10.2) (2025-12-19)
+
+
+### Bug Fixes
+
+* adjust formatting in CrudField component ([0a0498c](https://github.com/kingteza/crud-component/commit/0a0498cf46a9166d7c45bc75c058edca87a58725))
+
 ## [1.10.1](https://github.com/kingteza/crud-component/compare/v1.10.0...v1.10.1) (2025-12-19)
 
 
