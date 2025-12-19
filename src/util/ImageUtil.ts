@@ -3,10 +3,15 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import { RcFile } from 'antd/lib/upload';
-import imageCompression from 'browser-image-compression';
+import { RcFile } from "antd/lib/upload";
+import imageCompression from "browser-image-compression";
 
-export type ImageDataReturn = { data: string; type: 'png' | 'jpeg' | 'jpg', width: number, height: number } | null;
+export type ImageDataReturn = {
+  data: string;
+  type: "png" | "jpeg" | "jpg";
+  width: number;
+  height: number;
+} | null;
 class ImageUtl {
   async resizeImage(file: RcFile) {
     const compressedFile = await imageCompression(file, {
@@ -34,7 +39,7 @@ class ImageUtl {
               width: img.width,
             });
           };
-        },
+        }
       );
       Object.assign(data, rst);
       return data;
@@ -44,30 +49,37 @@ class ImageUtl {
   }
   async getImageData0(uriOrBase64: string): Promise<ImageDataReturn> {
     try {
-      if (uriOrBase64.startsWith('data:image/')) {
+      if (uriOrBase64.startsWith("data:image/")) {
         // It's already in base64 format
-        const matches = uriOrBase64.match(/^data:image\/(png|jpeg|jpg);base64,(.*)$/);
+        const matches = uriOrBase64.match(
+          /^data:image\/(png|jpeg|jpg);base64,(.*)$/
+        );
         if (!matches) {
-          throw new Error('Invalid base64 image data');
+          throw new Error("Invalid base64 image data");
         }
-        return { data: uriOrBase64, type: matches[1] as 'png' | 'jpeg' | 'jpg' } as any;
+        return {
+          data: uriOrBase64,
+          type: matches[1] as "png" | "jpeg" | "jpg",
+        } as any;
       } else {
         // It's a URL, fetch the image data
         const response = await fetch(uriOrBase64);
-        if (!response.ok) throw new Error('Network response was not ok');
+        if (!response.ok) throw new Error("Network response was not ok");
         const blob = await response.blob();
         return new Promise((resolve, reject) => {
           const reader = new FileReader();
           reader.onloadend = function () {
             const base64data = reader.result as string;
-            const typeMatch = base64data.match(/^data:image\/(png|jpeg|jpg);base64,/);
+            const typeMatch = base64data.match(
+              /^data:image\/(png|jpeg|jpg);base64,/
+            );
             if (typeMatch) {
               resolve({
                 data: base64data,
-                type: typeMatch[1] as 'png' | 'jpeg' | 'jpg',
+                type: typeMatch[1] as "png" | "jpeg" | "jpg",
               } as any);
             } else {
-              reject(new Error('Could not determine image type'));
+              reject(new Error("Could not determine image type"));
             }
           };
           reader.onerror = reject;
@@ -78,6 +90,15 @@ class ImageUtl {
       console.warn(e);
       return null;
     }
+  }
+
+  getBase64(file) {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
   }
 }
 

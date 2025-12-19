@@ -1,4 +1,4 @@
-import { ColorPickerProps, Form, Space } from "antd";
+import { ButtonProps, ColorPickerProps, Space } from "antd";
 import { Rule } from "antd/es/form";
 import { FormInstance } from "antd/lib";
 import { Dayjs } from "dayjs";
@@ -6,9 +6,8 @@ import React, {
   ReactElement,
   ReactNode,
   useCallback,
-  useEffect,
-  useState,
   useRef,
+  useMemo,
 } from "react";
 
 import { CrudSearchComponentProps } from "./CrudSearchComponent";
@@ -27,7 +26,6 @@ import IdProps from "../types/Id";
 import { TextAreaBasedFieldProps } from ".";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import { Copyable } from "src/util/CopyUtilComponent";
-
 
 export type SelectFieldItem = {
   key?: string | number;
@@ -173,7 +171,9 @@ export type AddonFieldProps = {
   addonBefore?: ReactNode;
 };
 
-export interface ObjectCrudField<T> extends InitialCrudField<T>, Copyable<true> {
+export interface ObjectCrudField<T>
+  extends InitialCrudField<T>,
+    Copyable<true> {
   type: "object";
 
   render: (value: any, obj: T, index: number) => any;
@@ -182,14 +182,16 @@ export interface ObjectCrudField<T> extends InitialCrudField<T>, Copyable<true> 
 
 export interface TextBasedFieldProps<T>
   extends InitialCrudField<T>,
-    AddonFieldProps, Copyable<false> {
+    AddonFieldProps,
+    Copyable<false> {
   placeholder?: string;
   type: "text" | "time" | "email" | "password";
   onChange?: (value: string, form: FormInstance<T>) => void;
 }
 
 export interface ColorPickerFieldProps<T>
-  extends Omit<InitialCrudField<T>, "placeholder">, Copyable<false> {
+  extends Omit<InitialCrudField<T>, "placeholder">,
+    Copyable<false> {
   type: "color";
   innerProps?: ColorPickerProps;
 }
@@ -202,7 +204,8 @@ export interface CheckboxBasedFieldProps<T> extends InitialCrudField<T> {
 
 export interface NumberBasedFieldProps<T>
   extends InitialCrudField<T>,
-    AddonFieldProps, Copyable<false> {
+    AddonFieldProps,
+    Copyable<false> {
   type: "number";
   placeholder?: string;
   allowMinus?: boolean;
@@ -216,7 +219,9 @@ export interface NumberBasedFieldProps<T>
   onChange?: (value: number, form: FormInstance<T>) => void;
 }
 
-export interface DateBasedFieldProps<T> extends InitialCrudField<T>, Copyable<false> {
+export interface DateBasedFieldProps<T>
+  extends InitialCrudField<T>,
+    Copyable<false> {
   type: "date";
   format?: string;
   placeholder?: string;
@@ -235,7 +240,9 @@ export interface DateBasedFieldProps<T> extends InitialCrudField<T>, Copyable<fa
   onChange?: (value: Dayjs | undefined, form: FormInstance<T>) => void;
 }
 
-export interface TimeBasedFieldProps<T> extends InitialCrudField<T>, Copyable<false> {
+export interface TimeBasedFieldProps<T>
+  extends InitialCrudField<T>,
+    Copyable<false> {
   type: "time";
   placeholder?: string;
   use12Hours?: boolean;
@@ -289,7 +296,9 @@ type CrudFieldTypeMap<T> = {
 
 // Create the discriminated union using a mapped type
 export type CrudFieldProps<T> = {
-  [K in keyof CrudFieldTypeMap<T>]: CrudFieldTypeMap<T>[K] & { readonly type: K };
+  [K in keyof CrudFieldTypeMap<T>]: CrudFieldTypeMap<T>[K] & {
+    readonly type: K;
+  };
 }[keyof CrudFieldTypeMap<T>];
 
 export type CrudPaginateProps =
@@ -336,7 +345,11 @@ export type CrudComponentProps<T, FormType = T> = {
   wizard?: CrudWizardProp<T>[];
   extraView?: (t: T) => React.ReactElement;
   importable?: CrudImportProps<T>;
+  /**
+   * @deprecated Use {@link CrudComponentProps.newButtonProps?.onClick} instead.
+   */
   onClickNew?: () => void;
+  newButtonProps?: ButtonProps;
   draggable?: CrudDragableProps<T>;
   size?: SizeType;
 } & CrudSearchComponentProps<T, FormType>;
@@ -369,6 +382,7 @@ function CrudComponent<T, FormType = T>({
   extraView,
   importable,
   onClickNew,
+  newButtonProps,
   size,
   ...props
 }: CrudComponentProps<T, FormType>) {
@@ -391,20 +405,26 @@ function CrudComponent<T, FormType = T>({
     },
     [onClickUpdate0]
   );
+  const { onClick: onClickNewButton, ...newButtonPropsWithoutOnClick } =
+    useMemo(() => newButtonProps || {}, [newButtonProps]);
+
   return (
     <>
       <Space direction="vertical" className="w-100">
         <div className="w-100 d-flex">
           <div style={{ flex: 1 }}>
             <NewButton
-              onClick={() => {
+              onClick={(_, e) => {
                 if (onClickNew) {
                   onClickNew();
+                } else if (newButtonProps?.onClick) {
+                  newButtonProps.onClick(e);
                 } else {
                   handleNew();
                 }
               }}
               className="flex-1"
+              {...newButtonPropsWithoutOnClick}
             ></NewButton>
           </div>
           <Space>
@@ -430,7 +450,13 @@ function CrudComponent<T, FormType = T>({
           idField={idField}
           isDeleting={isDeleting}
           loadingData={loadingData}
-          onClickUpdate={onClickUpdate ? onClickUpdate : onUpdate ? onClickUpdate0 : undefined}
+          onClickUpdate={
+            onClickUpdate
+              ? onClickUpdate
+              : onUpdate
+              ? onClickUpdate0
+              : undefined
+          }
           onHide={onHide}
           isHiding={isHiding}
           onDelete={onDelete}

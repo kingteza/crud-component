@@ -10,7 +10,14 @@ import { Avatar, Form, Image, Input } from "antd";
 import { UploadListType } from "antd/es/upload/interface";
 import { UploadFile } from "antd/lib";
 import path from "path-browserify";
-import { FC, useCallback, useEffect, useState } from "react";
+import React, {
+  FC,
+  ForwardedRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import NumberUtil from "../util/NumberUtil";
 import ValidationUtil from "../util/ValidationUtil";
 import { v4 as uuidV4 } from "uuid";
@@ -18,6 +25,7 @@ import { v4 as uuidV4 } from "uuid";
 import { InitialCrudField } from "./CrudComponent";
 import { ImagePicker } from "../common";
 import { Copyable } from "src/util/CopyUtilComponent";
+import { ImageUtil } from "src/util";
 
 export interface _ImageCrudField<T> extends InitialCrudField<T> {
   provider: FileUploadProvider;
@@ -76,19 +84,26 @@ export abstract class FileUploadProvider extends FileDownloadProvider {
   }
 }
 
-export default function ImageCrudFieldComponent<T>({
-  name,
-  label,
-  required,
-  provider,
-  onUploading,
-  aspectRatio,
-  onRemoved,
-  fieldClassName,
-  hideLabel = false,
-  listType,
-  fieldHelper: help,
-}: Readonly<_ImageCrudField<T>>) {
+export interface ImageCrudFieldRef {
+  uploadBlob: (blob: Blob, fileName: string) => Promise<void>;
+}
+
+function Component<T>(
+  {
+    name,
+    label,
+    required,
+    provider,
+    onUploading,
+    aspectRatio,
+    onRemoved,
+    fieldClassName,
+    hideLabel = false,
+    listType,
+    fieldHelper: help,
+  }: Readonly<_ImageCrudField<T>>,
+  ref: ForwardedRef<ImageCrudFieldRef>
+) {
   const formInstance = Form.useFormInstance();
 
   const fieldValue = Form.useWatch(name, formInstance);
@@ -131,6 +146,27 @@ export default function ImageCrudFieldComponent<T>({
     }
   }, [fieldValue, isUpload, provider, value]);
 
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        async uploadBlob(blob: Blob, fileName: string) {
+          
+          const url = await ImageUtil.getBase64(blob);
+          
+          const file = {
+            name: fileName,
+            uid: fileName + Math.random().toString(36).substring(2, 15),
+            url: url,
+            originFileObj: blob as any,
+          };
+          return onChange(file, true);
+        },
+      };
+    },
+    [onChange],
+  );
+
   return (
     <Form.Item
       rules={required ? ValidationUtil.required(label) : []}
@@ -156,6 +192,13 @@ export default function ImageCrudFieldComponent<T>({
     </Form.Item>
   );
 }
+
+const ImageCrudFieldComponent = React.forwardRef(Component) as <T>(
+  props: React.ComponentProps<typeof Component<T>>,
+  ref: React.Ref<any>
+) => React.ReactElement | null;
+
+export default ImageCrudFieldComponent;
 
 export const ImageCrudCellValue: FC<{
   value: string;
