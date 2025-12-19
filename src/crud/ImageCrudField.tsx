@@ -13,6 +13,8 @@ import path from "path-browserify";
 import React, {
   FC,
   ForwardedRef,
+  ReactElement,
+  Ref,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -151,9 +153,8 @@ function Component<T>(
     () => {
       return {
         async uploadBlob(blob: Blob, fileName: string) {
-          
           const url = await ImageUtil.getBase64(blob);
-          
+
           const file = {
             name: fileName,
             uid: fileName + Math.random().toString(36).substring(2, 15),
@@ -164,7 +165,7 @@ function Component<T>(
         },
       };
     },
-    [onChange],
+    [onChange]
   );
 
   return (
@@ -193,12 +194,11 @@ function Component<T>(
   );
 }
 
-const ImageCrudFieldComponent = React.forwardRef(Component) as <T>(
-  props: React.ComponentProps<typeof Component<T>>,
-  ref: React.Ref<any>
-) => React.ReactElement | null;
+const ImageCrudField = React.forwardRef(Component) as <T>(
+  p: Readonly<_ImageCrudField<T>> & { ref?: Ref<ImageCrudFieldRef> }
+) => ReactElement;
 
-export default ImageCrudFieldComponent;
+export default ImageCrudField;
 
 export const ImageCrudCellValue: FC<{
   value: string;
