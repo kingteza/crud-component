@@ -33,7 +33,9 @@ import {
 import CrudTextAreaComponent from "./CrudTextAreaComponent";
 import CrudUtil from "src/util/CrudUtil";
 
-export default function CrudField<T = any>(props0: Readonly<CrudFieldProps<T>>) {
+export default function CrudField<T = any>(
+  props0: Readonly<CrudFieldProps<T>>
+) {
   const {
     label,
     name,
@@ -67,14 +69,17 @@ export default function CrudField<T = any>(props0: Readonly<CrudFieldProps<T>>) 
   const { t } = useTranslationLibNoNS();
   if (readonly || hidden) return <></>;
   if (customFormFieldRender) {
-    return customFormFieldRender(form, props0 as any);
+    <Suspense fallback={null}>
+      {customFormFieldRender(form, props0 as any)}
+    </Suspense>;
   }
   switch (type) {
     case "text":
     case "email":
     case "password": {
       // case 'object': // Show the text field even if the type is object
-      const { onChange, placeholder, addonAfter, addonBefore } = props as TextBasedFieldProps<T>;
+      const { onChange, placeholder, addonAfter, addonBefore } =
+        props as TextBasedFieldProps<T>;
       return (
         <Suspense fallback={null}>
           <TextField
@@ -97,8 +102,15 @@ export default function CrudField<T = any>(props0: Readonly<CrudFieldProps<T>>) 
       );
     }
     case "number": {
-      const { onChange, placeholder, allowMinus, min, max, addonAfter, addonBefore } =
-        props as NumberBasedFieldProps<T>;
+      const {
+        onChange,
+        placeholder,
+        allowMinus,
+        min,
+        max,
+        addonAfter,
+        addonBefore,
+      } = props as NumberBasedFieldProps<T>;
       return (
         <Suspense fallback={null}>
           <NumberTextField
@@ -295,7 +307,7 @@ export default function CrudField<T = any>(props0: Readonly<CrudFieldProps<T>>) 
         );
       }
       return (
-        <Suspense fallback={null}> 
+        <Suspense fallback={null}>
           <SelectComponent
             {...props}
             tagRender={
@@ -335,7 +347,8 @@ export default function CrudField<T = any>(props0: Readonly<CrudFieldProps<T>>) 
       );
     }
     case "checkbox": {
-      const { onChange, switch: asASwitch } = props as CheckboxBasedFieldProps<T>;
+      const { onChange, switch: asASwitch } =
+        props as CheckboxBasedFieldProps<T>;
       return (
         <Suspense fallback={null}>
           <CheckBoxComponent
@@ -403,7 +416,10 @@ export function SelectCrudFieldComponent<T>(
   const form = (props as any).form;
   const [typing, setTyping] = useState("");
   const realName = useMemo(() => CrudUtil.getRealName(name), [name]);
-  const upsertFieldName = useMemo(() => CrudUtil.getRealName(name, 'upsertFieldName'), [name]);
+  const upsertFieldName = useMemo(
+    () => CrudUtil.getRealName(name, "upsertFieldName"),
+    [name]
+  );
   const value = Form.useWatch(realName, form);
 
   const [first, setFirst] = useState(true);
@@ -430,7 +446,6 @@ export function SelectCrudFieldComponent<T>(
     <SelectComponent
       {...props}
       maxTagCount="responsive"
-      
       maxTagPlaceholder={(omittedValues) => {
         return (
           <TooltipComponent
