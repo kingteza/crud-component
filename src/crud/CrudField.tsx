@@ -295,7 +295,7 @@ export default function CrudField<T = any>(props0: Readonly<CrudFieldProps<T>>) 
         );
       }
       return (
-        <Suspense fallback={null}>
+        <Suspense fallback={null}> 
           <SelectComponent
             {...props}
             tagRender={
