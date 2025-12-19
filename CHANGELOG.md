@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/kingteza/crud-component/compare/v1.10.4...v1.11.0) (2025-12-19)
+
+
+### Features
+
+* introduce CrudComponentProvider for automatic i18n setup ([c32f24f](https://github.com/kingteza/crud-component/commit/c32f24ff131925fd1b243f08f1135639f73bb7da))
+
 ## [1.10.4](https://github.com/kingteza/crud-component/compare/v1.10.3...v1.10.4) (2025-12-19)
 
 
