@@ -1,3 +1,10 @@
+## [1.10.3](https://github.com/kingteza/crud-component/compare/v1.10.2...v1.10.3) (2025-12-19)
+
+
+### Bug Fixes
+
+* improve formatting and readability in CrudField component ([dfcdb6f](https://github.com/kingteza/crud-component/commit/dfcdb6f88a140a430b148f06ff8b0fdbef5aa82c))
+
 ## [1.10.2](https://github.com/kingteza/crud-component/compare/v1.10.1...v1.10.2) (2025-12-19)
 
 
