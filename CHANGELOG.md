@@ -1,3 +1,10 @@
+## [1.10.4](https://github.com/kingteza/crud-component/compare/v1.10.3...v1.10.4) (2025-12-19)
+
+
+### Bug Fixes
+
+* wrap field components in ErrorBoundary for improved error handling ([90daa0e](https://github.com/kingteza/crud-component/commit/90daa0eb9ec8ab15224b6051af275147d15350fd))
+
 ## [1.10.3](https://github.com/kingteza/crud-component/compare/v1.10.2...v1.10.3) (2025-12-19)
 
 
