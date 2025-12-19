@@ -18,9 +18,52 @@ npm install antd@^5.22.6 react@^18.3.1 react-dom@^18.3.1 react-router-dom@^7.0.0
 
 ## Setup
 
-### 1. Initialize translations
+### Option 1: Using CrudComponentProvider (Recommended)
 
-The library uses i18next for internationalization. You need to set it up before using the components:
+Wrap your app with `CrudComponentProvider` to automatically initialize the library:
+
+```typescript
+import { CrudComponentProvider } from '@kingteza/crud-component';
+
+function App() {
+  return (
+    <CrudComponentProvider>
+      {/* Your app components */}
+      <YourComponents />
+    </CrudComponentProvider>
+  );
+}
+```
+
+With custom i18n options:
+
+```typescript
+import { CrudComponentProvider } from '@kingteza/crud-component';
+
+function App() {
+  return (
+    <CrudComponentProvider
+      i18nOptions={{
+        language: 'en',
+        translations: {
+          en: {
+            'crud-component': {
+              // your custom translations
+            }
+          }
+        },
+        i18nInstance: existingI18nInstance // optional: use your existing i18n instance
+      }}
+    >
+      <YourComponents />
+    </CrudComponentProvider>
+  );
+}
+```
+
+### Option 2: Manual Setup (Legacy)
+
+If you prefer to initialize manually, you can still use `setupI18n()`:
 
 ```typescript
 import { setupI18n } from '@kingteza/crud-component';
@@ -30,7 +73,7 @@ setupI18n();
 
 // Or with custom options
 setupI18n({
-  language: 'en', // default language
+  language: 'en',
   translations: {
     en: {
       'crud-component': {
@@ -42,36 +85,41 @@ setupI18n({
 });
 ```
 
-### 2. Usage
+### Usage
 
 ```typescript
-import { CrudComponent } from '@kingteza/crud-component';
+import { CrudComponentProvider, CrudComponent } from '@kingteza/crud-component';
 import { Button } from '@kingteza/crud-component/common';
 
 function App() {
   return (
-    <CrudComponent
-      fields={[
-        { type: "text", name: "name", label: "Name", required: true },
-        { type: "select", name: "status", label: "Status", options: [
-          { value: "active", label: "Active" },
-          { value: "inactive", label: "Inactive" }
+    <CrudComponentProvider>
+      <CrudComponent
+        fields={[
+          { type: "text", name: "name", label: "Name", required: true },
+          { type: "select", name: "status", label: "Status", options: [
+            { value: "active", label: "Active" },
+            { value: "inactive", label: "Inactive" }
+          ]}
         ]}
-      ]}
-      data={[]}
-      onSave={(data) => console.log(data)}
-    />
+        data={[]}
+        onSave={(data) => console.log(data)}
+      />
+    </CrudComponentProvider>
   );
 }
 ```
 
-### 3. Available Imports
+### Available Imports
 
 The library provides several entry points for importing components:
 
 ```typescript
 // Main CRUD component
 import { CrudComponent } from '@kingteza/crud-component';
+
+// Provider component
+import { CrudComponentProvider } from '@kingteza/crud-component';
 
 // Common components
 import { Button, Select, DatePicker } from '@kingteza/crud-component/common';

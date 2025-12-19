@@ -65,10 +65,32 @@ export const updateTranslations = (
 };
 
 export const useTranslationLib = (options?: Omit<UseTranslationOptions<string>, "i18n">) => {
+  if (!i18nInstance.isInitialized) {
+    // Initialize with defaults if not already done
+    if (!i18nInstance.isInitialized) {
+      i18nInstance.use(initReactI18next).init({
+        resources: defaultTranslations,
+        lng: "en",
+        fallbackLng: "en",
+        ns: TRANSLATION_NAMESPACE,
+        interpolation: { escapeValue: false },
+      });
+    }
+  }
   return useTranslation(TRANSLATION_NAMESPACE, { ...options, i18n: i18nInstance });
 };
 
 export const useTranslationLibNoNS = (options?: Omit<UseTranslationOptions<string>, "i18n">) => {
+    // Ensure i18n is initialized before using useTranslation
+    if (!i18nInstance.isInitialized) {
+      i18nInstance.use(initReactI18next).init({
+        resources: defaultTranslations,
+        lng: "en",
+        fallbackLng: "en",
+        ns: TRANSLATION_NAMESPACE,
+        interpolation: { escapeValue: false },
+      });
+    }
   return useTranslation(undefined, { ...options, i18n: i18nInstance });
 };
 

@@ -3,7 +3,7 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 import { ColorPicker, Form, Radio, Select, Tag } from "antd";
-import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { useTranslationLib, useTranslationLibNoNS } from "../locale";
 
@@ -32,11 +32,8 @@ import {
 } from "../common";
 import CrudTextAreaComponent from "./CrudTextAreaComponent";
 import CrudUtil from "src/util/CrudUtil";
-import { ErrorBoundaryComponent } from "src/common/error/ErrorBoundaryComponent";
 
-export default function CrudField<T = any>(
-  props0: Readonly<CrudFieldProps<T>>
-) {
+export default function CrudField<T = any>(props0: Readonly<CrudFieldProps<T>>) {
   const {
     label,
     name,
@@ -70,78 +67,56 @@ export default function CrudField<T = any>(
   const { t } = useTranslationLibNoNS();
   if (readonly || hidden) return <></>;
   if (customFormFieldRender) {
-    return (
-      <Suspense fallback={null}>
-        {customFormFieldRender(form, props0 as any)}
-      </Suspense>
-    );
+    return customFormFieldRender(form, props0 as any);
   }
   switch (type) {
     case "text":
     case "email":
     case "password": {
       // case 'object': // Show the text field even if the type is object
-      const { onChange, placeholder, addonAfter, addonBefore } =
-        props as TextBasedFieldProps<T>;
+      const { onChange, placeholder, addonAfter, addonBefore } = props as TextBasedFieldProps<T>;
       return (
-        <ErrorBoundaryComponent>
-          <Suspense fallback={null}>
-            <TextField
-              placeholder={placeholder}
-              disabled={!updatable}
-              rules={rules}
-              required={required}
-              onChange={onChange ? (val) => onChange(val, form) : undefined}
-              type={type}
-              name={name as any}
-              tooltip={fieldTooltip}
-              label={label}
-              className={fieldClassName}
-              autoComplete={"new-password"}
-              addonAfter={addonAfter}
-              addonBefore={addonBefore}
-              help={help}
-            />
-          </Suspense>
-        </ErrorBoundaryComponent>
+        <TextField
+          placeholder={placeholder}
+          disabled={!updatable}
+          rules={rules}
+          required={required}
+          onChange={onChange ? (val) => onChange(val, form) : undefined}
+          type={type}
+          name={name as any}
+          tooltip={fieldTooltip}
+          label={label}
+          className={fieldClassName}
+          autoComplete={"new-password"}
+          addonAfter={addonAfter}
+          addonBefore={addonBefore}
+          help={help}
+        />
       );
     }
     case "number": {
-      const {
-        onChange,
-        placeholder,
-        allowMinus,
-        min,
-        max,
-        addonAfter,
-        addonBefore,
-      } = props as NumberBasedFieldProps<T>;
+      const { onChange, placeholder, allowMinus, min, max, addonAfter, addonBefore } =
+        props as NumberBasedFieldProps<T>;
       return (
-        <ErrorBoundaryComponent>
-          <Suspense fallback={null}>
-            <NumberTextField
-              placeholder={placeholder}
-              disabled={!updatable}
-              moneyField={Boolean(
-                (props as NumberBasedFieldProps<T>).formatted
-              )}
-              type={type}
-              onChange={onChange ? (val) => onChange(val, form) : undefined}
-              rules={rules}
-              autoComplete={"false"}
-              required={required}
-              tooltip={fieldTooltip}
-              className={fieldClassName}
-              min={allowMinus ? null : min}
-              max={max}
-              addonAfter={addonAfter}
-              addonBefore={addonBefore}
-              name={name as any}
-              label={label}
-              help={help}
-            />
-          </Suspense>
-        </ErrorBoundaryComponent>
+        <NumberTextField
+          placeholder={placeholder}
+          disabled={!updatable}
+          moneyField={Boolean((props as NumberBasedFieldProps<T>).formatted)}
+          type={type}
+          onChange={onChange ? (val) => onChange(val, form) : undefined}
+          rules={rules}
+          autoComplete={"false"}
+          required={required}
+          tooltip={fieldTooltip}
+          className={fieldClassName}
+          min={allowMinus ? null : min}
+          max={max}
+          addonAfter={addonAfter}
+          addonBefore={addonBefore}
+          name={name as any}
+          label={label}
+          help={help}
+        />
       );
     }
     case "date": {
@@ -155,29 +130,25 @@ export default function CrudField<T = any>(
         format,
       } = props as DateBasedFieldProps<T>;
       return (
-        <ErrorBoundaryComponent>
-          <Suspense fallback={null}>
-            <DatePickerComponent
-              placeholder={placeholder}
-              required={required}
-              disabled={!updatable}
-              type={type}
-              format={format}
-              tooltip={fieldTooltip}
-              range={range}
-              name={name as any}
-              label={label}
-              onChange={
-                onChange ? (val: any) => onChange(val as any, form) : undefined
-              }
-              className={fieldClassName}
-              disableToday={disableToday}
-              disabledFutureDays={disabledFutureDays}
-              disabledPastDays={disabledPastDays}
-              help={help}
-            />
-          </Suspense>
-        </ErrorBoundaryComponent>
+        <DatePickerComponent
+          placeholder={placeholder}
+          required={required}
+          disabled={!updatable}
+          type={type}
+          format={format}
+          tooltip={fieldTooltip}
+          range={range}
+          name={name as any}
+          label={label}
+          onChange={
+            onChange ? (val: any) => onChange(val as any, form) : undefined
+          }
+          className={fieldClassName}
+          disableToday={disableToday}
+          disabledFutureDays={disabledFutureDays}
+          disabledPastDays={disabledPastDays}
+          help={help}
+        />
       );
     }
     case "time": {
@@ -192,97 +163,75 @@ export default function CrudField<T = any>(
         placeholder,
       } = props as TimeBasedFieldProps<T>;
       return (
-        <ErrorBoundaryComponent>
-          <Suspense fallback={null}>
-            <TimePickerComponent
-              placeholder={placeholder}
-              required={required}
-              format={format}
-              disabled={!updatable}
-              type={type}
-              tooltip={fieldTooltip}
-              range={range as any}
-              use12Hours={use12Hours}
-              name={name as any}
-              label={label}
-              onChange={onChange ? (val) => onChange(val, form) : undefined}
-              className={fieldClassName}
-              disableCurrent={disableCurrent}
-              disabledFuture={disabledFuture}
-              disabledPast={disabledPast}
-              help={help}
-            />
-          </Suspense>
-        </ErrorBoundaryComponent>
+        <TimePickerComponent
+          placeholder={placeholder}
+          required={required}
+          format={format}
+          disabled={!updatable}
+          type={type}
+          tooltip={fieldTooltip}
+          range={range as any}
+          use12Hours={use12Hours}
+          name={name as any}
+          label={label}
+          onChange={onChange ? (val) => onChange(val, form) : undefined}
+          className={fieldClassName}
+          disableCurrent={disableCurrent}
+          disabledFuture={disabledFuture}
+          disabledPast={disabledPast}
+          help={help}
+        />
       );
     }
     case "textarea": {
-      return (
-        <ErrorBoundaryComponent>
-          <Suspense fallback={null}>
-            <CrudTextAreaComponent {...props0} />
-          </Suspense>
-        </ErrorBoundaryComponent>
-      );
+      return <CrudTextAreaComponent {...props0} />;
     }
     case "image":
       return (
-        <ErrorBoundaryComponent>
-          <Suspense fallback={null}>
-            <ImageCrudFieldComponent
-              {...props}
-              required={required}
-              name={name as never}
-              label={label}
-              rules={rules}
-              fieldHelper={help}
-              fieldClassName={fieldClassName}
-              onRemoved={(props as ImageCrudField<T>).onRemoved}
-              onUploading={(props as ImageCrudField<T>).onUploading}
-              provider={(props as ImageCrudField<T>).provider}
-            />
-          </Suspense>
-        </ErrorBoundaryComponent>
+        <ImageCrudFieldComponent
+          {...props}
+          required={required}
+          name={name as never}
+          label={label}
+          rules={rules}
+          fieldHelper={help}
+          fieldClassName={fieldClassName}
+          onRemoved={(props as ImageCrudField<T>).onRemoved}
+          onUploading={(props as ImageCrudField<T>).onUploading}
+          provider={(props as ImageCrudField<T>).provider}
+        />
       );
     case "file":
       return (
-        <ErrorBoundaryComponent>
-          <Suspense fallback={null}>
-            <FileCrudFieldComponent
-              {...props}
-              required={required}
-              name={name as never}
-              label={label}
-              rules={rules}
-              fieldHelper={help}
-              fieldClassName={fieldClassName}
-              onRemoved={(props as FileCrudField<T>).onRemoved}
-              onUploading={(props as FileCrudField<T>).onUploading}
-              provider={(props as FileCrudField<T>).provider}
-            />
-          </Suspense>
-        </ErrorBoundaryComponent>
+        <FileCrudFieldComponent
+          {...props}
+          required={required}
+          name={name as never}
+          label={label}
+          rules={rules}
+          fieldHelper={help}
+          fieldClassName={fieldClassName}
+          onRemoved={(props as FileCrudField<T>).onRemoved}
+          onUploading={(props as FileCrudField<T>).onUploading}
+          provider={(props as FileCrudField<T>).provider}
+        />
       );
     case "select": {
       return (
-        <ErrorBoundaryComponent>
-          <Suspense fallback={null}>
-            <SelectCrudFieldComponent
-              {...(props as any)}
-              required={required}
-              name={name as never}
-              label={label}
-              rules={rules}
-              fieldClassName={fieldClassName}
-              form={form}
-              help={help}
-              updatable={updatable}
-              readonly={readonly}
-              fieldTooltip={fieldTooltip}
-              fieldHelper={help}
-            />
-          </Suspense>
-        </ErrorBoundaryComponent>
+        <SelectCrudFieldComponent
+          {...(props as any)}
+          required={required}
+          name={name as never}
+          label={label}
+          rules={rules}
+          fieldClassName={fieldClassName}
+          form={form}
+          help={help}
+          updatable={updatable}
+          readonly={readonly}
+          fieldTooltip={fieldTooltip}
+          fieldHelper={help}
+        />
       );
     }
     case "enum": {
@@ -298,119 +247,102 @@ export default function CrudField<T = any>(
       const list = Array.isArray(enumList) ? enumList : Object.keys(enumList);
       if (radio) {
         return (
-          <ErrorBoundaryComponent>
-            <Suspense fallback={null}>
-              <Form.Item
-                {...props}
-                name={name as any}
-                required={required}
-                tooltip={fieldTooltip}
-                rules={rules}
-                label={label}
-                className={["w-100", fieldClassName].join(" ")}
-                help={help}
-              >
-                <Radio.Group
-                  {...props}
-                  onChange={
-                    onChange
-                      ? (val) => onChange(val?.target?.value, form)
-                      : undefined
-                  }
-                >
-                  {list.map((e) => (
-                    <Radio disabled={!updatable} key={e} value={e}>
-                      {translation ? t(translation[e]) : e}
-                    </Radio>
-                  ))}
-                </Radio.Group>
-              </Form.Item>
-            </Suspense>
-          </ErrorBoundaryComponent>
+          <Form.Item
+            {...props}
+            name={name as any}
+            required={required}
+            tooltip={fieldTooltip}
+            rules={rules}
+            label={label}
+            className={["w-100", fieldClassName].join(" ")}
+            help={help}
+          >
+            <Radio.Group
+              {...props}
+              onChange={
+                onChange
+                  ? (val) => onChange(val?.target?.value, form)
+                  : undefined
+              }
+            >
+              {list.map((e) => (
+                <Radio disabled={!updatable} key={e} value={e}>
+                  {translation ? t(translation[e]) : e}
+                </Radio>
+              ))}
+            </Radio.Group>
+          </Form.Item>
         );
       }
       return (
-        <ErrorBoundaryComponent>
-          <Suspense fallback={null}>
-            <SelectComponent
-              {...props}
-              tagRender={
-                typeof tagRender === "function"
-                  ? tagRender
-                  : tagRender
-                  ? (props) => {
-                      const { value, label } = props;
-                      const tagProps = tagRender[value];
-                      if (tagProps) {
-                        return <Tag color={tagProps.color}>{label}</Tag>;
-                      }
-                      return <Tag>{label}</Tag>;
-                    }
-                  : undefined
-              }
-              onChange={onChange ? (val) => onChange(val, form) : undefined}
-              className={["w-100", fieldClassName].join(" ")}
-              name={name as any}
-              items={list}
-              required={required}
-              tooltip={fieldTooltip}
-              rules={rules}
-              label={label}
-              help={help}
-              disabled={!updatable}
-              onSearch={onSearch ? (val) => onSearch(val, form) : undefined}
-              allowClear
-              mode={multiple ? "multiple" : undefined}
-              itemBuilder={(e) => (
-                <Select.Option key={e} value={e}>
-                  {translation ? t(translation[e]) : e}
-                </Select.Option>
-              )}
-            />
-          </Suspense>
-        </ErrorBoundaryComponent>
+        <SelectComponent
+          {...props}
+          tagRender={
+            typeof tagRender === "function"
+              ? tagRender
+              : tagRender
+              ? (props) => {
+                  const { value, label } = props;
+                  const tagProps = tagRender[value];
+                  if (tagProps) {
+                    return <Tag color={tagProps.color}>{label}</Tag>;
+                  }
+                  return <Tag>{label}</Tag>;
+                }
+              : undefined
+          }
+          onChange={onChange ? (val) => onChange(val, form) : undefined}
+          className={["w-100", fieldClassName].join(" ")}
+          name={name as any}
+          items={list}
+          required={required}
+          tooltip={fieldTooltip}
+          rules={rules}
+          label={label}
+          help={help}
+          disabled={!updatable}
+          onSearch={onSearch ? (val) => onSearch(val, form) : undefined}
+          allowClear
+          mode={multiple ? "multiple" : undefined}
+          itemBuilder={(e) => (
+            <Select.Option key={e} value={e}>
+              {translation ? t(translation[e]) : e}
+            </Select.Option>
+          )}
+        />
       );
     }
     case "checkbox": {
-      const { onChange, switch: asASwitch } =
-        props as CheckboxBasedFieldProps<T>;
+      const { onChange, switch: asASwitch } = props as CheckboxBasedFieldProps<T>;
       return (
-        <ErrorBoundaryComponent>
-          <Suspense fallback={null}>
-            <CheckBoxComponent
-              className={fieldClassName}
-              rules={rules}
-              onChange={onChange ? (val) => onChange(val, form) : undefined}
-              label={label}
-              tooltip={fieldTooltip}
-              disabled={!updatable}
-              name={name as any}
-              help={help}
-              switch={asASwitch}
-            />
-          </Suspense>
-        </ErrorBoundaryComponent>
+        <CheckBoxComponent
+          className={fieldClassName}
+          rules={rules}
+          onChange={onChange ? (val) => onChange(val, form) : undefined}
+          label={label}
+          tooltip={fieldTooltip}
+          disabled={!updatable}
+          name={name as any}
+          help={help}
+          switch={asASwitch}
+        />
       );
     }
     case "color": {
       return (
-        <ErrorBoundaryComponent>
-          <Suspense fallback={null}>
-            <ColorCrudFieldComponent
-              {...props}
-              type="color"
-              required={required}
-              name={name as never}
-              label={label}
-              rules={rules}
-              fieldClassName={fieldClassName}
-              updatable={updatable}
-              readonly={readonly}
-              fieldTooltip={fieldTooltip}
-              fieldHelper={help}
-            />
-          </Suspense>
-        </ErrorBoundaryComponent>
+        <ColorCrudFieldComponent
+          {...props}
+          type="color"
+          required={required}
+          name={name as never}
+          label={label}
+          rules={rules}
+          fieldClassName={fieldClassName}
+          updatable={updatable}
+          readonly={readonly}
+          fieldTooltip={fieldTooltip}
+          fieldHelper={help}
+        />
       );
     }
     default:
@@ -445,10 +377,7 @@ export function SelectCrudFieldComponent<T>(
   const form = (props as any).form;
   const [typing, setTyping] = useState("");
   const realName = useMemo(() => CrudUtil.getRealName(name), [name]);
-  const upsertFieldName = useMemo(
-    () => CrudUtil.getRealName(name, "upsertFieldName"),
-    [name]
-  );
+  const upsertFieldName = useMemo(() => CrudUtil.getRealName(name, 'upsertFieldName'), [name]);
   const value = Form.useWatch(realName, form);
 
   const [first, setFirst] = useState(true);
@@ -475,6 +404,7 @@ export function SelectCrudFieldComponent<T>(
     <SelectComponent
       {...props}
       maxTagCount="responsive"
+      
       maxTagPlaceholder={(omittedValues) => {
         return (
           <TooltipComponent
