@@ -1,3 +1,11 @@
+# [1.10.0](https://github.com/kingteza/crud-component/compare/v1.9.0...v1.10.0) (2025-12-19)
+
+
+### Features
+
+* add ImageCrudFieldRef type export to index ([88e70f8](https://github.com/kingteza/crud-component/commit/88e70f8ba89718b6db70be71c783f3d1afdd8b66))
+* enhance NewButton and CrudComponent with improved onClick handling ([4bb6603](https://github.com/kingteza/crud-component/commit/4bb660343cd33d1ca0cf0a665c216c4cc994bb34))
+
 # [1.9.0](https://github.com/kingteza/crud-component/compare/v1.8.1...v1.9.0) (2025-12-08)
 
 
