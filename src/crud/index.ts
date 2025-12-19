@@ -51,6 +51,7 @@ export {
   FileUploadProvider,
   ImageCellValue,
   ImageCrudCellValue,
+  type ImageCrudFieldRef,
 } from "./ImageCrudField";
 
 export type { ImageCrudField as ImageCrudFieldProps } from "./ImageCrudField";
