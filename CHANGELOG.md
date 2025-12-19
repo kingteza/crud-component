@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/kingteza/crud-component/compare/v1.10.0...v1.10.1) (2025-12-19)
+
+
+### Bug Fixes
+
+* rename ImageCrudFieldComponent to ImageCrudField and improve type definitions ([d5bc905](https://github.com/kingteza/crud-component/commit/d5bc9052849957edc96846324f9b0d34b5bd5e93))
+
 # [1.10.0](https://github.com/kingteza/crud-component/compare/v1.9.0...v1.10.0) (2025-12-19)
 
 
