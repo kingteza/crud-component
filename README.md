@@ -16,6 +16,16 @@ This library has the following peer dependencies that need to be installed:
 npm install antd@^5.22.6 react@^18.3.1 react-dom@^18.3.1 react-router-dom@^7.0.0
 ```
 
+## CSS Styles
+
+**Important:** You need to import the CSS styles manually in your application entry point:
+
+```typescript
+import '@kingteza/crud-component/styles';
+```
+
+This should be imported once at the root of your application (e.g., in your `main.tsx`, `index.tsx`, or `App.tsx` file).
+
 ## Setup
 
 ### Option 1: Using CrudComponentProvider (Recommended)
@@ -23,6 +33,7 @@ npm install antd@^5.22.6 react@^18.3.1 react-dom@^18.3.1 react-router-dom@^7.0.0
 Wrap your app with `CrudComponentProvider` to automatically initialize the library:
 
 ```typescript
+import '@kingteza/crud-component/styles';
 import { CrudComponentProvider } from '@kingteza/crud-component';
 
 function App() {
@@ -66,6 +77,7 @@ function App() {
 If you prefer to initialize manually, you can still use `setupI18n()`:
 
 ```typescript
+import '@kingteza/crud-component/styles';
 import { setupI18n } from '@kingteza/crud-component';
 
 // Basic setup with default English translations
@@ -88,6 +100,7 @@ setupI18n({
 ### Usage
 
 ```typescript
+import '@kingteza/crud-component/styles';
 import { CrudComponentProvider, CrudComponent } from '@kingteza/crud-component';
 import { Button } from '@kingteza/crud-component/common';
 
@@ -115,6 +128,9 @@ function App() {
 The library provides several entry points for importing components:
 
 ```typescript
+// CSS styles (required - import once at your app entry point)
+import '@kingteza/crud-component/styles';
+
 // Main CRUD component
 import { CrudComponent } from '@kingteza/crud-component';
 
