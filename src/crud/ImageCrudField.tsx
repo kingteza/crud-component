@@ -3,7 +3,6 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import "./style.css";
 
 import { EyeOutlined } from "@ant-design/icons";
 import { Avatar, Form, Image, Input } from "antd";

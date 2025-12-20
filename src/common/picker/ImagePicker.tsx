@@ -5,7 +5,6 @@
 ***************************************************************************** */
 
 import { CropperRef, Cropper, CropperState } from "react-advanced-cropper";
-import "./style.css";
 
 import {
   LoadingOutlined,

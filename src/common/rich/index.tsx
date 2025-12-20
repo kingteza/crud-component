@@ -2,8 +2,6 @@
 Copyright (c) 2020-2023 Kingteza and/or its affiliates. All rights reserved.
 KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
-import 'react-quill/dist/quill.snow.css';
-import './style.css';
 import { Form } from "antd";
 import { Rule } from "antd/es/form";
 import React, { FC, ReactNode, Suspense, useEffect, useMemo, useState } from "react";

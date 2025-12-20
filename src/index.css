@@ -1,6 +1,8 @@
 @import 'bootstrap-css-only/css/bootstrap.min.css';
 @import './styles/image-picker.css';
 @import './styles/rich-text.css';
+@import './styles/crud.css';
+@import './styles/button.css';
 
 input:focus {
   outline: none !important;

@@ -6,7 +6,6 @@ import { Button, ButtonProps, Tooltip } from "antd";
 
 import React, { forwardRef, useCallback, useMemo, useState } from "react";
 import { useTranslationLib } from "../../locale";
-import "./style.css";
 import { useNavigateOptional } from "src/hooks/NavigatorHooks";
 
 export interface ButtonComponentProps extends ButtonProps {
