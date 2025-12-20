@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/kingteza/crud-component/compare/v1.13.0...v1.13.1) (2025-12-20)
+
+
+### Bug Fixes
+
+* remove trailing whitespace in ImagePicker component ([cec4e78](https://github.com/kingteza/crud-component/commit/cec4e78a8d9b3f0d33f30013f7e5be869a9a26b3))
+
 # [1.13.0](https://github.com/kingteza/crud-component/compare/v1.12.0...v1.13.0) (2025-12-20)
 
 
