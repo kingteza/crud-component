@@ -1,3 +1,10 @@
+## [1.13.2](https://github.com/kingteza/crud-component/compare/v1.13.1...v1.13.2) (2025-12-20)
+
+
+### Bug Fixes
+
+* enhance ImagePicker with uploading button states ([30113c0](https://github.com/kingteza/crud-component/commit/30113c0793d309054d3bd38ea36363a538d9ee81))
+
 ## [1.13.1](https://github.com/kingteza/crud-component/compare/v1.13.0...v1.13.1) (2025-12-20)
 
 
