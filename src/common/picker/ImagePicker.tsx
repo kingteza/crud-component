@@ -107,7 +107,7 @@ const ImagePicker: FC<Props> = ({
   onAdd,
   onRemove,
   listType,
-  showSkipCropButton,
+  showSkipCropButton, 
   skipResize,
   ...props
 }) => {
