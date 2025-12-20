@@ -150,10 +150,11 @@ const ImagePicker: FC<Props> = ({
     onChange?.(fileList[0], fileList);
   }, [fileList, onChange]);
 
+  const [uploadingButton, setuploadingButton] = useState<'skip-crop' | 'crop'>();
   const onClickConfirmCrop = useCallback(async (skipCrop?: boolean) => {
     // get the new image
     const { type, size, name, uid } = fileRef.current as any;
-
+    setuploadingButton(skipCrop ? 'skip-crop' : 'crop');
     setShowLoadingIndicator(true);
 
     if (skipCrop) {
@@ -183,6 +184,7 @@ const ImagePicker: FC<Props> = ({
       setFileList([fl, ...fileList]);
       setShowLoadingIndicator(false);
       setPreview(undefined);
+      setuploadingButton(undefined);
     } else {
       // Use cropped canvas when skipCrop is false
       const croppedImgData = cropperRef.current?.getCanvas();
@@ -216,6 +218,7 @@ const ImagePicker: FC<Props> = ({
         // if (beforeUploadRef?.current) beforeUploadRef?.current(file, [file]);
       });
       setPreview(undefined);
+      setuploadingButton(undefined);
     }
   }, []);
 
@@ -362,6 +365,10 @@ const ImagePicker: FC<Props> = ({
         maskClosable={false}
         onOk={() => onClickConfirmCrop(false)}
         closable={false}
+        okButtonProps={{
+          loading: uploadingButton === 'crop',
+          disabled: uploadingButton === 'skip-crop',
+        }}
         onCancel={onClickCancelCrop}
         footer={(original, { CancelBtn, OkBtn }) => {
           return !showSkipCropButton ? (
@@ -371,6 +378,8 @@ const ImagePicker: FC<Props> = ({
               <CancelBtn />
               <ButtonComponent
                 type="primary"
+                loading={uploadingButton === 'skip-crop'}
+                disabled={uploadingButton === 'crop'}
                 onClick={() => onClickConfirmCrop(true)}
               >
                 {t("str.skipCrop")}
