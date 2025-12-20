@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/kingteza/crud-component/compare/v1.12.0...v1.13.0) (2025-12-20)
+
+
+### Features
+
+* enhance CSS handling and bundling ([46f9410](https://github.com/kingteza/crud-component/commit/46f94108a3e47156dda64d87ae6ed3a60aeb0428))
+
 # [1.12.0](https://github.com/kingteza/crud-component/compare/v1.11.0...v1.12.0) (2025-12-20)
 
 
