@@ -1,3 +1,15 @@
+# [1.12.0](https://github.com/kingteza/crud-component/compare/v1.11.0...v1.12.0) (2025-12-20)
+
+
+### Bug Fixes
+
+* remove unused CSS import from ImageCrudField component ([a53a23e](https://github.com/kingteza/crud-component/commit/a53a23ea8cb7c899af87bf20676fc8d1599bfba9))
+
+
+### Features
+
+* enhance image upload functionality with cropping options ([1d05319](https://github.com/kingteza/crud-component/commit/1d05319f4d3baacf3a0167b4f20f844fd09d1544))
+
 # [1.11.0](https://github.com/kingteza/crud-component/compare/v1.10.4...v1.11.0) (2025-12-19)
 
 
