@@ -10,3 +10,15 @@
 .max-width {
   width: 100%;
 }
+
+/* Excel export button styles */
+.crud-excel-export-btn {
+  background-color: #15803d !important;
+  color: white !important;
+  border-color: #15803d !important;
+}
+
+.crud-excel-export-btn:hover {
+  background-color: #16a34a !important;
+  border-color: #16a34a !important;
+}

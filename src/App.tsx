@@ -135,8 +135,8 @@ function App() {
           type="image"
           updatable={true}
           showSkipCropButton
-          
         />
+        <CrudField type="textarea" rich name="appendix2" label="Appendix 2" />
       </Form>
     </div>
   );

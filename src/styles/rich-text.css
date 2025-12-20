@@ -1,27 +1,49 @@
 @import 'react-quill/dist/quill.snow.css';
 
-/* Dark mode styles */
-.dark .ql-toolbar.ql-snow {
-  @apply border border-[#424242];
+/* Dark mode styles - only applies when dark mode is activated on html/body */
+html.dark .ql-toolbar.ql-snow,
+html[data-theme="dark"] .ql-toolbar.ql-snow,
+body.dark .ql-toolbar.ql-snow {
+  border: 1px solid #424242;
 }
 
-.dark .ql-container.ql-snow {
-  @apply border border-[#424242];
+html.dark .ql-container.ql-snow,
+html[data-theme="dark"] .ql-container.ql-snow,
+body.dark .ql-container.ql-snow {
+  border: 1px solid #424242;
+}
+
+html.dark .rich-text-editor,
+html[data-theme="dark"] .rich-text-editor,
+body.dark .rich-text-editor {
+  background-color: #141414 !important;
+  color: white !important;
+}
+
+html.dark .rich-text-editor svg,
+html[data-theme="dark"] .rich-text-editor svg,
+body.dark .rich-text-editor svg {
+  fill: white !important;
 }
 
 /* Light mode styles */
 .ql-toolbar.ql-snow {
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
-  @apply border border-[#d9d9d9];
+  border: 1px solid #d9d9d9;
 }
 
 .ql-container.ql-snow {
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
-  @apply border border-[#d9d9d9];
+  border: 1px solid #d9d9d9;
 }
 
 .quill {
   border-radius: 6px;
+}
+
+/* Rich text editor styles */
+.rich-text-editor {
+  background-color: white;
 }

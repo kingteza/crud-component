@@ -333,14 +333,9 @@ function CrudReportComponent<T, F = T>({
               })
             }
             icon={<FileExcelOutlined />}
-            className={`group
-                ${
-                  loadingData || !data.length
-                    ? ""
-                    : "!bg-green-700 hover:!bg-green-600 !text-white !border-green-700 hover:!border-green-600"
-                }
-                
-              `}
+            className={`group ${
+              loadingData || !data.length ? "" : "crud-excel-export-btn"
+            }`}
           >
             Excel
           </ButtonComponent>

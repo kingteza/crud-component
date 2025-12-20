@@ -110,7 +110,7 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
           value={editorValue}
           onChange={handleChange}
           theme="snow"
-          className="bg-white dark:!bg-[#141414] dark:text-white dark:!fill-white"
+          className="rich-text-editor"
           modules={modules}
           formats={formats}
         />
