@@ -1,3 +1,10 @@
+## [1.13.3](https://github.com/kingteza/crud-component/compare/v1.13.2...v1.13.3) (2025-12-20)
+
+
+### Bug Fixes
+
+* enhance CRUD components with new styles and rich text editor ([a3d63cc](https://github.com/kingteza/crud-component/commit/a3d63ccaad632e9705e1633ea8f5649567a6e415))
+
 ## [1.13.2](https://github.com/kingteza/crud-component/compare/v1.13.1...v1.13.2) (2025-12-20)
 
 
