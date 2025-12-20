@@ -8,6 +8,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   build: {
     outDir: "dist",
+    cssCodeSplit: false,
     lib: {
       entry: {
         index: resolve(__dirname, "src/index.ts"),
@@ -56,6 +57,13 @@ export default defineConfig({
       output: {
         entryFileNames: ({ name }) => {
           return `${name}.[format].js`;
+        },
+        assetFileNames: (assetInfo) => {
+          // Extract all CSS into a single file named style.css
+          if (assetInfo.name && assetInfo.name.endsWith('.css')) {
+            return "style.css";
+          }
+          return assetInfo.name || "assets/[name].[ext]";
         },
         preserveModules: true,
         preserveModulesRoot: "src",

@@ -24,7 +24,11 @@
     "package.json"
   ],
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css",
+    "**/*.scss"
+  ],
+  "style": "./dist/style.css",
   "scripts": {
     "dev": "vite",
     "clean": "rm -rf dist",
@@ -50,7 +54,9 @@
       "types": "./dist/util/index.d.ts",
       "import": "./dist/util/index.es.js",
       "require": "./dist/util/index.cjs.js"
-    }
+    },
+    "./style.css": "./dist/style.css",
+    "./styles": "./dist/style.css"
   },
   "publishConfig": {
     "access": "public"
