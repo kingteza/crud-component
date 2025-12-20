@@ -34,6 +34,7 @@ export default {
     rotateRight: "Rotate Right",
     flipHorizontal: "Flip Horizontal",
     flipVertical: "Flip Vertical",
+    skipCrop: "Skip Crop",
   },
   err: {
     save: "An error occurred while saving",

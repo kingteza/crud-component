@@ -5,7 +5,6 @@
 ***************************************************************************** */
 
 import { CropperRef, Cropper, CropperState } from "react-advanced-cropper";
-import "react-advanced-cropper/dist/style.css";
 import "./style.css";
 
 import {
@@ -74,6 +73,8 @@ interface Props extends FormItemProps {
   buttonType?: string;
   onAdd?: (file?: UploadFile) => Promise<void>;
   onRemove?: (file?: UploadFile) => void;
+  showSkipCropButton?: boolean;
+  skipResize?: boolean;
 }
 
 /**
@@ -107,6 +108,8 @@ const ImagePicker: FC<Props> = ({
   onAdd,
   onRemove,
   listType,
+  showSkipCropButton,
+  skipResize,
   ...props
 }) => {
   const [previewTitle, setPreviewTitle] = React.useState("");
@@ -148,17 +151,18 @@ const ImagePicker: FC<Props> = ({
     onChange?.(fileList[0], fileList);
   }, [fileList, onChange]);
 
-  const onClickConfirmCrop = async () => {
-    const croppedImgData = cropperRef.current?.getCanvas();
+  const onClickConfirmCrop = useCallback(async (skipCrop?: boolean) => {
     // get the new image
     const { type, size, name, uid } = fileRef.current as any;
 
     setShowLoadingIndicator(true);
-    croppedImgData?.toBlob(async (blob: any) => {
-      const file = Object.assign(new File([blob], name, { type }), {
-        uid,
-      }) as RcFile;
-      const fileResized: RcFile = await ImageUtil.resizeImage(file);
+
+    if (skipCrop) {
+      // Use original image data when skipCrop is true
+      const originalFile = fileRef.current as RcFile;
+      const fileResized: RcFile = skipResize
+        ? originalFile
+        : await ImageUtil.resizeImage(originalFile);
       const url = await getBase64(fileResized);
       const fl = {
         url,
@@ -179,10 +183,42 @@ const ImagePicker: FC<Props> = ({
       }
       setFileList([fl, ...fileList]);
       setShowLoadingIndicator(false);
-      // if (beforeUploadRef?.current) beforeUploadRef?.current(file, [file]);
-    });
-    setPreview(undefined);
-  };
+      setPreview(undefined);
+    } else {
+      // Use cropped canvas when skipCrop is false
+      const croppedImgData = cropperRef.current?.getCanvas();
+      croppedImgData?.toBlob(async (blob: any) => {
+        const file = Object.assign(new File([blob], name, { type }), {
+          uid,
+        }) as RcFile;
+        const fileResized: RcFile = skipResize
+          ? file
+          : await ImageUtil.resizeImage(file);
+        const url = await getBase64(fileResized);
+        const fl = {
+          url,
+          name,
+          uid,
+          type,
+          size,
+          thumbUrl: url,
+          originFileObj: fileResized,
+        };
+        if (onAdd) {
+          try {
+            setShowLoadingIndicator(true);
+            await onAdd(fl);
+          } finally {
+            setShowLoadingIndicator(false);
+          }
+        }
+        setFileList([fl, ...fileList]);
+        setShowLoadingIndicator(false);
+        // if (beforeUploadRef?.current) beforeUploadRef?.current(file, [file]);
+      });
+      setPreview(undefined);
+    }
+  }, []);
 
   const onClickCancelCrop = () => {
     setPreview(undefined);
@@ -325,9 +361,25 @@ const ImagePicker: FC<Props> = ({
       <Modal
         open={Boolean(preview)}
         maskClosable={false}
-        onOk={onClickConfirmCrop}
+        onOk={() => onClickConfirmCrop(false)}
         closable={false}
         onCancel={onClickCancelCrop}
+        footer={(original, { CancelBtn, OkBtn }) => {
+          return !showSkipCropButton ? (
+            <>{original}</>
+          ) : (
+            <Space>
+              <CancelBtn />
+              <ButtonComponent
+                type="primary"
+                onClick={() => onClickConfirmCrop(true)}
+              >
+                {t("str.skipCrop")}
+              </ButtonComponent>
+              <OkBtn />
+            </Space>
+          );
+        }}
         destroyOnHidden
       >
         <Cropper

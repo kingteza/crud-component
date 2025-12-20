@@ -4,7 +4,7 @@
 ***************************************************************************** */
 import React, { useEffect, ReactNode, createContext } from "react";
 import { setupI18n, SetupI18nOptions } from "../locale";
-
+import "../index.css";
 export interface CrudComponentProviderProps {
   children: ReactNode;
   /**

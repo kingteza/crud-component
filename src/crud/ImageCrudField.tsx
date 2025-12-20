@@ -26,7 +26,6 @@ import { v4 as uuidV4 } from "uuid";
 
 import { InitialCrudField } from "./CrudComponent";
 import { ImagePicker } from "../common";
-import { Copyable } from "src/util/CopyUtilComponent";
 import { ImageUtil } from "src/util";
 
 export interface _ImageCrudField<T> extends InitialCrudField<T> {
@@ -36,6 +35,8 @@ export interface _ImageCrudField<T> extends InitialCrudField<T> {
   aspectRatio?: number;
   fieldClassName?: string;
   listType?: UploadListType;
+  showSkipCropButton?: boolean;
+  skipResize?: boolean;
 }
 
 export interface ImageCrudField<T> extends _ImageCrudField<T> {
@@ -103,6 +104,8 @@ function Component<T>(
     hideLabel = false,
     listType,
     fieldHelper: help,
+    showSkipCropButton = false,
+    skipResize = false,
   }: Readonly<_ImageCrudField<T>>,
   ref: ForwardedRef<ImageCrudFieldRef>
 ) {
@@ -175,6 +178,7 @@ function Component<T>(
       required={required}
       name={name as any}
       help={help}
+      className={fieldClassName}
     >
       <ImagePicker
         noStyle
@@ -188,6 +192,8 @@ function Component<T>(
           if (e) await onChange(e, true);
         }}
         className={fieldClassName}
+        showSkipCropButton={showSkipCropButton}
+        skipResize={skipResize}
       />
       <Input hidden />
     </Form.Item>

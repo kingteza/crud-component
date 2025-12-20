@@ -122,10 +122,22 @@ function App() {
       helloId: "3",
     },
   ]);
-  
+
   return (
     <div className="">
-      <CrudField type="date" name="date" required label={'Date'} />
+      <Form layout="vertical">
+        <CrudField
+          required
+          label={"Image"}
+          fieldClassName="mb-0"
+          provider={new TestUploadProvider()}
+          name="image"
+          type="image"
+          updatable={true}
+          showSkipCropButton
+          
+        />
+      </Form>
     </div>
   );
 }
