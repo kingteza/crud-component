@@ -1,3 +1,10 @@
+## [1.14.4](https://github.com/kingteza/crud-component/compare/v1.14.3...v1.14.4) (2025-12-21)
+
+
+### Bug Fixes
+
+* Enhanced the RichTextEditor with custom indent handling and improved toolbar configuration. ([5bcf6df](https://github.com/kingteza/crud-component/commit/5bcf6df06b98486ba29bc2e8d4fbd0000df00016))
+
 ## [1.14.3](https://github.com/kingteza/crud-component/compare/v1.14.2...v1.14.3) (2025-12-21)
 
 
