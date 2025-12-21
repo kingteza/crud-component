@@ -27,9 +27,9 @@ export interface RichTextEditorProps {
 const ReactQuill = React.lazy(async () => {
   const { default: RQ } = await import("react-quill");
   const { Quill } = RQ;
-  const Block = Quill.import("blots/block");
-  Block.tagName = "div";
-  Quill.register(Block);
+  const Block = Quill.import("blots/block"); 
+  Block.tagName = "div"; 
+  Quill.register(Block); 
   return { default: (props: any) => <RQ {...props} /> };
 });
 
