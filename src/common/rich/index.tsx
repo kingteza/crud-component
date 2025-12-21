@@ -29,7 +29,8 @@ const ReactQuill = React.lazy(async () => {
   const { Quill } = RQ;
   const Block = Quill.import("blots/block"); 
   Block.tagName = "div"; 
-  Quill.register(Block); 
+  Quill.register(Block);
+  
   return { default: (props: any) => <RQ {...props} /> };
 });
 
@@ -44,14 +45,103 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
   const form = Form.useFormInstance();
   const [editorValue, setEditorValue] = useState("");
 
-  const modules = {
-    toolbar: [
-      ["bold", "italic", "underline", "strike", "blockquote"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["link"],
-      ["clean"],
-    ],
-  };
+  const indentChar = "\u00A0\u00A0\u00A0\u00A0"; // 4 non-breaking spaces
+
+  const modules = useMemo(() => ({
+    toolbar: {
+      container: [
+        ["bold", "italic", "underline", "strike", "blockquote"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ indent: "-1" }, { indent: "+1" }], // Use Quill's default indent format
+        ["link"],
+        ["clean"],
+      ],
+      handlers: {
+        // Override indent handler to use characters instead of CSS classes
+        indent: function (this: any, value: number) {
+          const quill = this.quill;
+          const range = quill.getSelection(true);
+          if (range) {
+            const start = range.index;
+            const end = range.index + range.length;
+            
+            // Get the text and find line breaks
+            const text = quill.getText();
+            const lines: number[] = [];
+            
+            // Find all line start positions in the selection
+            for (let i = start; i <= end; i++) {
+              if (i === 0 || text[i - 1] === "\n") {
+                lines.push(i);
+              }
+            }
+            
+            if (lines.length === 0) lines.push(start);
+            
+            if (value > 0) {
+              // Indent: Insert spaces at the beginning of each line
+              let offset = 0;
+              lines.forEach((lineStart) => {
+                quill.insertText(lineStart + offset, indentChar);
+                offset += indentChar.length;
+              });
+              quill.setSelection(start + indentChar.length, end + (lines.length * indentChar.length));
+            } else {
+              // Outdent: Remove spaces from the beginning of each line
+              let removedChars = 0;
+              lines.forEach((lineStart) => {
+                const checkPos = lineStart - removedChars;
+                const lineText = quill.getText(checkPos, indentChar.length);
+                if (lineText === indentChar) {
+                  quill.deleteText(checkPos, indentChar.length);
+                  removedChars += indentChar.length;
+                }
+              });
+              const newStart = Math.max(0, start - indentChar.length);
+              const newEnd = Math.max(newStart, end - removedChars);
+              quill.setSelection(newStart, newEnd);
+            }
+          }
+        },
+      },
+    },
+    keyboard: {
+      bindings: {
+        // Tab key: Insert 4 non-breaking spaces
+        tab: {
+          key: "Tab",
+          handler: function (this: any) {
+            const quill = this.quill;
+            const range = quill.getSelection(true);
+            if (range) {
+              quill.insertText(range.index, indentChar);
+              quill.setSelection(range.index + indentChar.length);
+              return false; // Prevent default behavior
+            }
+            return true;
+          },
+        },
+        // Shift+Tab: Remove indentation (outdent)
+        "shift-tab": {
+          key: "Tab",
+          shiftKey: true,
+          handler: function (this: any) {
+            const quill = this.quill;
+            const range = quill.getSelection(true);
+            if (range && range.index >= indentChar.length) {
+              const text = quill.getText(range.index - indentChar.length, indentChar.length);
+              if (text === indentChar) {
+                quill.deleteText(range.index - indentChar.length, indentChar.length);
+                quill.setSelection(range.index - indentChar.length);
+                return false; // Prevent default behavior
+              }
+            }
+            return true;
+          },
+        },
+      },
+    },
+  }), []);
 
   const formats = [
     "bold",

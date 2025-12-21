@@ -5,9 +5,9 @@ import {
   CrudField,
   FileUploadProvider,
 } from ".";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { UploadFile } from "antd/lib";
-import { Form } from "antd";
+import { Button, Form } from "antd";
 
 // Initialize with your custom translations
 setupI18n();
@@ -123,9 +123,23 @@ function App() {
     },
   ]);
 
+  const [form] = Form.useForm();
+
+  const save = useCallback(() => {
+    const value = form.getFieldsValue();
+    localStorage.setItem("data", JSON.stringify(value));
+  }, []);
+  useEffect(() => {
+    const value = localStorage.getItem("data");
+    if (value) {
+      form.setFieldsValue(JSON.parse(value));
+    }
+  }, [form]);
+  
+
   return (
     <div className="">
-      <Form layout="vertical">
+      <Form layout="vertical" form={form}>
         <CrudField
           required
           label={"Image"}
@@ -137,6 +151,7 @@ function App() {
           showSkipCropButton
         />
         <CrudField type="textarea" rich name="appendix2" label="Appendix 2" />
+        <Button onClick={save}>Save</Button>
       </Form>
     </div>
   );

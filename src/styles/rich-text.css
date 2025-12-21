@@ -47,7 +47,3 @@ body.dark .rich-text-editor svg {
 .rich-text-editor {
   background-color: white;
 }
-
-.ql-editor {
-  white-space: pre !important;
-}
