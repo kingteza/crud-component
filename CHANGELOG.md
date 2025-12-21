@@ -1,3 +1,10 @@
+## [1.14.1](https://github.com/kingteza/crud-component/compare/v1.14.0...v1.14.1) (2025-12-21)
+
+
+### Bug Fixes
+
+* Fixed Rich Text Error ([2f61c1a](https://github.com/kingteza/crud-component/commit/2f61c1af37fb12fd18cad376b711251c537c6fad))
+
 # [1.14.0](https://github.com/kingteza/crud-component/compare/v1.13.3...v1.14.0) (2025-12-21)
 
 
