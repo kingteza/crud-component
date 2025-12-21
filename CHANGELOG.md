@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/kingteza/crud-component/compare/v1.13.3...v1.14.0) (2025-12-21)
+
+
+### Features
+
+* add selectOptionRender prop to SelectCrudField for custom option rendering ([09bf0a0](https://github.com/kingteza/crud-component/commit/09bf0a0bd3f289941b730a1d661836411a4921ab))
+
 ## [1.13.3](https://github.com/kingteza/crud-component/compare/v1.13.2...v1.13.3) (2025-12-20)
 
 
