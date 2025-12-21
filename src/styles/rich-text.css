@@ -49,5 +49,5 @@ body.dark .rich-text-editor svg {
 }
 
 .ql-editor {
-  white-space: pre-wrap !important;
+  white-space: pre !important;
 }
