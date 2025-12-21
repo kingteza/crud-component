@@ -1,3 +1,10 @@
+## [1.14.3](https://github.com/kingteza/crud-component/compare/v1.14.2...v1.14.3) (2025-12-21)
+
+
+### Bug Fixes
+
+* adjust white-space handling in .ql-editor for improved text formatting ([2ff6fa6](https://github.com/kingteza/crud-component/commit/2ff6fa6933ad8acbc0bed76956fa74fe5d8c8fe6))
+
 ## [1.14.2](https://github.com/kingteza/crud-component/compare/v1.14.1...v1.14.2) (2025-12-21)
 
 
