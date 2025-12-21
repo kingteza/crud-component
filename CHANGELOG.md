@@ -1,3 +1,10 @@
+## [1.14.2](https://github.com/kingteza/crud-component/compare/v1.14.1...v1.14.2) (2025-12-21)
+
+
+### Bug Fixes
+
+* update CSS import syntax and enhance white-space handling in rich text editor ([0b27fbd](https://github.com/kingteza/crud-component/commit/0b27fbd6ad0a7529653bbdeb3e1c6d22e943de6c))
+
 ## [1.14.1](https://github.com/kingteza/crud-component/compare/v1.14.0...v1.14.1) (2025-12-21)
 
 
