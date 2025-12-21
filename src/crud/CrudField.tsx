@@ -16,6 +16,7 @@ import {
   InitialCrudField,
   NumberBasedFieldProps,
   SelectCrudField,
+  SelectFieldItem,
   TextBasedFieldProps,
   TimeBasedFieldProps,
 } from "./CrudComponent";
@@ -33,7 +34,9 @@ import {
 import CrudTextAreaComponent from "./CrudTextAreaComponent";
 import CrudUtil from "src/util/CrudUtil";
 
-export default function CrudField<T = any>(props0: Readonly<CrudFieldProps<T>>) {
+export default function CrudField<T = any>(
+  props0: Readonly<CrudFieldProps<T>>
+) {
   const {
     label,
     name,
@@ -74,7 +77,8 @@ export default function CrudField<T = any>(props0: Readonly<CrudFieldProps<T>>) 
     case "email":
     case "password": {
       // case 'object': // Show the text field even if the type is object
-      const { onChange, placeholder, addonAfter, addonBefore } = props as TextBasedFieldProps<T>;
+      const { onChange, placeholder, addonAfter, addonBefore } =
+        props as TextBasedFieldProps<T>;
       return (
         <TextField
           placeholder={placeholder}
@@ -95,8 +99,15 @@ export default function CrudField<T = any>(props0: Readonly<CrudFieldProps<T>>) 
       );
     }
     case "number": {
-      const { onChange, placeholder, allowMinus, min, max, addonAfter, addonBefore } =
-        props as NumberBasedFieldProps<T>;
+      const {
+        onChange,
+        placeholder,
+        allowMinus,
+        min,
+        max,
+        addonAfter,
+        addonBefore,
+      } = props as NumberBasedFieldProps<T>;
       return (
         <NumberTextField
           placeholder={placeholder}
@@ -313,7 +324,8 @@ export default function CrudField<T = any>(props0: Readonly<CrudFieldProps<T>>) 
       );
     }
     case "checkbox": {
-      const { onChange, switch: asASwitch } = props as CheckboxBasedFieldProps<T>;
+      const { onChange, switch: asASwitch } =
+        props as CheckboxBasedFieldProps<T>;
       return (
         <CheckBoxComponent
           className={fieldClassName}
@@ -373,11 +385,15 @@ export function SelectCrudFieldComponent<T>(
     onSet,
     placeholder,
     allowClear = true,
+    selectOptionRender,
   } = props;
   const form = (props as any).form;
   const [typing, setTyping] = useState("");
   const realName = useMemo(() => CrudUtil.getRealName(name), [name]);
-  const upsertFieldName = useMemo(() => CrudUtil.getRealName(name, 'upsertFieldName'), [name]);
+  const upsertFieldName = useMemo(
+    () => CrudUtil.getRealName(name, "upsertFieldName"),
+    [name]
+  );
   const value = Form.useWatch(realName, form);
 
   const [first, setFirst] = useState(true);
@@ -400,11 +416,19 @@ export function SelectCrudFieldComponent<T>(
     },
     [form, onSearch, searchOnType, updatingValue]
   );
+
+  const _selectOptionRender = useCallback(
+    (option: SelectFieldItem) => {
+      if (selectOptionRender) return selectOptionRender(option);
+      return option.value;
+    },
+    [selectOptionRender]
+  );
+
   return (
     <SelectComponent
       {...props}
       maxTagCount="responsive"
-      
       maxTagPlaceholder={(omittedValues) => {
         return (
           <TooltipComponent
@@ -483,7 +507,7 @@ export function SelectCrudFieldComponent<T>(
                 title={e.value}
                 disabled={e.disabled}
               >
-                {e.value}
+                {_selectOptionRender(e)}
               </Select.Option>
             )
           : (e) => {

@@ -140,6 +140,8 @@ export interface SelectCrudField<
     items: SelectFieldItem[],
     form: FormInstance<T>
   ) => void;
+
+  selectOptionRender?: (option: SelectFieldItem) => ReactNode;
 }
 
 export interface EnumCrudField<T> extends InitialCrudField<T>, Copyable<false> {
