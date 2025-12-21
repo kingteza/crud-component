@@ -1,4 +1,4 @@
-@import 'react-quill/dist/quill.snow.css';
+@import "react-quill/dist/quill.snow.css";
 
 /* Dark mode styles - only applies when dark mode is activated on html/body */
 html.dark .ql-toolbar.ql-snow,
@@ -46,4 +46,8 @@ body.dark .rich-text-editor svg {
 /* Rich text editor styles */
 .rich-text-editor {
   background-color: white;
+}
+
+.ql-editor {
+  white-space: pre-wrap !important;
 }
