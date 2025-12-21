@@ -4,7 +4,14 @@ KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 import { Form } from "antd";
 import { Rule } from "antd/es/form";
-import React, { FC, ReactNode, Suspense, useEffect, useMemo, useState } from "react";
+import React, {
+  FC,
+  ReactNode,
+  Suspense,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { ValidationUtil } from "src/util";
 
 export interface RichTextEditorProps {
@@ -18,11 +25,13 @@ export interface RichTextEditorProps {
 
 // Dynamically import ReactQuill for Vite
 const ReactQuill = React.lazy(async () => {
-  const { default: RQ } = await import('react-quill');
-  // eslint-disable-next-line react/display-name
+  const { default: RQ } = await import("react-quill");
+  const { Quill } = RQ;
+  const Block = Quill.import("blots/block");
+  Block.tagName = "div";
+  Quill.register(Block);
   return { default: (props: any) => <RQ {...props} /> };
 });
-
 
 export const RichTextEditor: FC<RichTextEditorProps> = ({
   name,
