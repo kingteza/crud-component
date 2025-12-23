@@ -81,7 +81,7 @@ export const useTranslationLibNoNS = (options?: Omit<UseTranslationOptions<strin
   
   if (!instance.isInitialized) {
     // Fallback: initialize with defaults if not already initialized
-    setupI18n({});
+    setupI18n({}); 
   }
   return useTranslation(undefined, { ...options, i18n: instance });
 };
