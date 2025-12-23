@@ -1,3 +1,10 @@
+## [1.14.8](https://github.com/kingteza/crud-component/compare/v1.14.7...v1.14.8) (2025-12-23)
+
+
+### Bug Fixes
+
+* improve i18n initialization and update handling in CrudComponentProvider ([3339f0c](https://github.com/kingteza/crud-component/commit/3339f0ccc672f0bd8d14b92e92581b5afd00e3c7))
+
 ## [1.14.7](https://github.com/kingteza/crud-component/compare/v1.14.6...v1.14.7) (2025-12-23)
 
 
