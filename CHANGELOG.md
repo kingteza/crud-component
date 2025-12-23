@@ -1,3 +1,10 @@
+## [1.14.7](https://github.com/kingteza/crud-component/compare/v1.14.6...v1.14.7) (2025-12-23)
+
+
+### Bug Fixes
+
+* add logging for i18n instance in translation hooks ([76ce5a9](https://github.com/kingteza/crud-component/commit/76ce5a926fb2739621a03503487b488e1ada6df1))
+
 ## [1.14.6](https://github.com/kingteza/crud-component/compare/v1.14.5...v1.14.6) (2025-12-23)
 
 
