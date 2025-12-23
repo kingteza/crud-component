@@ -72,8 +72,6 @@ export const useTranslationLib = (options?: Omit<UseTranslationOptions<string>, 
     // Fallback: initialize with defaults if not already initialized
     setupI18n({});
   }
-  
-  console.log("i18nInstance", instance, options);
   return useTranslation(TRANSLATION_NAMESPACE, { ...options, i18n: instance });
 };
 
@@ -85,8 +83,6 @@ export const useTranslationLibNoNS = (options?: Omit<UseTranslationOptions<strin
     // Fallback: initialize with defaults if not already initialized
     setupI18n({});
   }
-  
-  console.log("i18nInstance", instance, options);
   return useTranslation(undefined, { ...options, i18n: instance });
 };
 
