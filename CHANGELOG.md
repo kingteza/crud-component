@@ -1,3 +1,10 @@
+## [1.14.5](https://github.com/kingteza/crud-component/compare/v1.14.4...v1.14.5) (2025-12-23)
+
+
+### Bug Fixes
+
+* remove i18n initialization check in useTranslationLibNoNS function ([5efa9c0](https://github.com/kingteza/crud-component/commit/5efa9c05c6f0e05810927b345711694258690d18))
+
 ## [1.14.4](https://github.com/kingteza/crud-component/compare/v1.14.3...v1.14.4) (2025-12-21)
 
 
