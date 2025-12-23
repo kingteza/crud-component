@@ -2,7 +2,7 @@
  Copyright (c) 2020-2024 Kingteza and/or its affiliates. All rights reserved.
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
-import React, { useEffect, ReactNode, createContext } from "react";
+import React, { useEffect, useRef, ReactNode, createContext } from "react";
 import { setupI18n, SetupI18nOptions } from "../locale";
 export interface CrudComponentProviderProps {
   children: ReactNode;
@@ -55,10 +55,24 @@ export const CrudComponentProvider: React.FC<CrudComponentProviderProps> = ({
   children,
   i18nOptions,
 }) => {
+  // Initialize i18n synchronously before first render
+  // This ensures i18nInstance is set before any hooks are called
+  const isInitialized = useRef(false);
+  
+  React.useMemo(() => {
+    if (!isInitialized.current) {
+      setupI18n(i18nOptions || {});
+      isInitialized.current = true;
+    }
+  }, []);
+
   useEffect(() => {
-    // Initialize i18n when provider mounts
-    setupI18n(i18nOptions || {});
-  }, []); // Only run once on mount
+    // Update translations if options change (skip initial mount since useMemo handles it)
+    if (isInitialized.current && i18nOptions) {
+      setupI18n(i18nOptions);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [i18nOptions?.language]);
 
   return <Context.Provider value={{}}>{children}</Context.Provider>;
 };

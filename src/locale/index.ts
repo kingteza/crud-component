@@ -45,7 +45,7 @@ export const setupI18n = (options: SetupI18nOptions = {}) => {
     });
   }
 
-  return i18n;
+  return i18nToUse;
 };
 
 // Add this function to update translations at runtime
@@ -65,14 +65,29 @@ export const updateTranslations = (
 };
 
 export const useTranslationLib = (options?: Omit<UseTranslationOptions<string>, "i18n">) => {
-  console.log("i18nInstance", i18nInstance, options);
-  return useTranslation(TRANSLATION_NAMESPACE, { ...options, i18n: i18nInstance });
+  // Ensure we're using the current i18nInstance
+  const instance = i18nInstance || i18n;
+  
+  if (!instance.isInitialized) {
+    // Fallback: initialize with defaults if not already initialized
+    setupI18n({});
+  }
+  
+  console.log("i18nInstance", instance, options);
+  return useTranslation(TRANSLATION_NAMESPACE, { ...options, i18n: instance });
 };
 
 export const useTranslationLibNoNS = (options?: Omit<UseTranslationOptions<string>, "i18n">) => {
-
-  console.log("i18nInstance", i18nInstance, options);
-  return useTranslation(undefined, { ...options, i18n: i18nInstance });
+  // Ensure we're using the current i18nInstance
+  const instance = i18nInstance || i18n;
+  
+  if (!instance.isInitialized) {
+    // Fallback: initialize with defaults if not already initialized
+    setupI18n({});
+  }
+  
+  console.log("i18nInstance", instance, options);
+  return useTranslation(undefined, { ...options, i18n: instance });
 };
 
 export const t = (key: string, options?: any) => {
