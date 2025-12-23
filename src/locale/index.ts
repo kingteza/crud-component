@@ -65,11 +65,13 @@ export const updateTranslations = (
 };
 
 export const useTranslationLib = (options?: Omit<UseTranslationOptions<string>, "i18n">) => {
+  console.log("i18nInstance", i18nInstance, options);
   return useTranslation(TRANSLATION_NAMESPACE, { ...options, i18n: i18nInstance });
 };
 
 export const useTranslationLibNoNS = (options?: Omit<UseTranslationOptions<string>, "i18n">) => {
 
+  console.log("i18nInstance", i18nInstance, options);
   return useTranslation(undefined, { ...options, i18n: i18nInstance });
 };
 
