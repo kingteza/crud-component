@@ -1,3 +1,10 @@
+## [1.15.2](https://github.com/kingteza/crud-component/compare/v1.15.1...v1.15.2) (2025-12-28)
+
+
+### Bug Fixes
+
+* enhance filtering logic in CrudFormFields component ([3745eb1](https://github.com/kingteza/crud-component/commit/3745eb1929e632e605cc2495365b5aea64a47f85))
+
 ## [1.15.1](https://github.com/kingteza/crud-component/compare/v1.15.0...v1.15.1) (2025-12-28)
 
 
