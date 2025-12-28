@@ -50,12 +50,12 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
   const modules = useMemo(() => ({
     toolbar: {
       container: [
-        ["bold", "italic", "underline", "strike", "blockquote"],
-        [{ list: "ordered" }, { list: "bullet" }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [{ list: "ordered" }, { list: "bullet" }],
         [{ indent: "-1" }, { indent: "+1" }], // Use Quill's default indent format
-        ["link"],
-        ["clean"],
-      ],
+      ["link"],
+      ["clean"],
+    ],
       handlers: {
         // Override indent handler to use characters instead of CSS classes
         indent: function (this: any, value: number) {

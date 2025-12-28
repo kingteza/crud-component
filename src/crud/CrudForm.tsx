@@ -47,7 +47,12 @@ export function CrudFormFields<T>({
   const _fields = useMemo(
     () =>
       fields
-        .filter((e) => !e.readonly)
+        .filter(
+          (e) =>
+            !e.readonly &&
+            (e.type !== "object" ||
+              typeof e.customFormFieldRender === "function")
+        )
         .map((e) => {
           const functionProps = {
             onUploading:
@@ -92,7 +97,9 @@ export function CrudFormFields<T>({
 
   const getFormField = useCallback(
     (name: keyof T | string, options: GetFormFieldOptions = {}) => {
-      const e = fields.find((field) => CrudUtil.getRealName(field.name) === name);
+      const e = fields.find(
+        (field) => CrudUtil.getRealName(field.name) === name
+      );
       if (e?.hidden) return <></>;
       if (e) {
         const functionProps = {
