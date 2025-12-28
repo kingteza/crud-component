@@ -26,6 +26,7 @@ import IdProps from "../types/Id";
 import { TextAreaBasedFieldProps } from ".";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import { Copyable } from "src/util/CopyUtilComponent";
+import { ColumnType } from "antd/es/table";
 
 export type SelectFieldItem = {
   key?: string | number;
@@ -71,6 +72,7 @@ export interface InitialCrudField<T> {
     hidden?: boolean;
   };
   hideLabel?: boolean;
+  sorter: ColumnType<T>['sorter'];
 }
 
 export type CrudFieldGrid = {
