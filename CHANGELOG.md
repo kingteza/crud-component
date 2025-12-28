@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/kingteza/crud-component/compare/v1.14.9...v1.15.0) (2025-12-28)
+
+
+### Features
+
+* add sorter property to InitialCrudField interface and CrudViewer component ([578ddac](https://github.com/kingteza/crud-component/commit/578ddac763ac585f285f829a77835f7832ceef1a))
+
 ## [1.14.9](https://github.com/kingteza/crud-component/compare/v1.14.8...v1.14.9) (2025-12-23)
 
 
