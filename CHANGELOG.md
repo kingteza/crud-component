@@ -1,3 +1,10 @@
+## [1.15.1](https://github.com/kingteza/crud-component/compare/v1.15.0...v1.15.1) (2025-12-28)
+
+
+### Bug Fixes
+
+* make sorter property optional in InitialCrudField interface ([c6cf89b](https://github.com/kingteza/crud-component/commit/c6cf89be3b5d4db6dd79ec469e4dedb0e61255b9))
+
 # [1.15.0](https://github.com/kingteza/crud-component/compare/v1.14.9...v1.15.0) (2025-12-28)
 
 
