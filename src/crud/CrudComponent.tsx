@@ -72,7 +72,7 @@ export interface InitialCrudField<T> {
     hidden?: boolean;
   };
   hideLabel?: boolean;
-  sorter?: ColumnType<T>['sorter'];
+  sorter?: ColumnType<T>["sorter"];
 }
 
 export type CrudFieldGrid = {
@@ -356,6 +356,7 @@ export type CrudComponentProps<T, FormType = T> = {
   newButtonProps?: ButtonProps;
   draggable?: CrudDragableProps<T>;
   size?: SizeType;
+  headerRender?: (props: { newButton: JSX.Element }) => React.ReactElement;
 } & CrudSearchComponentProps<T, FormType>;
 
 function CrudComponent<T, FormType = T>({
@@ -388,6 +389,7 @@ function CrudComponent<T, FormType = T>({
   onClickNew,
   newButtonProps,
   size,
+  headerRender,
   ...props
 }: CrudComponentProps<T, FormType>) {
   const modalRef = useRef<CrudModalRef<T>>(null);
@@ -412,25 +414,38 @@ function CrudComponent<T, FormType = T>({
   const { onClick: onClickNewButton, ...newButtonPropsWithoutOnClick } =
     useMemo(() => newButtonProps || {}, [newButtonProps]);
 
+  const newButton = useMemo(
+    () => (
+      <NewButton
+        onClick={(_, e) => {
+          if (onClickNew) {
+            onClickNew();
+          } else if (newButtonProps?.onClick) {
+            newButtonProps.onClick(e);
+          } else {
+            handleNew();
+          }
+        }}
+        className="flex-1"
+        {...newButtonPropsWithoutOnClick}
+      ></NewButton>
+    ),
+    [onClickNew, newButtonProps, newButtonPropsWithoutOnClick]
+  );
+
+  const headerRender0 = useCallback(() => {
+    if (headerRender) {
+      return headerRender({ newButton });
+    } else {
+      return newButton;
+    }
+  }, [newButton, headerRender]);
+
   return (
     <>
       <Space direction="vertical" className="w-100">
         <div className="w-100 d-flex">
-          <div style={{ flex: 1 }}>
-            <NewButton
-              onClick={(_, e) => {
-                if (onClickNew) {
-                  onClickNew();
-                } else if (newButtonProps?.onClick) {
-                  newButtonProps.onClick(e);
-                } else {
-                  handleNew();
-                }
-              }}
-              className="flex-1"
-              {...newButtonPropsWithoutOnClick}
-            ></NewButton>
-          </div>
+          <div>{headerRender0()}</div>
           <Space>
             {Boolean(onPrint) && (
               <PrintButton
