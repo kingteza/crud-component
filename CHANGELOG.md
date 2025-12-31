@@ -1,3 +1,15 @@
+# [1.16.0](https://github.com/kingteza/crud-component/compare/v1.15.2...v1.16.0) (2025-12-31)
+
+
+### Bug Fixes
+
+* enhance ColorCrudFieldComponent with color event handling ([a7631bc](https://github.com/kingteza/crud-component/commit/a7631bcfe62a3bbde903aad40130fc5da8e598de))
+
+
+### Features
+
+* add headerRender prop to CrudComponent for customizable header rendering ([ed66f24](https://github.com/kingteza/crud-component/commit/ed66f24e7ab797df74e03a3d90d3477a32a8cf04))
+
 ## [1.15.2](https://github.com/kingteza/crud-component/compare/v1.15.1...v1.15.2) (2025-12-28)
 
 
