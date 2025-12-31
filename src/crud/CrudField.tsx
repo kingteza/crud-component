@@ -33,6 +33,7 @@ import {
 } from "../common";
 import CrudTextAreaComponent from "./CrudTextAreaComponent";
 import CrudUtil from "src/util/CrudUtil";
+import { Color } from "antd/es/color-picker";
 
 export default function CrudField<T = any>(
   props0: Readonly<CrudFieldProps<T>>
@@ -553,6 +554,12 @@ export function ColorCrudFieldComponent<T>(props: ColorPickerFieldProps<T>) {
       rules={rules}
       tooltip={fieldTooltip}
       help={help}
+      getValueFromEvent={(color: Color) => {
+        if(typeof color === 'object') {
+          return color.toHexString();
+        }
+        return color;
+      }}
     >
       <ColorPicker
         disabledAlpha
