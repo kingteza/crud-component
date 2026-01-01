@@ -3,6 +3,7 @@ import {
   CrudComponent,
   CrudDecListView,
   CrudField,
+  CrudViewer,
   FileUploadProvider,
 } from ".";
 import { useCallback, useEffect, useState } from "react";
@@ -138,6 +139,14 @@ function App() {
     asyncUpload: true,
   } as const;
 
+  const fields = [
+    {type: 'text', label: 'id', name: 'id'},
+    {type: 'text', label: 'helloId', name: 'helloId'},
+    {type: 'text', label: 'status', name: 'status'},
+    {type: 'text', label: 'test', name: 'test'},
+    {type: 'text', label: 'value', name: 'value'},
+    {type: 'text', label: 'name', name: 'name'},
+  ];
   return (
     <div className="">
       <Form layout="vertical" form={form} onFinish={save}>
@@ -146,7 +155,7 @@ function App() {
         <CrudField type="color" name="color" label="Color" />
         <Button htmlType="submit">Save</Button>
       </Form>
-      <CrudComponent fields={[imageProps]} data={[]} />
+      <CrudViewer viewable fields={fields} data={data} />
     </div>
   );
 }

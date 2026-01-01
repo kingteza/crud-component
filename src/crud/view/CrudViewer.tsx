@@ -149,6 +149,10 @@ function CrudViewer<T, FormType = T>({
     useState<string>();
   const [dataSource, setDataSource] = useState<T[]>([]);
 
+  const onClickOpenView = useCallback((data: T) => {
+    setOpenView(data);
+  }, []);
+
   useEffect(() => {
     if (data) {
       setDataSource(data);
@@ -287,7 +291,7 @@ function CrudViewer<T, FormType = T>({
                 onClick={
                   typeof viewable === "object"
                     ? () => viewable.onClick?.(data)
-                    : setOpenView
+                    : onClickOpenView
                 }
               />
             )}
@@ -373,45 +377,44 @@ function CrudViewer<T, FormType = T>({
 
   return (
     <div>
-      {typeof viewable === "boolean" ||
-        (typeof viewable === "string" && (
-          <Modal
-            width={"100%"}
-            open={Boolean(openView)}
-            title={viewTitleValue ?? <div>&nbsp;</div>}
-            footer={<></>}
-            closable
-            onCancel={() => setOpenView(undefined)}
-          >
-            {Boolean(openView) && (
-              <div key={openView?.[idField]}>
-                <CrudDecListView<T, FormType>
-                  layout={decListLayout}
-                  descListColumn={descListColumn}
-                  data={openView}
-                  fields={fields}
-                  idField={idField}
-                  extraAction={extraAction}
-                  onUpdate={onUpdate}
-                  onClickUpdate={onClickUpdate}
-                  onClickClone={onClickClone}
-                  onDelete={onDelete}
-                  onHide={onHide}
-                  onExport={onExport}
-                  isHiding={isHiding}
-                  isDeleting={isDeleting}
-                  confirmHiding={confirmHiding}
-                  confirmDeleting={confirmDeleting}
-                  closeViewOnClickUpdate={closeViewOnClickUpdate}
-                  recentUpdateOrDeleteId={recentUpdateOrDeleteId}
-                  setRecentUpdateOrDeleteId={setRecentUpdateOrDeleteId}
-                  setOpenView={setOpenView}
-                />
-                {extraView?.(openView!)}
-              </div>
-            )}
-          </Modal>
-        ))}
+      {(typeof viewable === "boolean" || typeof viewable === "string") && (
+        <Modal
+          width={"100%"}
+          open={Boolean(openView)}
+          title={viewTitleValue ?? <div>&nbsp;</div>}
+          footer={<></>}
+          closable
+          onCancel={() => setOpenView(undefined)}
+        >
+          {Boolean(openView) && (
+            <div key={openView?.[idField]}>
+              <CrudDecListView<T, FormType>
+                layout={decListLayout}
+                descListColumn={descListColumn}
+                data={openView}
+                fields={fields}
+                idField={idField}
+                extraAction={extraAction}
+                onUpdate={onUpdate}
+                onClickUpdate={onClickUpdate}
+                onClickClone={onClickClone}
+                onDelete={onDelete}
+                onHide={onHide}
+                onExport={onExport}
+                isHiding={isHiding}
+                isDeleting={isDeleting}
+                confirmHiding={confirmHiding}
+                confirmDeleting={confirmDeleting}
+                closeViewOnClickUpdate={closeViewOnClickUpdate}
+                recentUpdateOrDeleteId={recentUpdateOrDeleteId}
+                setRecentUpdateOrDeleteId={setRecentUpdateOrDeleteId}
+                setOpenView={setOpenView}
+              />
+              {extraView?.(openView!)}
+            </div>
+          )}
+        </Modal>
+      )}
       <CrudSearchComponent<T, FormType> fields={fields} {...props} />
       <VerticalSpace>
         {Boolean(onClickRefresh) && <RefreshButton onClick={onClickRefresh} />}
