@@ -26,7 +26,8 @@
       "@anolilab/semantic-release-pnpm",
       {
         "pnpmPublish": true,
-        "pnpmPublishArgs": ["--access", "public"]
+        "pnpmPublishArgs": ["--access", "public"],
+        "tarballDir": "dist"
       }
     ]
   ],
