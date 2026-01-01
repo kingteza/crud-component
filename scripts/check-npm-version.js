@@ -5,9 +5,13 @@
  * If it exists, it will bump to the next patch version automatically
  */
 
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+import { execSync } from 'child_process';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function bumpPatchVersion(version) {
   const [major, minor, patch] = version.split('.').map(Number);
@@ -25,7 +29,7 @@ async function checkVersionExists(packageName, version) {
   }
 }
 
-module.exports = {
+export default {
   async prepare(pluginConfig, context) {
     const { nextRelease, logger } = context;
     
