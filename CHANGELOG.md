@@ -1,3 +1,10 @@
+## [1.17.1](https://github.com/kingteza/crud-component/compare/v1.17.0...v1.17.1) (2026-01-01)
+
+
+### Bug Fixes
+
+* simplify release configuration by removing tarballDir ([0548bd8](https://github.com/kingteza/crud-component/commit/0548bd8d2ef629d17db9e822c437fe8829500d1d))
+
 # [1.17.0](https://github.com/kingteza/crud-component/compare/v1.16.0...v1.17.0) (2026-01-01)
 
 
