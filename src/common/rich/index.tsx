@@ -8,8 +8,10 @@ import React, {
   FC,
   ReactNode,
   Suspense,
+  useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { ValidationUtil } from "src/util";
@@ -44,106 +46,135 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
 }) => {
   const form = Form.useFormInstance();
   const [editorValue, setEditorValue] = useState("");
+  const isUpdatingRef = useRef(false);
 
   const indentChar = "\u00A0\u00A0\u00A0\u00A0"; // 4 non-breaking spaces
 
-  const modules = useMemo(() => ({
-    toolbar: {
-      container: [
-      ["bold", "italic", "underline", "strike", "blockquote"],
-      [{ list: "ordered" }, { list: "bullet" }],
-        [{ indent: "-1" }, { indent: "+1" }], // Use Quill's default indent format
-      ["link"],
-      ["clean"],
-    ],
-      handlers: {
-        // Override indent handler to use characters instead of CSS classes
-        indent: function (this: any, value: number) {
-          const quill = this.quill;
-          const range = quill.getSelection(true);
-          if (range) {
-            const start = range.index;
-            const end = range.index + range.length;
-            
-            // Get the text and find line breaks
-            const text = quill.getText();
-            const lines: number[] = [];
-            
-            // Find all line start positions in the selection
-            for (let i = start; i <= end; i++) {
-              if (i === 0 || text[i - 1] === "\n") {
-                lines.push(i);
-              }
-            }
-            
-            if (lines.length === 0) lines.push(start);
-            
-            if (value > 0) {
-              // Indent: Insert spaces at the beginning of each line
-              let offset = 0;
-              lines.forEach((lineStart) => {
-                quill.insertText(lineStart + offset, indentChar);
-                offset += indentChar.length;
-              });
-              quill.setSelection(start + indentChar.length, end + (lines.length * indentChar.length));
-            } else {
-              // Outdent: Remove spaces from the beginning of each line
-              let removedChars = 0;
-              lines.forEach((lineStart) => {
-                const checkPos = lineStart - removedChars;
-                const lineText = quill.getText(checkPos, indentChar.length);
-                if (lineText === indentChar) {
-                  quill.deleteText(checkPos, indentChar.length);
-                  removedChars += indentChar.length;
-                }
-              });
-              const newStart = Math.max(0, start - indentChar.length);
-              const newEnd = Math.max(newStart, end - removedChars);
-              quill.setSelection(newStart, newEnd);
-            }
-          }
-        },
-      },
-    },
-    keyboard: {
-      bindings: {
-        // Tab key: Insert 4 non-breaking spaces
-        tab: {
-          key: "Tab",
-          handler: function (this: any) {
-            const quill = this.quill;
-            const range = quill.getSelection(true);
-            if (range) {
-              quill.insertText(range.index, indentChar);
-              quill.setSelection(range.index + indentChar.length);
-              return false; // Prevent default behavior
-            }
-            return true;
-          },
-        },
-        // Shift+Tab: Remove indentation (outdent)
-        "shift-tab": {
-          key: "Tab",
-          shiftKey: true,
-          handler: function (this: any) {
-            const quill = this.quill;
-            const range = quill.getSelection(true);
-            if (range && range.index >= indentChar.length) {
-              const text = quill.getText(range.index - indentChar.length, indentChar.length);
-              if (text === indentChar) {
-                quill.deleteText(range.index - indentChar.length, indentChar.length);
-                quill.setSelection(range.index - indentChar.length);
-                return false; // Prevent default behavior
-              }
-            }
-            return true;
-          },
-        },
-      },
-    },
-  }), []);
+  // Helper to safely convert value to string
+  const safeStringValue = (value: any): string => {
+    if (!value) return "";
+    if (typeof value === "string") return value;
+    // If it's an object, try to stringify (but avoid circular refs)
+    try {
+      return String(value);
+    } catch {
+      return "";
+    }
+  };
 
-  const formats = [
+  // Create handlers outside of useMemo to avoid circular references
+  const createIndentHandler = () => {
+    return function (this: any, value: number) {
+      const quill = this.quill;
+      const range = quill.getSelection(true);
+      if (range) {
+        const start = range.index;
+        const end = range.index + range.length;
+        
+        // Get the text and find line breaks
+        const text = quill.getText();
+        const lines: number[] = [];
+        
+        // Find all line start positions in the selection
+        for (let i = start; i <= end; i++) {
+          if (i === 0 || text[i - 1] === "\n") {
+            lines.push(i);
+          }
+        }
+        
+        if (lines.length === 0) lines.push(start);
+        
+        if (value > 0) {
+          // Indent: Insert spaces at the beginning of each line
+          let offset = 0;
+          lines.forEach((lineStart) => {
+            quill.insertText(lineStart + offset, indentChar);
+            offset += indentChar.length;
+          });
+          quill.setSelection(start + indentChar.length, end + (lines.length * indentChar.length));
+        } else {
+          // Outdent: Remove spaces from the beginning of each line
+          let removedChars = 0;
+          lines.forEach((lineStart) => {
+            const checkPos = lineStart - removedChars;
+            const lineText = quill.getText(checkPos, indentChar.length);
+            if (lineText === indentChar) {
+              quill.deleteText(checkPos, indentChar.length);
+              removedChars += indentChar.length;
+            }
+          });
+          const newStart = Math.max(0, start - indentChar.length);
+          const newEnd = Math.max(newStart, end - removedChars);
+          quill.setSelection(newStart, newEnd);
+        }
+      }
+    };
+  };
+
+  const createTabHandler = () => {
+    return function (this: any) {
+      const quill = this.quill;
+      const range = quill.getSelection(true);
+      if (range) {
+        quill.insertText(range.index, indentChar);
+        quill.setSelection(range.index + indentChar.length);
+        return false; // Prevent default behavior
+      }
+      return true;
+    };
+  };
+
+  const createShiftTabHandler = () => {
+    return function (this: any) {
+      const quill = this.quill;
+      const range = quill.getSelection(true);
+      if (range && range.index >= indentChar.length) {
+        const text = quill.getText(range.index - indentChar.length, indentChar.length);
+        if (text === indentChar) {
+          quill.deleteText(range.index - indentChar.length, indentChar.length);
+          quill.setSelection(range.index - indentChar.length);
+          return false; // Prevent default behavior
+        }
+      }
+      return true;
+    };
+  };
+
+  const modules = useMemo(() => {
+    const indentHandler = createIndentHandler();
+    const tabHandler = createTabHandler();
+    const shiftTabHandler = createShiftTabHandler();
+
+    return {
+      toolbar: {
+        container: [
+          ["bold", "italic", "underline", "strike", "blockquote"],
+          [{ list: "ordered" }, { list: "bullet" }],
+          [{ indent: "-1" }, { indent: "+1" }],
+          ["link"],
+          ["clean"],
+        ],
+        handlers: {
+          indent: indentHandler,
+        },
+      },
+      keyboard: {
+        bindings: {
+          tab: {
+            key: "Tab",
+            handler: tabHandler,
+          },
+          "shift-tab": {
+            key: "Tab",
+            shiftKey: true,
+            handler: shiftTabHandler,
+          },
+        },
+      },
+    };
+  }, []);
+
+  const formats = useMemo(() => [
     "bold",
     "italic",
     "underline",
@@ -152,67 +183,102 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
     "list",
     "bullet",
     "link",
-  ];
+  ], []);
 
   // Sync editor value with form when component mounts
   useEffect(() => {
     const currentValue = form.getFieldValue(name);
+    const stringValue = safeStringValue(currentValue);
     if (
-      currentValue &&
-      currentValue !== "<p></p>" &&
-      currentValue !== "<p><br></p>"
+      stringValue &&
+      stringValue !== "<p></p>" &&
+      stringValue !== "<p><br></p>" &&
+      stringValue !== "<div></div>"
     ) {
-      setEditorValue(currentValue);
+      setEditorValue(stringValue);
     }
   }, [form, name]);
 
   // Watch for form value changes (external updates)
   const watchedValue = Form.useWatch(name, form);
   useEffect(() => {
-    if (watchedValue !== editorValue) {
+    // Prevent circular updates
+    if (isUpdatingRef.current) {
+      return;
+    }
+
+    const stringWatchedValue = safeStringValue(watchedValue);
+    const stringEditorValue = safeStringValue(editorValue);
+
+    if (stringWatchedValue !== stringEditorValue) {
       if (
-        !watchedValue ||
-        watchedValue === "<p></p>" ||
-        watchedValue === "<p><br></p>"
+        !stringWatchedValue ||
+        stringWatchedValue === "<p></p>" ||
+        stringWatchedValue === "<p><br></p>" ||
+        stringWatchedValue === "<div></div>"
       ) {
         setEditorValue("");
       } else {
-        setEditorValue(watchedValue);
+        setEditorValue(stringWatchedValue);
       }
     }
-  }, [watchedValue, editorValue]);
+  }, [watchedValue]);
 
-  const handleChange = (value: string) => {
-    setEditorValue(value);
+  const handleChange = useCallback((value: string) => {
+    // Ensure value is a string
+    const stringValue = safeStringValue(value);
+    
+    // Prevent circular updates
+    isUpdatingRef.current = true;
+    setEditorValue(stringValue);
 
     const cleanedValue =
-      !value || value === "<p></p>" || value.trim() === "<p><br></p>"
+      !stringValue || 
+      stringValue === "<p></p>" || 
+      stringValue.trim() === "<p><br></p>" ||
+      stringValue === "<div></div>" ||
+      stringValue.trim() === "<div></div>"
         ? undefined
-        : value;
+        : stringValue;
 
     form.setFieldValue(name, cleanedValue);
 
+    // Reset the flag after a short delay
+    setTimeout(() => {
+      isUpdatingRef.current = false;
+    }, 0);
+
     // Trigger validation for this field
     form.validateFields([name]).catch(() => {});
-  };
+  }, [form, name]);
 
   const rules0 = useMemo(
     () =>
       required ? [...rules, ...ValidationUtil.required(label ?? "")] : rules,
     [required, rules, label]
   );
+  // Ensure editorValue is always a clean string and not undefined/null
+  const cleanEditorValue = useMemo(() => {
+    const value = safeStringValue(editorValue);
+    // ReactQuill doesn't like undefined or null, always use empty string
+    return value || "";
+  }, [editorValue]);
+
+  // Create a stable props object to prevent circular reference warnings
+  const quillProps = useMemo(() => ({
+    readOnly: Boolean(disabled),
+    value: String(cleanEditorValue || ""),
+    onChange: handleChange,
+    theme: "snow" as const,
+    className: "rich-text-editor",
+    modules: modules as any,
+    formats: formats as any,
+  }), [disabled, cleanEditorValue, handleChange, modules, formats]);
+
   return (
     <Form.Item help={help} name={name} label={label} rules={rules0}>
       <Suspense fallback={<div>Loading editor...</div>}>
-        <ReactQuill
-          readOnly={disabled}
-          value={editorValue}
-          onChange={handleChange}
-          theme="snow"
-          className="rich-text-editor"
-          modules={modules}
-          formats={formats}
-        />
+        <ReactQuill {...quillProps} />
       </Suspense>
     </Form.Item>
   );

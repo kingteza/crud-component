@@ -46,18 +46,9 @@ class TestUploadProvider extends FileUploadProvider {
     file: UploadFile<any>,
     filePath: string
   ): Promise<string> {
-    // Create a download link for the blob
-    if (file.originFileObj) {
-      const url = URL.createObjectURL(file.originFileObj);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = file.name || "cropped-image.jpg";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    }
-
+    console.log("Uploading file", file, filePath);
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    console.log("Uploaded file", file, filePath);
     // Return a placeholder URL for the component
     return Promise.resolve(
       `https://picsum.photos/id${Math.floor(Math.random() * 1000)}/400/300`
@@ -65,7 +56,7 @@ class TestUploadProvider extends FileUploadProvider {
   }
 
   public delete(filePath: string): Promise<boolean> {
-    throw new Error("Method not implemented.");
+    return Promise.resolve(true);
   }
   public clone(filePath: string): Promise<string> {
     throw new Error("Method not implemented.");
@@ -131,30 +122,31 @@ function App() {
   }, []);
   useEffect(() => {
     const value = localStorage.getItem("data");
-    console.log('Setting value', value);
+    console.log("Setting value", value);
     if (value) {
       form.setFieldsValue(JSON.parse(value));
     }
   }, [form]);
-  
+  const imageProps = {
+    label: "Image",
+    fieldClassName: "mb-0",
+    provider: new TestUploadProvider(),
+    name: "image",
+    type: "image",
+    updatable: true,
+    showSkipCropButton: true,
+    asyncUpload: true,
+  } as const;
 
   return (
     <div className="">
       <Form layout="vertical" form={form} onFinish={save}>
-        <CrudField
-          label={"Image"}
-          fieldClassName="mb-0"
-          provider={new TestUploadProvider()}
-          name="image"
-          type="image"
-          updatable={true}
-          showSkipCropButton
-          asyncUpload
-        />
+        <CrudField {...imageProps} />
         <CrudField type="textarea" rich name="appendix2" label="Appendix 2" />
         <CrudField type="color" name="color" label="Color" />
         <Button htmlType="submit">Save</Button>
       </Form>
+      <CrudComponent fields={[imageProps]} data={[]} />
     </div>
   );
 }

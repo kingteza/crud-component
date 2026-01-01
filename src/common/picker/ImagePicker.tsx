@@ -160,59 +160,20 @@ const ImagePicker: FC<Props> = ({
   const [uploadingButton, setuploadingButton] = useState<
     "skip-crop" | "crop"
   >();
-  const onClickConfirmCrop = useCallback(async (skipCrop?: boolean) => {
-    // get the new image
-    const { type, size, name, uid } = fileRef.current as any;
-    setuploadingButton(skipCrop ? "skip-crop" : "crop");
-    setShowLoadingIndicator(true);
 
-    if (skipCrop) {
-      // Use original image data when skipCrop is true
-      const originalFile = fileRef.current as RcFile;
-      const fileResized: RcFile = skipResize
-        ? originalFile
-        : await ImageUtil.resizeImage(originalFile);
-      const url = await getBase64(fileResized);
-      const fl = {
-        url,
-        name,
-        uid,
-        type,
-        size,
-        thumbUrl: url,
-        originFileObj: fileResized,
-        status: asyncUpload ? ("uploading" as UploadFileStatus) : undefined,
-      };
-      if (onAdd) {
-        try {
-          setShowLoadingIndicator(true);
-          if (asyncUpload) {
-            onAdd(fl).then(() => {
-              setFileList((prev) =>
-                prev.map((f) =>
-                  f.uid === fl.uid ? { ...f, status: "done" } : f
-                )
-              );
-            });
-          } else await onAdd(fl);
-        } finally {
-          setShowLoadingIndicator(false);
-        }
-      }
-      setFileList([fl, ...fileList]);
-      setShowLoadingIndicator(false);
-      setPreview(undefined);
-      setuploadingButton(undefined);
-    } else {
-      // Use cropped canvas when skipCrop is false
-      const croppedImgData = cropperRef.current?.getCanvas();
-      croppedImgData?.toBlob(async (blob: any) => {
-        const file = Object.assign(new File([blob], name, { type }), {
-          uid,
-        }) as RcFile;
+  const onClickConfirmCrop = useCallback(
+    async (skipCrop?: boolean) => {
+      // get the new image
+      const { type, size, name, uid } = fileRef.current as any;
+      setuploadingButton(skipCrop ? "skip-crop" : "crop");
+      setShowLoadingIndicator(true);
+
+      if (skipCrop) {
+        // Use original image data when skipCrop is true
+        const originalFile = fileRef.current as RcFile;
         const fileResized: RcFile = skipResize
-          ? file
-          : await ImageUtil.resizeImage(file);
+          ? originalFile
+          : await ImageUtil.resizeImage(originalFile);
         const url = await getBase64(fileResized);
         const fl = {
           url,
@@ -222,26 +183,70 @@ const ImagePicker: FC<Props> = ({
           size,
           thumbUrl: url,
           originFileObj: fileResized,
+          status: asyncUpload ? ("uploading" as UploadFileStatus) : undefined,
         };
         if (onAdd) {
-          if (asyncUpload) {
-            onAdd(fl).then(() => {
-              setFileList((prev) =>
-                prev.map((f) =>
-                  f.uid === fl.uid ? { ...f, status: "done" } : f
-                )
-              );
-            });
-          } else await onAdd(fl);
+          try {
+            setShowLoadingIndicator(true);
+            if (asyncUpload) {
+              onAdd(fl).then(() => {
+                setFileList((prev) =>
+                  prev.map((f) =>
+                    f.uid === fl.uid ? { ...f, status: "done" } : f
+                  )
+                );
+              });
+            } else await onAdd(fl);
+          } finally {
+            setShowLoadingIndicator(false);
+          }
         }
         setFileList([fl, ...fileList]);
         setShowLoadingIndicator(false);
-        // if (beforeUploadRef?.current) beforeUploadRef?.current(file, [file]);
-      });
-      setPreview(undefined);
-      setuploadingButton(undefined);
-    }
-  }, []);
+        setPreview(undefined);
+        setuploadingButton(undefined);
+      } else {
+        // Use cropped canvas when skipCrop is false
+        const croppedImgData = cropperRef.current?.getCanvas();
+        croppedImgData?.toBlob(async (blob: any) => {
+          const file = Object.assign(new File([blob], name, { type }), {
+            uid,
+          }) as RcFile;
+          const fileResized: RcFile = skipResize
+            ? file
+            : await ImageUtil.resizeImage(file);
+          const url = await getBase64(fileResized);
+          const fl = {
+            url,
+            name,
+            uid,
+            type,
+            size,
+            thumbUrl: url,
+            originFileObj: fileResized,
+            status: asyncUpload ? ("uploading" as UploadFileStatus) : undefined,
+          };
+          if (onAdd) {
+            if (asyncUpload) {
+              onAdd(fl).then(() => {
+                setFileList((prev) =>
+                  prev.map((f) =>
+                    f.uid === fl.uid ? { ...f, status: "done" } : f
+                  )
+                );
+              });
+            } else await onAdd(fl);
+          }
+          setFileList([fl, ...fileList]);
+          setShowLoadingIndicator(false);
+          // if (beforeUploadRef?.current) beforeUploadRef?.current(file, [file]);
+        });
+        setPreview(undefined);
+        setuploadingButton(undefined);
+      }
+    },
+    [asyncUpload]
+  );
 
   const onClickCancelCrop = () => {
     setPreview(undefined);
