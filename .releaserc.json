@@ -4,6 +4,9 @@
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     [
+      "./scripts/check-npm-version.js"
+    ],
+    [
       "@semantic-release/changelog",
       {
         "changelogFile": "CHANGELOG.md"
@@ -26,8 +29,7 @@
       "@anolilab/semantic-release-pnpm",
       {
         "pnpmPublish": true,
-        "pnpmPublishArgs": ["--access", "public"],
-        "tarballDir": "dist"
+        "pnpmPublishArgs": ["--access", "public"]
       }
     ]
   ],
