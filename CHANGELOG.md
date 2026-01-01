@@ -1,3 +1,15 @@
+# [1.17.0](https://github.com/kingteza/crud-component/compare/v1.16.0...v1.17.0) (2026-01-01)
+
+
+### Bug Fixes
+
+* convert check-npm-version plugin to ES modules ([6fec93f](https://github.com/kingteza/crud-component/commit/6fec93fb8e3e2d77c84c908493a4db41ae87cc23))
+
+
+### Features
+
+* add automatic version bumping when version already exists on npm ([3ad7074](https://github.com/kingteza/crud-component/commit/3ad7074beb3b40caabefed563257a3ed8ae52ee0))
+
 # [1.16.0](https://github.com/kingteza/crud-component/compare/v1.15.2...v1.16.0) (2026-01-01)
 
 
