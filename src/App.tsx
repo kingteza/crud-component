@@ -125,12 +125,13 @@ function App() {
 
   const [form] = Form.useForm();
 
-  const save = useCallback(() => {
-    const value = form.getFieldsValue();
+  const save = useCallback((value) => {
+    console.log(value);
     localStorage.setItem("data", JSON.stringify(value));
   }, []);
   useEffect(() => {
     const value = localStorage.getItem("data");
+    console.log('Setting value', value);
     if (value) {
       form.setFieldsValue(JSON.parse(value));
     }
@@ -139,9 +140,8 @@ function App() {
 
   return (
     <div className="">
-      <Form layout="vertical" form={form}>
+      <Form layout="vertical" form={form} onFinish={save}>
         <CrudField
-          required
           label={"Image"}
           fieldClassName="mb-0"
           provider={new TestUploadProvider()}
@@ -149,9 +149,11 @@ function App() {
           type="image"
           updatable={true}
           showSkipCropButton
+          asyncUpload
         />
         <CrudField type="textarea" rich name="appendix2" label="Appendix 2" />
-        <Button onClick={save}>Save</Button>
+        <CrudField type="color" name="color" label="Color" />
+        <Button htmlType="submit">Save</Button>
       </Form>
     </div>
   );

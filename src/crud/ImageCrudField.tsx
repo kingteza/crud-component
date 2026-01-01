@@ -35,6 +35,7 @@ export interface _ImageCrudField<T> extends InitialCrudField<T> {
   listType?: UploadListType;
   showSkipCropButton?: boolean;
   skipResize?: boolean;
+  asyncUpload?: boolean;
 }
 
 export interface ImageCrudField<T> extends _ImageCrudField<T> {
@@ -104,6 +105,7 @@ function Component<T>(
     fieldHelper: help,
     showSkipCropButton = false,
     skipResize = false,
+    asyncUpload = false,
   }: Readonly<_ImageCrudField<T>>,
   ref: ForwardedRef<ImageCrudFieldRef>
 ) {
@@ -180,6 +182,7 @@ function Component<T>(
     >
       <ImagePicker
         noStyle
+        asyncUpload={asyncUpload}
         listType={listType}
         aspectRatio={aspectRatio}
         values={value}

@@ -1,6 +1,6 @@
 import { ButtonProps, ColorPickerProps, Space } from "antd";
 import { Rule } from "antd/es/form";
-import { FormInstance } from "antd/lib";
+import { FormInstance, TablePaginationConfig } from "antd/lib";
 import { Dayjs } from "dayjs";
 import React, {
   ReactElement,
@@ -312,7 +312,7 @@ export type CrudPaginateProps =
       setPage?: (page: number, pageSize?: number) => void;
       pageSize?: number;
       count?: number;
-    };
+    } & TablePaginationConfig;
 
 export type CrudWizardProp<T> = {
   title: string;
