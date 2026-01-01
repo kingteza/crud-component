@@ -1,3 +1,10 @@
+## [1.17.2](https://github.com/kingteza/crud-component/compare/v1.17.1...v1.17.2) (2026-01-01)
+
+
+### Bug Fixes
+
+* Fix viewable issue in CrudViewer ([4752484](https://github.com/kingteza/crud-component/commit/4752484921b47112dac85334eb1fbe26ba788008))
+
 ## [1.17.1](https://github.com/kingteza/crud-component/compare/v1.17.0...v1.17.1) (2026-01-01)
 
 
