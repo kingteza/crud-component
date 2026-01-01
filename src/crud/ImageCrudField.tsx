@@ -185,7 +185,7 @@ function Component<T>(
         asyncUpload={asyncUpload}
         listType={listType}
         aspectRatio={aspectRatio}
-        values={value}
+        values={value} 
         onRemove={(e) => {
           if (e) onChange(e, false);
         }}
