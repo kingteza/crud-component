@@ -37,6 +37,7 @@ const CrudTextAreaComponent = <T,>({
   rules,
   name,
   updatable = true,
+  formLayout,
   ...props
 }: TextAreaBasedFieldProps<T>) => {
   const form = Form.useFormInstance();
@@ -50,6 +51,7 @@ const CrudTextAreaComponent = <T,>({
         rules={rules}
         disabled={!updatable}
         help={props.fieldHelper}
+        formLayout={formLayout}
       />
     );
   } else {
@@ -57,6 +59,7 @@ const CrudTextAreaComponent = <T,>({
       props as TextAreaProps<T>;
     return (
       <TextAreaComponent
+        layout={formLayout}
         rules={rules}
         placeholder={placeholder}
         onChange={

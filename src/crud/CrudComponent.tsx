@@ -27,6 +27,7 @@ import { TextAreaBasedFieldProps } from ".";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import { Copyable } from "src/util/CopyUtilComponent";
 import { ColumnType } from "antd/es/table";
+import { FormItemLayout } from "antd/es/form/Form";
 
 export type SelectFieldItem = {
   key?: string | number;
@@ -35,6 +36,7 @@ export type SelectFieldItem = {
 };
 
 export interface InitialCrudField<T> {
+  formLayout?: FormItemLayout;
   label: string;
   fieldHelper?: ReactNode;
   updatingValue?: T;

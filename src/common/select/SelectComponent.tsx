@@ -38,6 +38,7 @@ interface SelectComponentProps<T> extends SelectProps<any>, FormItemProps<any> {
 }
 
 function SelectComponent<T = any>({
+  layout,
   label,
   rules = [],
   required,
@@ -89,6 +90,7 @@ function SelectComponent<T = any>({
           label={label}
           name={props.name}
           help={help}
+          layout={layout}
           className={props.className}
           required={required}
           rules={[

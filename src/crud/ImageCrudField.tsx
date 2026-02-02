@@ -92,6 +92,7 @@ export interface ImageCrudFieldRef {
 
 function Component<T>(
   {
+    formLayout,
     name,
     label,
     required,
@@ -178,6 +179,7 @@ function Component<T>(
       required={required}
       name={name as any}
       help={help}
+      layout={formLayout}
       className={fieldClassName}
     >
       <ImagePicker
