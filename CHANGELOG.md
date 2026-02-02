@@ -1,3 +1,10 @@
+# [1.18.0](https://github.com/kingteza/crud-component/compare/v1.17.2...v1.18.0) (2026-02-02)
+
+
+### Features
+
+* add formLayout prop to various components for improved layout handling ([3d5ac30](https://github.com/kingteza/crud-component/commit/3d5ac301e895240fa51fd2a66372d6d058dc05a1))
+
 ## [1.17.2](https://github.com/kingteza/crud-component/compare/v1.17.1...v1.17.2) (2026-01-01)
 
 
