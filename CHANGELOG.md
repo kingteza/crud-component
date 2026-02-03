@@ -1,3 +1,10 @@
+# [1.21.0](https://github.com/kingteza/crud-component/compare/v1.20.0...v1.21.0) (2026-02-03)
+
+
+### Features
+
+* add actionWidth prop to CrudComponent for customizable action button width ([e694f88](https://github.com/kingteza/crud-component/commit/e694f88469153dd59b2fd98699994e3ba5641779))
+
 # [1.20.0](https://github.com/kingteza/crud-component/compare/v1.19.0...v1.20.0) (2026-02-03)
 
 
