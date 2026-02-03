@@ -1,6 +1,6 @@
 import { ButtonProps, ColorPickerProps, Space } from "antd";
 import { Rule } from "antd/es/form";
-import { FormInstance, FormItemProps, TablePaginationConfig } from "antd/lib";
+import { FormInstance, FormItemProps, TablePaginationConfig, TableProps } from "antd/lib";
 import { Dayjs } from "dayjs";
 import React, {
   ReactElement,
@@ -346,6 +346,7 @@ export type CrudComponentProps<T, FormType = T> = {
   paginateProps?: CrudPaginateProps;
   formBuilder?: FormBuilderFunc<T>;
   minusHeight?: string;
+  scroll?: TableProps<T>["scroll"];
   cloneable?: boolean;
   fullWidthModal?: boolean;
   wizard?: CrudWizardProp<T>[];
@@ -383,6 +384,7 @@ function CrudComponent<T, FormType = T>({
   formBuilder,
   extraAction,
   minusHeight,
+  scroll,
   cloneable,
   fullWidthModal = true,
   wizard,
@@ -464,6 +466,7 @@ function CrudComponent<T, FormType = T>({
         <CrudViewer<T, FormType>
           {...props}
           minusHeight={minusHeight}
+          scroll={scroll}
           data={data}
           size={size}
           fields={fields}
