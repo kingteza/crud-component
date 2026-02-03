@@ -56,7 +56,7 @@ export default function FileCrudFieldComponent<T>({
   maxCount = 1,
   block,
   fieldHelper: help,
-  formLayout,
+  formLayoutProps,
   ...props
 }: Readonly<_FileCrudField<T>>) {
   const form = Form.useFormInstance();
@@ -142,7 +142,7 @@ export default function FileCrudFieldComponent<T>({
       label={label}
       required={required}
       name={name as any}
-      layout={formLayout}
+      {...formLayoutProps}
       className={fieldClassName}
       rules={[
         ...(required ? ValidationUtil.required(label) : []),

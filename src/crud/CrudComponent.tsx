@@ -1,6 +1,6 @@
 import { ButtonProps, ColorPickerProps, Space } from "antd";
 import { Rule } from "antd/es/form";
-import { FormInstance, TablePaginationConfig } from "antd/lib";
+import { FormInstance, FormItemProps, TablePaginationConfig } from "antd/lib";
 import { Dayjs } from "dayjs";
 import React, {
   ReactElement,
@@ -36,7 +36,7 @@ export type SelectFieldItem = {
 };
 
 export interface InitialCrudField<T> {
-  formLayout?: FormItemLayout;
+  formLayoutProps?: Pick<FormItemProps, "layout" | 'labelCol' | 'wrapperCol'>;
   label: string;
   fieldHelper?: ReactNode;
   updatingValue?: T;

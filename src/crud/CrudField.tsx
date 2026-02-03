@@ -51,7 +51,7 @@ export default function CrudField<T = any>(
     customFormFieldRender,
     fieldTooltip,
     fieldHelper: help,
-    formLayout,
+    formLayoutProps,
     ...props
   } = props0;
   const form = Form.useFormInstance();
@@ -83,7 +83,7 @@ export default function CrudField<T = any>(
         props as TextBasedFieldProps<T>;
       return (
         <TextField
-          layout={formLayout}
+          {...formLayoutProps}
           placeholder={placeholder}
           disabled={!updatable}
           rules={rules}
@@ -113,7 +113,7 @@ export default function CrudField<T = any>(
       } = props as NumberBasedFieldProps<T>;
       return (
         <NumberTextField
-          layout={formLayout}
+          {...formLayoutProps}
           placeholder={placeholder}
           disabled={!updatable}
           moneyField={Boolean((props as NumberBasedFieldProps<T>).formatted)}
@@ -146,7 +146,7 @@ export default function CrudField<T = any>(
       } = props as DateBasedFieldProps<T>;
       return (
         <DatePickerComponent
-          layout={formLayout}
+          {...formLayoutProps}
           placeholder={placeholder}
           required={required}
           disabled={!updatable}
@@ -180,7 +180,7 @@ export default function CrudField<T = any>(
       } = props as TimeBasedFieldProps<T>;
       return (
         <TimePickerComponent
-          layout={formLayout}
+          {...formLayoutProps}
           placeholder={placeholder}
           required={required}
           format={format}
@@ -266,7 +266,7 @@ export default function CrudField<T = any>(
         return (
           <Form.Item
             {...props}
-            layout={formLayout}
+            {...formLayoutProps}
             name={name as any}
             required={required}
             tooltip={fieldTooltip}
@@ -295,7 +295,7 @@ export default function CrudField<T = any>(
       return (
         <SelectComponent
           {...props}
-          layout={formLayout}
+          {...formLayoutProps}
           tagRender={
             typeof tagRender === "function"
               ? tagRender
@@ -336,7 +336,7 @@ export default function CrudField<T = any>(
         props as CheckboxBasedFieldProps<T>;
       return (
         <CheckBoxComponent
-          layout={formLayout}
+          {...formLayoutProps}
           className={fieldClassName}
           rules={rules}
           onChange={onChange ? (val) => onChange(val, form) : undefined}
@@ -395,7 +395,7 @@ export function SelectCrudFieldComponent<T>(
     placeholder,
     allowClear = true,
     selectOptionRender,
-    formLayout,
+    formLayoutProps,
   } = props;
   const form = (props as any).form;
   const [typing, setTyping] = useState("");
@@ -438,7 +438,7 @@ export function SelectCrudFieldComponent<T>(
   return (
     <SelectComponent
       {...props}
-      layout={formLayout}
+      {...formLayoutProps}
       maxTagCount="responsive"
       maxTagPlaceholder={(omittedValues) => {
         return (
@@ -546,7 +546,7 @@ export function SelectCrudFieldComponent<T>(
 
 export function ColorCrudFieldComponent<T>(props: ColorPickerFieldProps<T>) {
   const {
-    formLayout,
+    formLayoutProps,
     required,
     fieldClassName,
     rules,
@@ -559,7 +559,7 @@ export function ColorCrudFieldComponent<T>(props: ColorPickerFieldProps<T>) {
 
   return (
     <Form.Item
-      layout={formLayout}
+      {...formLayoutProps}
       label={label}
       name={name as any}
       required={required}

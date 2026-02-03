@@ -5,6 +5,7 @@ KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 import { Form } from "antd";
 import { Rule } from "antd/es/form";
 import { FormItemLayout } from "antd/es/form/Form";
+import { FormItemProps } from "antd/lib";
 import React, {
   FC,
   ReactNode,
@@ -24,7 +25,7 @@ export interface RichTextEditorProps {
   required?: boolean;
   rules?: Rule[];
   disabled?: boolean;
-  formLayout?: FormItemLayout;
+  formLayoutProps?: Pick<FormItemProps, "layout" | 'labelCol' | 'wrapperCol'>;
 }
 
 // Dynamically import ReactQuill for Vite
@@ -39,7 +40,7 @@ const ReactQuill = React.lazy(async () => {
 });
 
 export const RichTextEditor: FC<RichTextEditorProps> = ({
-  formLayout,
+  formLayoutProps,
   name,
   label,
   required,
@@ -279,7 +280,7 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
   }), [disabled, cleanEditorValue, handleChange, modules, formats]);
 
   return (
-    <Form.Item help={help} name={name} label={label} rules={rules0} layout={formLayout}>
+    <Form.Item help={help} name={name} label={label} rules={rules0} {...formLayoutProps}>
       <Suspense fallback={<div>Loading editor...</div>}>
         <ReactQuill {...quillProps} />
       </Suspense>
