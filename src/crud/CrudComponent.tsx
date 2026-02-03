@@ -351,6 +351,7 @@ export type CrudComponentProps<T, FormType = T> = {
   fullWidthModal?: boolean;
   wizard?: CrudWizardProp<T>[];
   extraView?: (t: T) => React.ReactElement;
+  actionWidth?: string | number | undefined;
   importable?: CrudImportProps<T>;
   /**
    * @deprecated Use {@link CrudComponentProps.newButtonProps?.onClick} instead.
@@ -394,6 +395,7 @@ function CrudComponent<T, FormType = T>({
   newButtonProps,
   size,
   headerRender,
+  actionWidth,
   ...props
 }: CrudComponentProps<T, FormType>) {
   const modalRef = useRef<CrudModalRef<T>>(null);
@@ -471,6 +473,7 @@ function CrudComponent<T, FormType = T>({
           size={size}
           fields={fields}
           extraAction={extraAction}
+          actionWidth={actionWidth}
           idField={idField}
           isDeleting={isDeleting}
           loadingData={loadingData}
