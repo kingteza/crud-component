@@ -1,3 +1,10 @@
+# [1.20.0](https://github.com/kingteza/crud-component/compare/v1.19.0...v1.20.0) (2026-02-03)
+
+
+### Features
+
+* add scroll prop to CrudComponent for enhanced table scrolling functionality ([b1808ac](https://github.com/kingteza/crud-component/commit/b1808ac7a4354647bbdeade326bcd4bc9fcfa224))
+
 # [1.19.0](https://github.com/kingteza/crud-component/compare/v1.18.0...v1.19.0) (2026-02-03)
 
 
