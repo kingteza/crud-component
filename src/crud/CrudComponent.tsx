@@ -451,7 +451,7 @@ function CrudComponent<T, FormType = T>({
     <>
       <Space direction="vertical" className="w-100">
         <div className="w-100 d-flex">
-          <div>{headerRender0()}</div>
+          <div className="flex-1">{headerRender0()}</div>
           <Space>
             {Boolean(onPrint) && (
               <PrintButton
