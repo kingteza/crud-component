@@ -1,3 +1,10 @@
+## [1.22.2](https://github.com/kingteza/crud-component/compare/v1.22.1...v1.22.2) (2026-02-05)
+
+
+### Bug Fixes
+
+* enhance delete functionality in CrudImportComponent by adding console logging and improving data filtering ([39ec882](https://github.com/kingteza/crud-component/commit/39ec882b2ca711b1afd82b341fc9214b31775126))
+
 ## [1.22.1](https://github.com/kingteza/crud-component/compare/v1.22.0...v1.22.1) (2026-02-05)
 
 
