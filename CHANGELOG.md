@@ -1,3 +1,10 @@
+## [1.22.1](https://github.com/kingteza/crud-component/compare/v1.22.0...v1.22.1) (2026-02-05)
+
+
+### Bug Fixes
+
+* improve readability and structure of CrudImportComponent by enhancing data mapping and memoization for fields display ([6f0ac21](https://github.com/kingteza/crud-component/commit/6f0ac2152bfb0a0b61fc23f0145a72c9bee09c98))
+
 # [1.22.0](https://github.com/kingteza/crud-component/compare/v1.21.1...v1.22.0) (2026-02-05)
 
 
