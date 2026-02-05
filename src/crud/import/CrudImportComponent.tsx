@@ -103,9 +103,9 @@ function CrudImportComponent<T>({
   }, []);
 
   const onDelete = useCallback(
-    async (id: string) => {
+    async (id: any) => {
       console.log("Deleting item from import component", id, data);
-      setData((data)=> data.filter((e) => e.id_private_private !== id));
+      setData((data)=> data.filter((e) => e.id_private_private !== id?.id_private_private));
     },
     [data]
   );
@@ -309,7 +309,6 @@ function CrudImportComponent<T>({
           size="small"
           idField="id_private_private"
           onDelete={onDelete}
-          confirmDeleting={false}
           fields={fieldsToShow}
         />
       </Spin>
