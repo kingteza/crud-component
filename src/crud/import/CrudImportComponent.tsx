@@ -93,10 +93,14 @@ function CrudImportComponent<T>({
     reader.onload = async (e) => {
       const text = e?.target?.result;
       const result = Papa.parse(text as any, { header: true });
-      setData(result.data);
+      setData(result.data.map((e: any, index: number) => ({ ...e, id_private_private: 'crud-import-' +index })));
     };
     reader.readAsText(file);
   }, []);
+  
+  const onDelete = useCallback(async (id: string) => {
+    setData(data.filter((e) => e.id_private_private !== id));
+  }, [data]);
 
   const hasAnyError = useMemo(() => {
     let hasAnyError = false;
@@ -249,18 +253,23 @@ function CrudImportComponent<T>({
           data={data}
           bordered
           size="small"
+          idField="id_private_private"
+          onDelete={onDelete}
+          confirmDeleting={false}
           fields={Array.from(fieldsAvailable.values()).flatMap((e) => {
             if (e.type === "text") {
               return [
                 {
                   ...e,
                   label: e.name,
+                  hideInTable: false,
                   render: renderErrorColumn(e),
                 },
-                ...(e.importProps?.extraFields?.map((f) => ({
+                ...(e.importProps?.extraFields?.map((f, j) => ({
                   ...e,
                   name: f as any,
                   label: f,
+                  hideInTable: false,
                   render: renderErrorColumn(e),
                 })) ?? []),
               ];
@@ -269,6 +278,7 @@ function CrudImportComponent<T>({
                 {
                   ...e,
                   label: e.name,
+                  hideInTable: false,
                   type: "text" as CrudFieldProps<T>["type"],
                   render: renderErrorColumn(e),
                 },
@@ -276,6 +286,7 @@ function CrudImportComponent<T>({
                   ...e,
                   name: f as any,
                   label: f,
+                  hideInTable: false,
                   type: "text" as CrudFieldProps<T>["type"],
                   render: renderErrorColumn(e),
                 })) ?? []),
@@ -285,6 +296,7 @@ function CrudImportComponent<T>({
               {
                 ...e,
                 label: e.name,
+                hideInTable: false,
                 render: renderErrorColumn(e),
               },
             ];
