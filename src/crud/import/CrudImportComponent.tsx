@@ -10,7 +10,6 @@ import { saveAs } from "file-saver";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslationLib } from "../../locale";
 
-
 import { CrudFieldProps } from "../CrudComponent";
 import CrudViewer from "../view/CrudViewer";
 import { DialogProps } from "../../types/DialogComponentProp";
@@ -93,14 +92,22 @@ function CrudImportComponent<T>({
     reader.onload = async (e) => {
       const text = e?.target?.result;
       const result = Papa.parse(text as any, { header: true });
-      setData(result.data.map((e: any, index: number) => ({ ...e, id_private_private: 'crud-import-' +index })));
+      setData(
+        result.data.map((e: any, index: number) => ({
+          ...e,
+          id_private_private: "crud-import-" + index,
+        }))
+      );
     };
     reader.readAsText(file);
   }, []);
-  
-  const onDelete = useCallback(async (id: string) => {
-    setData(data.filter((e) => e.id_private_private !== id));
-  }, [data]);
+
+  const onDelete = useCallback(
+    async (id: string) => {
+      setData(data.filter((e) => e.id_private_private !== id));
+    },
+    [data]
+  );
 
   const hasAnyError = useMemo(() => {
     let hasAnyError = false;
@@ -192,6 +199,52 @@ function CrudImportComponent<T>({
       onImport();
     }
   }, [hasAnyError, onImport, t]);
+  const fieldsToShow0 = useMemo(
+    () =>
+      Array.from(fieldsAvailable.values()).flatMap((e) => {
+        if (e.type === "text") {
+          return [
+            {
+              ...e,
+              label: e.name,
+              render: renderErrorColumn(e),
+            },
+            ...(e.importProps?.extraFields?.map((f, j) => ({
+              ...e,
+              name: f as any,
+              label: f,
+              render: renderErrorColumn(e),
+            })) ?? []),
+          ];
+        } else if (e.type === "select") {
+          return [
+            {
+              ...e,
+              label: e.name,
+              type: "text" as CrudFieldProps<T>["type"],
+              render: renderErrorColumn(e),
+            },
+            ...(e.importProps?.extraFields?.map((f) => ({
+              ...e,
+              name: f as any,
+              label: f,
+              type: "text" as CrudFieldProps<T>["type"],
+              render: renderErrorColumn(e),
+            })) ?? []),
+          ] as any[];
+        }
+        return [
+          {
+            ...e,
+            label: e.name,
+            render: renderErrorColumn(e),
+          },
+        ];
+      }),
+    [fieldsAvailable, renderErrorColumn]
+  );
+
+  const fieldsToShow = useMemo(() => fieldsToShow0.map((e) => ({ ...e, hideInTable: false })), [fieldsToShow0]);
   return (
     <Modal
       title={[t("str.import"), importProps?.name].filter(Boolean).join(" ")}
@@ -256,51 +309,7 @@ function CrudImportComponent<T>({
           idField="id_private_private"
           onDelete={onDelete}
           confirmDeleting={false}
-          fields={Array.from(fieldsAvailable.values()).flatMap((e) => {
-            if (e.type === "text") {
-              return [
-                {
-                  ...e,
-                  label: e.name,
-                  hideInTable: false,
-                  render: renderErrorColumn(e),
-                },
-                ...(e.importProps?.extraFields?.map((f, j) => ({
-                  ...e,
-                  name: f as any,
-                  label: f,
-                  hideInTable: false,
-                  render: renderErrorColumn(e),
-                })) ?? []),
-              ];
-            } else if (e.type === "select") {
-              return [
-                {
-                  ...e,
-                  label: e.name,
-                  hideInTable: false,
-                  type: "text" as CrudFieldProps<T>["type"],
-                  render: renderErrorColumn(e),
-                },
-                ...(e.importProps?.extraFields?.map((f) => ({
-                  ...e,
-                  name: f as any,
-                  label: f,
-                  hideInTable: false,
-                  type: "text" as CrudFieldProps<T>["type"],
-                  render: renderErrorColumn(e),
-                })) ?? []),
-              ] as any[];
-            }
-            return [
-              {
-                ...e,
-                label: e.name,
-                hideInTable: false,
-                render: renderErrorColumn(e),
-              },
-            ];
-          })}
+          fields={fieldsToShow}
         />
       </Spin>
     </Modal>
