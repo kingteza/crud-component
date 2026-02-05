@@ -1,3 +1,10 @@
+# [1.22.0](https://github.com/kingteza/crud-component/compare/v1.21.1...v1.22.0) (2026-02-05)
+
+
+### Features
+
+* enhance CrudImportComponent with delete functionality and unique ID assignment for imported data ([d8ecd72](https://github.com/kingteza/crud-component/commit/d8ecd72bd4ca1b16195820036637c978e67856ed))
+
 ## [1.21.1](https://github.com/kingteza/crud-component/compare/v1.21.0...v1.21.1) (2026-02-03)
 
 
