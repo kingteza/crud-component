@@ -104,7 +104,8 @@ function CrudImportComponent<T>({
 
   const onDelete = useCallback(
     async (id: string) => {
-      setData(data.filter((e) => e.id_private_private !== id));
+      console.log("Deleting item from import component", id, data);
+      setData((data)=> data.filter((e) => e.id_private_private !== id));
     },
     [data]
   );
