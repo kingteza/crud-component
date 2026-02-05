@@ -1,3 +1,10 @@
+## [1.22.3](https://github.com/kingteza/crud-component/compare/v1.22.2...v1.22.3) (2026-02-05)
+
+
+### Bug Fixes
+
+* update onDelete function in CrudImportComponent to handle ID filtering more robustly ([b84c780](https://github.com/kingteza/crud-component/commit/b84c78080b1afc1dc1fb9a8b666403def68e3e3d))
+
 ## [1.22.2](https://github.com/kingteza/crud-component/compare/v1.22.1...v1.22.2) (2026-02-05)
 
 
