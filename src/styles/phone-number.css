@@ -3,3 +3,7 @@
 .PhoneInputCountryIcon svg {
     margin-top: -11px;
 }
+
+.PhoneInputCountryIconImg {
+    margin-top: 0!important;
+}
