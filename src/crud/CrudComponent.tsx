@@ -28,6 +28,7 @@ import { SizeType } from "antd/es/config-provider/SizeContext";
 import { Copyable } from "src/util/CopyUtilComponent";
 import { ColumnType } from "antd/es/table";
 import { FormItemLayout } from "antd/es/form/Form";
+import { PhoneNumberConfigProps } from "src/common/text-field/PhoneNumberField";
 
 export type SelectFieldItem = {
   key?: string | number;
@@ -195,6 +196,10 @@ export interface TextBasedFieldProps<T>
   onChange?: (value: string, form: FormInstance<T>) => void;
 }
 
+export interface PhoneNumberFieldProps<T> extends Omit<TextBasedFieldProps<T>, "type">, PhoneNumberConfigProps {
+  type: "phone";
+}
+
 export interface ColorPickerFieldProps<T>
   extends Omit<InitialCrudField<T>, "placeholder">,
     Copyable<false> {
@@ -298,6 +303,7 @@ type CrudFieldTypeMap<T> = {
   object: ObjectCrudField<T>;
   file: FileCrudField<T>;
   image: ImageCrudField<T>;
+  phone: PhoneNumberFieldProps<T>;
 };
 
 // Create the discriminated union using a mapped type

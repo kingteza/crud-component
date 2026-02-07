@@ -148,9 +148,10 @@ function App() {
     {type: 'text', label: 'name', name: 'name'},
   ];
   return (
-    <div className="">
+    <div className="mx-2">
       <Form layout="vertical" form={form} onFinish={save}>
         <CrudField {...imageProps} />
+        <CrudField type="phone" required label="Phone Number" name="phone" defaultCountry="LK" />
         <CrudField type="textarea" rich name="appendix2" label="Appendix 2" />
         <CrudField type="color" name="color" label="Color" />
         <Button htmlType="submit">Save</Button>

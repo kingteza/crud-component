@@ -15,6 +15,7 @@ import {
   EnumCrudField,
   InitialCrudField,
   NumberBasedFieldProps,
+  PhoneNumberFieldProps,
   SelectCrudField,
   SelectFieldItem,
   TextBasedFieldProps,
@@ -34,6 +35,7 @@ import {
 import CrudTextAreaComponent from "./CrudTextAreaComponent";
 import CrudUtil from "src/util/CrudUtil";
 import { Color } from "antd/es/color-picker";
+import PhoneNumberField from "src/common/text-field/PhoneNumberField";
 
 export default function CrudField<T = any>(
   props0: Readonly<CrudFieldProps<T>>
@@ -83,6 +85,30 @@ export default function CrudField<T = any>(
         props as TextBasedFieldProps<T>;
       return (
         <TextField
+          {...formLayoutProps}
+          placeholder={placeholder}
+          disabled={!updatable}
+          rules={rules}
+          required={required}
+          onChange={onChange ? (val) => onChange(val, form) : undefined}
+          type={type}
+          name={name as any}
+          tooltip={fieldTooltip}
+          label={label}
+          className={fieldClassName}
+          autoComplete={"new-password"}
+          addonAfter={addonAfter}
+          addonBefore={addonBefore}
+          help={help}
+        />
+      );
+    }
+    case "phone": {
+      const { onChange, placeholder, addonAfter, addonBefore } =
+        props as PhoneNumberFieldProps<T>;
+      return (
+        <PhoneNumberField
+          {...props}
           {...formLayoutProps}
           placeholder={placeholder}
           disabled={!updatable}
@@ -567,7 +593,7 @@ export function ColorCrudFieldComponent<T>(props: ColorPickerFieldProps<T>) {
       tooltip={fieldTooltip}
       help={help}
       getValueFromEvent={(color: Color) => {
-        if(typeof color === 'object') {
+        if (typeof color === "object") {
           return color.toHexString();
         }
         return color;

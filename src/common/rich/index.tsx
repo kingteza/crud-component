@@ -4,7 +4,6 @@ KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 import { Form } from "antd";
 import { Rule } from "antd/es/form";
-import { FormItemLayout } from "antd/es/form/Form";
 import { FormItemProps } from "antd/lib";
 import React, {
   FC,
