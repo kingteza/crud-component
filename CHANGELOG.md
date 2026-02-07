@@ -1,3 +1,10 @@
+## [1.23.1](https://github.com/kingteza/crud-component/compare/v1.23.0...v1.23.1) (2026-02-07)
+
+
+### Bug Fixes
+
+* adjust margin for PhoneInputCountryIconImg to improve layout ([e0147c8](https://github.com/kingteza/crud-component/commit/e0147c8f3d9e8d3f099397e8606b7cefaac9c130))
+
 # [1.23.0](https://github.com/kingteza/crud-component/compare/v1.22.3...v1.23.0) (2026-02-07)
 
 
