@@ -1,3 +1,10 @@
+# [1.23.0](https://github.com/kingteza/crud-component/compare/v1.22.3...v1.23.0) (2026-02-07)
+
+
+### Features
+
+* add phone number input field and integrate react-phone-number-input ([897dc58](https://github.com/kingteza/crud-component/commit/897dc58e3d8af496ba35c6ac73c7d72e8a0f1fc9))
+
 ## [1.22.3](https://github.com/kingteza/crud-component/compare/v1.22.2...v1.22.3) (2026-02-05)
 
 
