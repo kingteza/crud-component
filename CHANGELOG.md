@@ -1,3 +1,10 @@
+## [1.25.1](https://github.com/kingteza/crud-component/compare/v1.25.0...v1.25.1) (2026-02-23)
+
+
+### Bug Fixes
+
+* rename FileCrudDragNDropField interface for clarity ([f507d3b](https://github.com/kingteza/crud-component/commit/f507d3b62ada7e8b69a3d97410ed59dc1043d61c))
+
 # [1.25.0](https://github.com/kingteza/crud-component/compare/v1.24.0...v1.25.0) (2026-02-23)
 
 
