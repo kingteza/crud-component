@@ -1,3 +1,16 @@
+# [1.25.0](https://github.com/kingteza/crud-component/compare/v1.24.0...v1.25.0) (2026-02-23)
+
+
+### Bug Fixes
+
+* remove summary prop from CrudViewer component ([ec27041](https://github.com/kingteza/crud-component/commit/ec270417965f1436556482a0a9685887810d32f9))
+
+
+### Features
+
+* add FileCrudDragNDropField component for file uploads ([2b667ea](https://github.com/kingteza/crud-component/commit/2b667ea27f5ab3bbc64395e7fd832cf8cec7de32))
+* add maxCount and summary props to ImageCrudField and CrudViewer components ([8440d81](https://github.com/kingteza/crud-component/commit/8440d8152f221b682447fab336a66b08df10a9e9))
+
 # [1.24.0](https://github.com/kingteza/crud-component/compare/v1.23.1...v1.24.0) (2026-02-23)
 
 
