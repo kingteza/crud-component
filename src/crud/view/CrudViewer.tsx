@@ -65,6 +65,7 @@ export type CrudViewableProps<T> =
     };
 
 export type CrudViewerProps<T, FormType> = {
+  summary?: TableProps<T>["summary"];
   fields: CrudFieldProps<T>[];
   decListLayout?: "horizontal" | "vertical";
   viewable?: CrudViewableProps<T>;
@@ -89,6 +90,7 @@ export type CrudViewerProps<T, FormType> = {
   CrudSearchComponentProps<T, FormType>;
 
 function CrudViewer<T, FormType = T>({
+  summary,
   idField = "id",
   loadingData,
   fields,
@@ -341,6 +343,7 @@ function CrudViewer<T, FormType = T>({
     const tableElement = (
       <TableComponentMemo
         {...tableProps}
+        summary={summary}
         dataSource={dataSource}
         loading={loadingData}
         components={draggable ? { body: { row: Row } } : undefined}
