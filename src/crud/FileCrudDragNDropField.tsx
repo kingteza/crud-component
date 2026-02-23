@@ -26,7 +26,7 @@ import { FileUploadProvider } from "./ImageCrudField";
 
 const { Dragger } = Upload;
 
-export interface FileCrudDragNDropField<T> extends _FileCrudDragNDropField<T> {
+export interface FileCrudDragNDropFieldProps<T> extends _FileCrudDragNDropField<T> {
   type: "file";
 }
 
@@ -47,7 +47,7 @@ export interface _FileCrudDragNDropField<T> extends InitialCrudField<T> {
   };
 }
 
-export default function FileCrudDragNDropFieldComponent<T>({
+export default function FileCrudDragNDropField<T>({
   name,
   label,
   required,

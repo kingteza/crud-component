@@ -64,9 +64,9 @@ export {
 
 export type { FileCrudField as FileCrudFieldProps } from "./FileCrudField";
 
-export { default as FileCrudDragNDropField } from "./FileCrudDragNDropField";
-export type {
-  FileCrudDragNDropField as FileCrudDragNDropFieldProps,
+export {
+  default as FileCrudDragNDropField,
+  type FileCrudDragNDropFieldProps,
 } from "./FileCrudDragNDropField";
 export { default as CrudTextAreaComponent } from "./CrudTextAreaComponent";
 export type { TextAreaBasedFieldProps } from "./CrudTextAreaComponent";
@@ -80,4 +80,4 @@ export { default as CrudActions } from "./actions";
 export type { CrudActionsProps } from "./actions";
 export { default as CrudModal } from "./modal";
 export type { CrudModalProps, CrudModalRef } from "./modal";
-export * from './view';
+export * from "./view";
