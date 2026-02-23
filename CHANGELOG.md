@@ -1,3 +1,10 @@
+# [1.24.0](https://github.com/kingteza/crud-component/compare/v1.23.1...v1.24.0) (2026-02-23)
+
+
+### Features
+
+* add summary prop to CrudViewer for enhanced table display ([d86307e](https://github.com/kingteza/crud-component/commit/d86307ef72eea910219c5244fa02641f0e06b549))
+
 ## [1.23.1](https://github.com/kingteza/crud-component/compare/v1.23.0...v1.23.1) (2026-02-07)
 
 
