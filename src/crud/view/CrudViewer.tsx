@@ -85,7 +85,6 @@ export type CrudViewerProps<T, FormType> = {
   scrollToTop?: boolean;
   rowClassName?: TableProps<T>["rowClassName"];
   actionWidth?: string | number;
-  summary?: TableProps<T>['summary'];
   draggable?: CrudDragableProps<T>;
 } & CrudActionsProps<T, FormType> &
   CrudSearchComponentProps<T, FormType>;
@@ -123,7 +122,6 @@ function CrudViewer<T, FormType = T>({
   confirmDeleting,
   rowClassName,
   actionWidth = 190,
-  summary,
   draggable,
   rowSelection,
   ...props
@@ -351,7 +349,6 @@ function CrudViewer<T, FormType = T>({
         components={draggable ? { body: { row: Row } } : undefined}
         pagination={paginationProps}
         columns={tableColumns}
-        summary={summary}
       />
     );
 
