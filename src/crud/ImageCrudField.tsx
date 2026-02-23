@@ -36,6 +36,7 @@ export interface _ImageCrudField<T> extends InitialCrudField<T> {
   showSkipCropButton?: boolean;
   skipResize?: boolean;
   asyncUpload?: boolean;
+  maxCount?: number;
 }
 
 export interface ImageCrudField<T> extends _ImageCrudField<T> {
@@ -107,6 +108,7 @@ function Component<T>(
     showSkipCropButton = false,
     skipResize = false,
     asyncUpload = false,
+    maxCount = 1,
   }: Readonly<_ImageCrudField<T>>,
   ref: ForwardedRef<ImageCrudFieldRef>
 ) {
@@ -197,6 +199,7 @@ function Component<T>(
         className={fieldClassName}
         showSkipCropButton={showSkipCropButton}
         skipResize={skipResize}
+        maxCount={maxCount}
       />
       <Input hidden />
     </Form.Item>

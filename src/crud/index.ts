@@ -63,6 +63,11 @@ export {
 } from "./FileCrudField";
 
 export type { FileCrudField as FileCrudFieldProps } from "./FileCrudField";
+
+export { default as FileCrudDragNDropField } from "./FileCrudDragNDropField";
+export type {
+  FileCrudDragNDropField as FileCrudDragNDropFieldProps,
+} from "./FileCrudDragNDropField";
 export { default as CrudTextAreaComponent } from "./CrudTextAreaComponent";
 export type { TextAreaBasedFieldProps } from "./CrudTextAreaComponent";
 export { default as CrudImportComponent } from "./import/CrudImportComponent";
