@@ -1,3 +1,10 @@
+# [1.26.0](https://github.com/kingteza/crud-component/compare/v1.25.1...v1.26.0) (2026-02-26)
+
+
+### Features
+
+* add defaultSortOrder to CrudField and CrudViewer components ([cdfffb2](https://github.com/kingteza/crud-component/commit/cdfffb238625362d1b23c8983e1c9d69c6ad7460))
+
 ## [1.25.1](https://github.com/kingteza/crud-component/compare/v1.25.0...v1.25.1) (2026-02-23)
 
 
