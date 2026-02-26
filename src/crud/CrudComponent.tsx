@@ -76,6 +76,7 @@ export interface InitialCrudField<T> {
   };
   hideLabel?: boolean;
   sorter?: ColumnType<T>["sorter"];
+  defaultSortOrder?: ColumnType<T>["defaultSortOrder"];
 }
 
 export type CrudFieldGrid = {

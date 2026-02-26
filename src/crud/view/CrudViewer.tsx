@@ -141,6 +141,7 @@ function CrudViewer<T, FormType = T>({
           align: halign ?? (props.type === "number" ? "right" : undefined),
           render: getRendererValueCrudViewer(props as any),
           sorter: props.sorter,
+          defaultSortOrder: props.defaultSortOrder,
         };
       }) as TableComponentColumnProp<T>,
     [fields]
