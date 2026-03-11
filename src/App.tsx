@@ -140,20 +140,36 @@ function App() {
   } as const;
 
   const fields = [
-    {type: 'text', label: 'id', name: 'id'},
-    {type: 'text', label: 'helloId', name: 'helloId'},
-    {type: 'text', label: 'status', name: 'status'},
-    {type: 'text', label: 'test', name: 'test'},
-    {type: 'text', label: 'value', name: 'value'},
-    {type: 'text', label: 'name', name: 'name'},
+    { type: "text", label: "id", name: "id" },
+    { type: "text", label: "helloId", name: "helloId" },
+    { type: "text", label: "status", name: "status" },
+    { type: "text", label: "test", name: "test" },
+    { type: "text", label: "value", name: "value" },
+    { type: "text", label: "name", name: "name" },
   ];
   return (
     <div className="mx-2">
       <Form layout="vertical" form={form} onFinish={save}>
         <CrudField {...imageProps} />
-        <CrudField type="phone" required label="Phone Number" name="phone" defaultCountry="LK" />
+        <CrudField
+          type="phone"
+          required
+          label="Phone Number"
+          name="phone"
+          defaultCountry="LK"
+        />
         <CrudField type="textarea" rich name="appendix2" label="Appendix 2" />
         <CrudField type="color" name="color" label="Color" />
+        <CrudField
+          type="select"
+          name="select"
+          label="Select"
+          loading
+          items={[
+            { key: "1", value: "1" },
+            { key: "2", value: "2" },
+          ]}
+        />
         <Button htmlType="submit">Save</Button>
       </Form>
       <CrudViewer viewable fields={fields} data={data} />

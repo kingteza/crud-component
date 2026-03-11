@@ -349,6 +349,7 @@ export default function CrudField<T = any>(
           onSearch={onSearch ? (val) => onSearch(val, form) : undefined}
           allowClear
           mode={multiple ? "multiple" : undefined}
+          showLoadingInEmptyIndicator
           itemBuilder={(e) => (
             <Select.Option key={e} value={e}>
               {translation ? t(translation[e]) : e}
@@ -465,6 +466,7 @@ export function SelectCrudFieldComponent<T>(
     <SelectComponent
       {...props}
       {...formLayoutProps}
+      showLoadingInEmptyIndicator
       maxTagCount="responsive"
       maxTagPlaceholder={(omittedValues) => {
         return (
