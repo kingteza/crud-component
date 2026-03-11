@@ -1,3 +1,10 @@
+# [1.27.0](https://github.com/kingteza/crud-component/compare/v1.26.0...v1.27.0) (2026-03-11)
+
+
+### Features
+
+* enhance CrudField and App components with new features ([df34096](https://github.com/kingteza/crud-component/commit/df34096ec8f66833efafa7d98f3d0cffac82879d))
+
 # [1.26.0](https://github.com/kingteza/crud-component/compare/v1.25.1...v1.26.0) (2026-02-26)
 
 
