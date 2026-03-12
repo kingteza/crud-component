@@ -4,7 +4,7 @@
 ***************************************************************************** */
 
 import { LeftOutlined, RightOutlined, SaveOutlined } from "@ant-design/icons";
-import { Col, Divider, Form, Row } from "antd";
+import { Col, Divider, Form, FormProps, Row } from "antd";
 import { useEffect, useMemo } from "react";
 import { useTranslationLib } from "../locale";
 
@@ -23,6 +23,7 @@ export interface CrudFormWizardProps<T> {
   onSave: (e: T) => void;
   updatingValue?: T;
   submitting?: boolean;
+  onValuesChange?: FormProps<T>["onValuesChange"];
 }
 
 function CrudFormWizard<T>({
@@ -35,12 +36,13 @@ function CrudFormWizard<T>({
   updatingValue,
   onSave,
   submitting,
+  onValuesChange,
 }: Readonly<CrudFormWizardProps<T>>) {
   const wizard0 = useMemo(() => {
     return wizard.map((e) => {
       let hidden = true;
       const fieldThatShouldShowing = fields.filter((x) =>
-        e.fields.includes(CrudUtil.getRealName(x.name))
+        e.fields.includes(CrudUtil.getRealName(x.name)),
       );
       fieldThatShouldShowing.forEach((x) => (hidden &&= x.hidden ?? false));
       return {
@@ -52,7 +54,7 @@ function CrudFormWizard<T>({
   }, [fields, wizard]);
   const filteredWizard = useMemo(
     () => wizard0.filter((e) => !e.hidden),
-    [wizard0]
+    [wizard0],
   );
   return (
     <WizardViewForm
@@ -79,10 +81,11 @@ function CrudFormWizard<T>({
                 forward={props.forward}
                 wizard={filteredWizard}
                 submitting={submitting}
+                onValuesChange={onValuesChange}
               />
             );
           },
-        })
+        }),
       )}
     />
   );
@@ -101,12 +104,13 @@ function SubForm<T>({
   backward,
   submitting,
   updatingValue,
+  onValuesChange,
 }: Omit<CrudFormWizardProps<T>, "form" | "onSave"> & {
   i: number;
   forward: (
     value?: any,
     submit?: boolean | undefined,
-    isRetry?: boolean | undefined
+    isRetry?: boolean | undefined,
   ) => void;
   backward: () => void;
 }) {
@@ -129,7 +133,12 @@ function SubForm<T>({
   }, [fields, form, purpose, updatingValue]);
 
   return (
-    <Form name={String(i)} form={form} layout="vertical">
+    <Form
+      name={String(i)}
+      form={form}
+      layout="vertical"
+      onValuesChange={onValuesChange}
+    >
       <CrudFormFields
         fields={fields as any}
         formBuilder={thisWizard.formBuilder}
@@ -169,7 +178,7 @@ function SubForm<T>({
                 forward(
                   values,
                   wizard.length - 1 === i,
-                  wizard.length - 1 === i
+                  wizard.length - 1 === i,
                 );
               });
             }}

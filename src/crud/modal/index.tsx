@@ -1,4 +1,4 @@
-import { Form, Modal, Spin } from "antd";
+import { Form, FormProps, Modal, Spin } from "antd";
 import { Color } from "antd/es/color-picker";
 import { FormInstance } from "antd/lib";
 import {
@@ -34,6 +34,7 @@ export interface CrudModalProps<T, FormType> {
   onUpdate?: (data: FormType & IdProps) => Promise<any>;
   idField?: string;
   formBuilder?: FormBuilderFunc<T>;
+  onValuesChange?: FormProps<T>["onValuesChange"];
 }
 
 export interface CrudModalRef<T> {
@@ -41,7 +42,7 @@ export interface CrudModalRef<T> {
   update: (
     data: T,
     shouldSetUpdatingField?: boolean,
-    isClone?: boolean
+    isClone?: boolean,
   ) => Promise<void>;
 }
 
@@ -57,12 +58,13 @@ const CrudModal = <T, FormType = T>(
     onUpdate,
     idField = "id",
     formBuilder,
+    onValuesChange,
   }: CrudModalProps<T, FormType>,
-  ref: Ref<CrudModalRef<T>>
+  ref: Ref<CrudModalRef<T>>,
 ) => {
   const [form] = Form.useForm();
   const { t } = useTranslationLib();
-  
+
   const [open, setOpen] = useState(false);
   const [purpose, setPurpose] = useState<"new" | "update" | "clone">("new");
 
@@ -99,7 +101,7 @@ const CrudModal = <T, FormType = T>(
       form.resetFields();
       setOpen(false);
     },
-    [fields, form, idField, onCreate, onUpdate, updatingField, wizard]
+    [fields, form, idField, onCreate, onUpdate, updatingField, wizard],
   );
 
   const onUploading = useCallback(async (p) => {
@@ -125,12 +127,12 @@ const CrudModal = <T, FormType = T>(
         setUpdating(true);
         setOpen(true);
         setPurpose(isClone ? "clone" : "update");
-        
+
         const _data = {};
         for (const e of fields) {
           const upsertFieldName = CrudUtil.getRealName(
             e.name,
-            "upsertFieldName"
+            "upsertFieldName",
           );
           const dataField = data[upsertFieldName];
           if (isClone && e.type === "image") {
@@ -148,7 +150,7 @@ const CrudModal = <T, FormType = T>(
           } else if (e.type === "select") {
             if (e.multiple && Array.isArray(dataField)) {
               _data[upsertFieldName] = dataField.map(
-                (x) => x[e.innerFieldId ?? "id"]
+                (x) => x[e.innerFieldId ?? "id"],
               );
             } else if (dataField && typeof dataField === "object")
               _data[upsertFieldName] = dataField[e.innerFieldId ?? "id"];
@@ -166,7 +168,7 @@ const CrudModal = <T, FormType = T>(
         setUpdating(false);
       }
     },
-    [fields, form]
+    [fields, form],
   );
 
   useImperativeHandle(
@@ -175,7 +177,7 @@ const CrudModal = <T, FormType = T>(
       create,
       update,
     }),
-    [create, update]
+    [create, update],
   );
 
   useEffect(() => {
@@ -239,6 +241,7 @@ const CrudModal = <T, FormType = T>(
             grid={grid}
             onDeleteFile={_onDeleteFile}
             onUploadFile={onUploading}
+            onValuesChange={onValuesChange}
           />
         )}
         {wizard && (
@@ -252,6 +255,7 @@ const CrudModal = <T, FormType = T>(
             onUploadFile={onUploading}
             purpose={purpose}
             wizard={wizard}
+            onValuesChange={onValuesChange}
           />
         )}
       </Spin>
@@ -260,5 +264,5 @@ const CrudModal = <T, FormType = T>(
 };
 
 export default forwardRef(CrudModal) as <T, FormType = T>(
-  props: CrudModalProps<T, FormType> & { ref?: Ref<CrudModalRef<T>> }
+  props: CrudModalProps<T, FormType> & { ref?: Ref<CrudModalRef<T>> },
 ) => ReturnType<typeof CrudModal>;

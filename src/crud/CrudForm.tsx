@@ -3,7 +3,7 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import { Col, Form, FormInstance, Input, Row } from "antd";
+import { Col, Form, FormInstance, FormProps, Input, Row } from "antd";
 import React, { useCallback, useMemo } from "react";
 
 import {
@@ -22,15 +22,17 @@ export interface CurdFormFieldsProps<T> {
   formBuilder?: FormBuilderFunc<T>;
   fields: CrudFieldProps<T>[];
   purpose?: CrudPurpose;
+  onValuesChange?: FormProps<T>["onValuesChange"];
 }
 
 export function CrudForm<T>({
   form,
   purpose = "new",
+  onValuesChange,
   ...props
 }: Readonly<CurdFormFieldsProps<T> & { form: FormInstance }>) {
   return (
-    <Form form={form} layout="vertical">
+    <Form form={form} layout="vertical" onValuesChange={onValuesChange}>
       <CrudFormFields {...props} purpose={purpose} />
     </Form>
   );
@@ -51,7 +53,7 @@ export function CrudFormFields<T>({
           (e) =>
             !e.readonly &&
             (e.type !== "object" ||
-              typeof e.customFormFieldRender === "function")
+              typeof e.customFormFieldRender === "function"),
         )
         .map((e) => {
           const functionProps = {
@@ -92,13 +94,13 @@ export function CrudFormFields<T>({
             </React.Fragment>
           );
         }),
-    [fields, grid, onDeleteFile, onUploadFile, purpose]
+    [fields, grid, onDeleteFile, onUploadFile, purpose],
   );
 
   const getFormField = useCallback(
     (name: keyof T | string, options: GetFormFieldOptions = {}) => {
       const e = fields.find(
-        (field) => CrudUtil.getRealName(field.name) === name
+        (field) => CrudUtil.getRealName(field.name) === name,
       );
       if (e?.hidden) return <></>;
       if (e) {
@@ -135,7 +137,7 @@ export function CrudFormFields<T>({
       }
       return <></>;
     },
-    [fields, purpose]
+    [fields, purpose],
   );
 
   return (
