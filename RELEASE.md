@@ -1,6 +1,6 @@
 # Release Process
 
-This project uses [semantic-release](https://github.com/semantic-release/semantic-release) to automate versioning and publishing.
+This project uses [semantic-release](https://github.com/semantic-release/semantic-release) to automate versioning and publishing. 
 
 ## How it works
 
