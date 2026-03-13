@@ -1,3 +1,10 @@
+## [1.27.1](https://github.com/kingteza/crud-component/compare/v1.27.0...v1.27.1) (2026-03-13)
+
+
+### Bug Fixes
+
+* manual release ([683bf1e](https://github.com/kingteza/crud-component/commit/683bf1e82d17f218b3c1cb130c6af086d31acab4))
+
 # [1.27.0](https://github.com/kingteza/crud-component/compare/v1.26.0...v1.27.0) (2026-03-11)
 
 
