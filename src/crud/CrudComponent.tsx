@@ -1,6 +1,11 @@
-import { ButtonProps, ColorPickerProps, Space } from "antd";
+import { ButtonProps, ColorPickerProps, Space, FormProps } from "antd";
 import { Rule } from "antd/es/form";
-import { FormInstance, FormItemProps, TablePaginationConfig, TableProps } from "antd/lib";
+import {
+  FormInstance,
+  FormItemProps,
+  TablePaginationConfig,
+  TableProps,
+} from "antd/lib";
 import { Dayjs } from "dayjs";
 import React, {
   ReactElement,
@@ -37,7 +42,7 @@ export type SelectFieldItem = {
 };
 
 export interface InitialCrudField<T> {
-  formLayoutProps?: Pick<FormItemProps, "layout" | 'labelCol' | 'wrapperCol'>;
+  formLayoutProps?: Pick<FormItemProps, "layout" | "labelCol" | "wrapperCol">;
   label: string;
   fieldHelper?: ReactNode;
   updatingValue?: T;
@@ -68,7 +73,7 @@ export interface InitialCrudField<T> {
   };
   customFormFieldRender?: (
     form: FormInstance<T>,
-    props: InitialCrudField<T>
+    props: InitialCrudField<T>,
   ) => React.ReactElement;
   importProps?: {
     extraFields?: string[];
@@ -90,10 +95,9 @@ export type CrudFieldGrid = {
 
 export interface SelectCrudField<
   T,
-  ItemType extends SelectFieldItem = SelectFieldItem
-> extends Omit<InitialCrudField<T>, "name">,
-    AddonFieldProps,
-    Copyable<false> {
+  ItemType extends SelectFieldItem = SelectFieldItem,
+>
+  extends Omit<InitialCrudField<T>, "name">, AddonFieldProps, Copyable<false> {
   name:
     | InitialCrudField<T>["name"]
     | {
@@ -130,7 +134,7 @@ export interface SelectCrudField<
   onSearch?: (
     keyword: any,
     form: FormInstance<T>,
-    record: T | undefined
+    record: T | undefined,
   ) => void;
   /**
    * Used when the type is 'select'. Wether the result should refresh if the search value is changed.
@@ -144,7 +148,7 @@ export interface SelectCrudField<
   onSet?: (
     value: any | any[],
     items: SelectFieldItem[],
-    form: FormInstance<T>
+    form: FormInstance<T>,
   ) => void;
 
   selectOptionRender?: (option: SelectFieldItem) => ReactNode;
@@ -180,8 +184,7 @@ export type AddonFieldProps = {
 };
 
 export interface ObjectCrudField<T>
-  extends InitialCrudField<T>,
-    Copyable<true> {
+  extends InitialCrudField<T>, Copyable<true> {
   type: "object";
 
   render: (value: any, obj: T, index: number) => any;
@@ -189,21 +192,19 @@ export interface ObjectCrudField<T>
 }
 
 export interface TextBasedFieldProps<T>
-  extends InitialCrudField<T>,
-    AddonFieldProps,
-    Copyable<false> {
+  extends InitialCrudField<T>, AddonFieldProps, Copyable<false> {
   placeholder?: string;
   type: "text" | "time" | "email" | "password";
   onChange?: (value: string, form: FormInstance<T>) => void;
 }
 
-export interface PhoneNumberFieldProps<T> extends Omit<TextBasedFieldProps<T>, "type">, PhoneNumberConfigProps {
+export interface PhoneNumberFieldProps<T>
+  extends Omit<TextBasedFieldProps<T>, "type">, PhoneNumberConfigProps {
   type: "phone";
 }
 
 export interface ColorPickerFieldProps<T>
-  extends Omit<InitialCrudField<T>, "placeholder">,
-    Copyable<false> {
+  extends Omit<InitialCrudField<T>, "placeholder">, Copyable<false> {
   type: "color";
   innerProps?: ColorPickerProps;
 }
@@ -215,9 +216,7 @@ export interface CheckboxBasedFieldProps<T> extends InitialCrudField<T> {
 }
 
 export interface NumberBasedFieldProps<T>
-  extends InitialCrudField<T>,
-    AddonFieldProps,
-    Copyable<false> {
+  extends InitialCrudField<T>, AddonFieldProps, Copyable<false> {
   type: "number";
   placeholder?: string;
   allowMinus?: boolean;
@@ -232,8 +231,7 @@ export interface NumberBasedFieldProps<T>
 }
 
 export interface DateBasedFieldProps<T>
-  extends InitialCrudField<T>,
-    Copyable<false> {
+  extends InitialCrudField<T>, Copyable<false> {
   type: "date";
   format?: string;
   placeholder?: string;
@@ -253,8 +251,7 @@ export interface DateBasedFieldProps<T>
 }
 
 export interface TimeBasedFieldProps<T>
-  extends InitialCrudField<T>,
-    Copyable<false> {
+  extends InitialCrudField<T>, Copyable<false> {
   type: "time";
   placeholder?: string;
   use12Hours?: boolean;
@@ -277,7 +274,7 @@ export type GetFormFieldOptions = {
 };
 export type FormBuilderFunc0<T> = (
   name: keyof T,
-  options?: GetFormFieldOptions
+  options?: GetFormFieldOptions,
 ) => ReactElement;
 export type FormBuilderFunc<T> = (
   i: FormBuilderFunc0<T>,
@@ -285,7 +282,7 @@ export type FormBuilderFunc<T> = (
     isAnyFieldHidden: (...name: Array<keyof T>) => boolean;
     isAllFieldsHidden: (...name: Array<keyof T>) => boolean;
     purpose?: CrudPurpose;
-  }
+  },
 ) => ReactElement;
 
 // Create a type mapping that explicitly links each type string to its interface
@@ -316,12 +313,12 @@ export type CrudFieldProps<T> = {
 
 export type CrudPaginateProps =
   | false
-  | {
+  | ({
       page?: number;
       setPage?: (page: number, pageSize?: number) => void;
       pageSize?: number;
       count?: number;
-    } & TablePaginationConfig;
+    } & TablePaginationConfig);
 
 export type CrudWizardProp<T> = {
   title: string;
@@ -368,6 +365,7 @@ export type CrudComponentProps<T, FormType = T> = {
   draggable?: CrudDragableProps<T>;
   size?: SizeType;
   headerRender?: (props: { newButton: JSX.Element }) => React.ReactElement;
+  onValuesChange?: FormProps<T>["onValuesChange"];
 } & CrudSearchComponentProps<T, FormType>;
 
 function CrudComponent<T, FormType = T>({
@@ -403,6 +401,7 @@ function CrudComponent<T, FormType = T>({
   size,
   headerRender,
   actionWidth,
+  onValuesChange,
   ...props
 }: CrudComponentProps<T, FormType>) {
   const modalRef = useRef<CrudModalRef<T>>(null);
@@ -415,14 +414,14 @@ function CrudComponent<T, FormType = T>({
     async (data: T, shouldSetUpdatingField = true, isClone = false) => {
       await modalRef.current?.update(data, shouldSetUpdatingField, isClone);
     },
-    []
+    [],
   );
 
   const onClickClone = useCallback(
     async (data: T) => {
       onClickUpdate0(data, false, true);
     },
-    [onClickUpdate0]
+    [onClickUpdate0],
   );
   const { onClick: onClickNewButton, ...newButtonPropsWithoutOnClick } =
     useMemo(() => newButtonProps || {}, [newButtonProps]);
@@ -443,7 +442,7 @@ function CrudComponent<T, FormType = T>({
         {...newButtonPropsWithoutOnClick}
       ></NewButton>
     ),
-    [onClickNew, newButtonProps, newButtonPropsWithoutOnClick]
+    [onClickNew, newButtonProps, newButtonPropsWithoutOnClick],
   );
 
   const headerRender0 = useCallback(() => {
@@ -488,8 +487,8 @@ function CrudComponent<T, FormType = T>({
             onClickUpdate
               ? onClickUpdate
               : onUpdate
-              ? onClickUpdate0
-              : undefined
+                ? onClickUpdate0
+                : undefined
           }
           onHide={onHide}
           isHiding={isHiding}
@@ -513,6 +512,7 @@ function CrudComponent<T, FormType = T>({
         onUpdate={onUpdate}
         idField={idField}
         formBuilder={formBuilder}
+        onValuesChange={onValuesChange}
       />
     </>
   );
