@@ -1,3 +1,10 @@
+## [1.27.2](https://github.com/kingteza/crud-component/compare/v1.27.1...v1.27.2) (2026-03-17)
+
+
+### Bug Fixes
+
+* handle array input in CrudUtil class ([eb89818](https://github.com/kingteza/crud-component/commit/eb898186b845a320e5f39d1f5bf5970d6578f0b9))
+
 ## [1.27.1](https://github.com/kingteza/crud-component/compare/v1.27.0...v1.27.1) (2026-03-13)
 
 
