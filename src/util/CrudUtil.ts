@@ -5,6 +5,9 @@ class CrudUtil {
     name: InitialCrudField<T>["name"] | SelectCrudField<T>["name"],
     extract: "name" | "upsertFieldName" = "name"
   ) {
+    if (Array.isArray(name)) {
+      return name;
+    }
     return typeof name === "object"
       ? name[extract]
       : name;
