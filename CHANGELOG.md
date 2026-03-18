@@ -1,3 +1,10 @@
+## [1.27.3](https://github.com/kingteza/crud-component/compare/v1.27.2...v1.27.3) (2026-03-18)
+
+
+### Bug Fixes
+
+* update modal title translation to use string prefix ([05971eb](https://github.com/kingteza/crud-component/commit/05971eb8fcf52855022b1c067a6005f4458ada72))
+
 ## [1.27.2](https://github.com/kingteza/crud-component/compare/v1.27.1...v1.27.2) (2026-03-17)
 
 
