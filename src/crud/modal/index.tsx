@@ -214,7 +214,7 @@ const CrudModal = <T, FormType = T>(
   return (
     <Modal
       width={fullWidthModal ? "100%" : undefined}
-      title={t(purpose ?? "new")}
+      title={t("str." + (purpose ?? "new"))}
       open={open}
       confirmLoading={isCreating || isUpdating}
       okText={t("str." + (purpose === "update" ? "update" : "save"))}
