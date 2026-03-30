@@ -154,7 +154,7 @@ export interface SelectCrudField<
   selectOptionRender?: (option: SelectFieldItem) => ReactNode;
 }
 
-export interface EnumCrudField<T> extends InitialCrudField<T>, Copyable<false> {
+type EnumBaseFieldProps<T> = InitialCrudField<T> & Copyable<false> & {
   type: "enum";
   placeholder?: string;
   // enum: T[keyof T]
@@ -163,9 +163,7 @@ export interface EnumCrudField<T> extends InitialCrudField<T>, Copyable<false> {
   //       : never)
   //   | T[keyof T][]; // Allow plain string arrays
   enum: object | object[];
-  radio?: boolean;
   translation?: object;
-  multiple?: boolean;
   tagRender?: Record<string, { color: string }> | SelectTagRenderProps;
   // tagRender?: keyof T extends infer K // Infer the name
   //   ? K extends this['name']
@@ -177,6 +175,16 @@ export interface EnumCrudField<T> extends InitialCrudField<T>, Copyable<false> {
   onChange?: (value: T[keyof T], form: FormInstance<T>) => void;
   onSearch?: (keyword: string, form: FormInstance<T>) => void;
 }
+
+export type EnumCrudField<T> = EnumBaseFieldProps<T> & ({
+  multiple?: false;
+  radio?: true;
+} | {
+  multiple: true;
+  checkbox?: true;
+  /** When `checkbox` is true, wraps each option in a `Col` for grid layout. */
+  checkboxGrid?: CrudFieldGrid;
+});
 
 export type AddonFieldProps = {
   addonAfter?: ReactNode;

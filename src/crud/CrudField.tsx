@@ -2,7 +2,7 @@
  Copyright (c) 2020-2024 Kingteza and/or its affiliates. All rights reserved.
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
-import { ColorPicker, Form, Radio, Select, Tag } from "antd";
+import { Checkbox, Col, ColorPicker, Form, Radio, Select, Tag } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { useTranslationLib, useTranslationLibNoNS } from "../locale";
@@ -280,7 +280,6 @@ export default function CrudField<T = any>(
     case "enum": {
       const {
         enum: enumList,
-        radio = false,
         translation,
         onChange,
         onSearch,
@@ -288,7 +287,8 @@ export default function CrudField<T = any>(
         tagRender,
       } = props as EnumCrudField<T>;
       const list = Array.isArray(enumList) ? enumList : Object.keys(enumList);
-      if (radio) {
+
+      if ("radio" in props && props.radio) {
         return (
           <Form.Item
             {...props}
@@ -315,6 +315,33 @@ export default function CrudField<T = any>(
                 </Radio>
               ))}
             </Radio.Group>
+          </Form.Item>
+        );
+      } else if ("checkbox" in props && props.checkbox) {
+        return (
+          <Form.Item
+            {...props}
+            {...formLayoutProps}
+            name={name as any}
+            required={required}
+            tooltip={fieldTooltip}
+            rules={rules}
+            label={label}
+            className={["w-100", fieldClassName].join(" ")}
+            help={help}
+          >
+            <Checkbox.Group className="w-100">
+              {list.map((e) => {
+                const checkbox = (
+                  <Checkbox disabled={!updatable} key={e} value={e}>
+                    {translation ? t(translation[e]) : e}
+                  </Checkbox>
+                );
+                return ('checkboxGrid' in props && props.checkboxGrid) ? (
+                  <Col {...props.checkboxGrid}>{checkbox}</Col>
+                ) : checkbox;
+              })}
+            </Checkbox.Group>
           </Form.Item>
         );
       }
