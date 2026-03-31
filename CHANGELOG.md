@@ -1,3 +1,11 @@
+# [1.28.0](https://github.com/kingteza/crud-component/compare/v1.27.3...v1.28.0) (2026-03-31)
+
+
+### Features
+
+* enhance CrudField and App components with enum field support ([fc6a04e](https://github.com/kingteza/crud-component/commit/fc6a04ea58b2ddd166c259d11115347866dbe9b5))
+* enhance CrudViewer and CrudComponent with delete and update controls ([6f70485](https://github.com/kingteza/crud-component/commit/6f704853ebc00f8257c4a8795dca36fd1f49ca70))
+
 ## [1.27.3](https://github.com/kingteza/crud-component/compare/v1.27.2...v1.27.3) (2026-03-18)
 
 
