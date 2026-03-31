@@ -174,7 +174,23 @@ function App() {
         />
         <Button htmlType="submit">Save</Button>
       </Form>
-      <CrudViewer viewable fields={fields} data={data} />
+      <CrudViewer
+        viewable
+        fields={fields}
+        data={data}
+        onDelete={async (e: any) => {
+          console.log(e);
+        }}
+        deletable={(e: any) => {
+          return e.id !== "1";
+        }}
+        updatable={(e: any) => {
+          return e.id !== "2";
+        }}
+        onClickUpdate={(e: any) => {
+          console.log(e);
+        }}
+      />
     </div>
   );
 }

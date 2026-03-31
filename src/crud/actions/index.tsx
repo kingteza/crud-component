@@ -1,4 +1,4 @@
-import { ReactElement, useCallback, useRef } from "react";
+import { ReactElement, useCallback, useMemo, useRef } from "react";
 import {
   CloneButtonTable,
   DeleteButtonTable,
@@ -17,6 +17,8 @@ export interface CrudActionsProps<T, FormType> {
   onClickUpdate?: (t: T) => void;
   onClickClone?: (t: T) => Promise<any>;
   onDelete?: (id: any) => Promise<any>;
+  updatable?: (t: T) => boolean;
+  deletable?: (t: T) => boolean;
   onHide?: (id: any) => Promise<any>;
   onExport?: (t: T) => Promise<any>;
   isHiding?: boolean;
@@ -50,6 +52,8 @@ function CrudActions<T, FormType>({
   setRecentUpdateOrDeleteId,
   setOpenView,
   inBuiltModalProps,
+  updatable,
+  deletable,
 }: CrudActionsProps<T, FormType> & { data: T }) {
   const extra = extraAction?.(data);
   const modalRef = useRef<CrudModalRef<T>>(null);
@@ -67,19 +71,22 @@ function CrudActions<T, FormType>({
     },
     [inBuiltModalProps, onClickUpdate]
   );
+  const canUpdate = useMemo(() => Boolean(updatable ? updatable?.(data) : true), [updatable, data]);
+  const canDelete = useMemo(() => Boolean(deletable ? deletable?.(data) : true), [deletable, data]);
+
   return (Array.isArray(extra) ? extra?.filter(Boolean)?.length : extra) ||
     onUpdate ||
-    onClickUpdate ||
+    (canUpdate && onClickUpdate) ||
     inBuiltModalProps?.onUpdate ||
     onClickClone ||
     inBuiltModalProps?.onCreate ||
-    onDelete ||
+    (canDelete && onDelete) ||
     onExport ||
     onHide ? (
     <>
       {inBuiltModalProps && <CrudModal ref={modalRef} {...inBuiltModalProps} />}
       {extra}
-      {(onUpdate || onClickUpdate || inBuiltModalProps?.onUpdate) && (
+      {(onUpdate || onClickUpdate || inBuiltModalProps?.onUpdate) && canUpdate && (
         <UpdateButtonTable value={data} onClick={(e) => onClickUpdate0(e)} />
       )}
       {(onClickClone || inBuiltModalProps?.onCreate) && (
@@ -106,7 +113,7 @@ function CrudActions<T, FormType>({
           }}
         />
       )}
-      {onDelete && (
+      {onDelete && canDelete && (
         <DeleteButtonTable
           value={data}
           disabled={isDeleting}

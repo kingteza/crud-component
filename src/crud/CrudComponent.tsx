@@ -346,7 +346,9 @@ export type CrudComponentProps<T, FormType = T> = {
   onCreate?: (t: FormType) => Promise<any>;
   onHide?: (id: any) => Promise<any>;
   onDelete?: (id: any) => Promise<any>;
+  deletable?: (t: T) => boolean;
   onUpdate?: (t: FormType & IdProps) => Promise<any>;
+  updatable?: (t: T) => boolean;
   onClickUpdate?: (t: T) => void;
   loadingData?: boolean;
   isCreating?: boolean;
@@ -380,8 +382,10 @@ function CrudComponent<T, FormType = T>({
   idField = "id",
   onCreate,
   onDelete,
+  deletable,
   onHide,
   onUpdate,
+  updatable,
   onClickUpdate,
   fields,
   data,
@@ -501,6 +505,8 @@ function CrudComponent<T, FormType = T>({
           onHide={onHide}
           isHiding={isHiding}
           onDelete={onDelete}
+          deletable={deletable}
+          updatable={updatable}
           onUpdate={onUpdate}
           onClickClone={cloneable ? onClickClone : undefined}
           paginateProps={paginateProps}

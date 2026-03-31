@@ -99,6 +99,8 @@ function CrudViewer<T, FormType = T>({
   viewable = false,
   paginateProps,
   onDelete,
+  deletable,
+  updatable,
   onHide,
   onUpdate,
   data = [],
@@ -306,6 +308,8 @@ function CrudViewer<T, FormType = T>({
               onClickUpdate={onClickUpdate}
               onClickClone={onClickClone}
               onDelete={onDelete}
+              deletable={deletable}
+              updatable={updatable}
               onHide={onHide}
               onExport={onExport}
               isHiding={isHiding}
@@ -327,6 +331,8 @@ function CrudViewer<T, FormType = T>({
     onUpdate,
     onClickUpdate,
     onDelete,
+    deletable,
+    updatable,
     extraAction,
     viewable,
     t,
@@ -404,6 +410,8 @@ function CrudViewer<T, FormType = T>({
                 onClickUpdate={onClickUpdate}
                 onClickClone={onClickClone}
                 onDelete={onDelete}
+                deletable={deletable}
+                updatable={updatable}
                 onHide={onHide}
                 onExport={onExport}
                 isHiding={isHiding}
