@@ -1,3 +1,10 @@
+# [1.29.0](https://github.com/kingteza/crud-component/compare/v1.28.0...v1.29.0) (2026-03-31)
+
+
+### Features
+
+* enhance release workflow with manual trigger and input options ([e03451d](https://github.com/kingteza/crud-component/commit/e03451dcff92fe9e6c4c11613e1759412ed362a5))
+
 # [1.28.0](https://github.com/kingteza/crud-component/compare/v1.27.3...v1.28.0) (2026-03-31)
 
 
