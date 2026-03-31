@@ -3,9 +3,26 @@ name: Release
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Git ref to publish from (branch, tag, or commit SHA)"
+        required: false
+        default: "main"
+        type: string
+      version:
+        description: "Optional version override (example: 1.2.3). Leave empty to use package.json version."
+        required: false
+        type: string
+      npm_tag:
+        description: "npm dist-tag to publish with"
+        required: false
+        default: "latest"
+        type: string
 
 jobs:
   release:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,3 +51,38 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: pnpm run release
+
+  force-publish:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Set package version (without git tag)
+        if: ${{ inputs.version != '' }}
+        run: npm version ${{ inputs.version }} --no-git-tag-version
+
+      - name: Publish to npm (manual force)
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --tag ${{ inputs.npm_tag }}
