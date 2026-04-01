@@ -4,7 +4,7 @@
 ***************************************************************************** */
 
 import { Checkbox, Col, Form, List, Modal, Row, Select } from "antd";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 
 import SelectComponent from "../select/SelectComponent";
 import { ValidationUtil } from "../../util";
@@ -80,6 +80,14 @@ export const SelectFieldInReport: FC<{
     [isCheckboxMode, onClickOpen]
   );
 
+  const itemSorted = useMemo(() => {
+    const sorted = [...items];
+    sorted.sort((a, b) => {
+      return a.label.localeCompare(b.label);
+    });
+    return sorted;
+  }, [items]);
+
   return (
     <>
       {isCheckboxMode && (
@@ -100,7 +108,7 @@ export const SelectFieldInReport: FC<{
               <List
                 size="small"
                 style={{ width: "100%" }}
-                dataSource={items}
+                dataSource={itemSorted}
                 renderItem={(e) => (
                   <List.Item key={e.id} style={{ width: "100%" }}>
                     <List.Item.Meta
