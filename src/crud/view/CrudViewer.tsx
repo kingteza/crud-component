@@ -44,7 +44,7 @@ import { CrudDecListView, DescListColumn } from "./CrudDecListView";
 import { getRendererValueCrudViewer } from "./CrudViewerUtil";
 import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 import { HolderOutlined } from "@ant-design/icons";
-import CrudUtil from "src/util/CrudUtil";
+import CrudUtil from "../../util/CrudUtil";
 
 // Create a stable table component that doesn't re-render unnecessarily
 const TableComponentMemo = React.memo(TableComponent) as typeof TableComponent;

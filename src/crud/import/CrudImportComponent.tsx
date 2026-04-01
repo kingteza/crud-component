@@ -10,7 +10,7 @@ import { saveAs } from "file-saver";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslationLib } from "../../locale";
 
-import { ReadonlyCrudFields } from "../CrudComponent";
+import type { CrudFieldProps, ReadonlyCrudFields } from "../CrudComponent";
 import CrudViewer from "../view/CrudViewer";
 import { DialogProps } from "../../types/DialogComponentProp";
 import DateUtil from "../../util/DateUtil";

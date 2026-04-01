@@ -4,6 +4,7 @@ KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 import { Form } from "antd";
 import { Rule } from "antd/es/form";
+import type { NamePath } from "antd/es/form/interface";
 import { FormItemProps } from "antd/lib";
 import React, {
   FC,
@@ -15,12 +16,12 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { ValidationUtil } from "src/util";
+import { ValidationUtil } from "../../util";
 
 export interface RichTextEditorProps {
   help?: ReactNode;
   label?: string;
-  name: string;
+  name: NamePath;
   required?: boolean;
   rules?: Rule[];
   disabled?: boolean;

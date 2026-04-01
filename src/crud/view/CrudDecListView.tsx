@@ -10,10 +10,10 @@ import { useTranslationLib } from "../../locale";
 
 import { ReadonlyCrudFields } from "../CrudComponent";
 import { getRendererValueCrudViewer } from "./CrudViewerUtil";
-import CrudUtil from "src/util/CrudUtil";
+import CrudUtil from "../../util/CrudUtil";
 import CrudActions, { CrudActionsProps } from "../actions";
 import { CrudModalProps } from "../modal";
-import { getValueByPath } from "src/util/ObjectUtil";
+import { getValueByPath } from "../../util/ObjectUtil";
 
 export type DescListColumn =
   | number

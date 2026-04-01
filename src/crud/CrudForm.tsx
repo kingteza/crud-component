@@ -13,7 +13,7 @@ import {
   ReadonlyCrudFields,
 } from "./CrudComponent";
 import CrudField from "./CrudField";
-import CrudUtil from "src/util/CrudUtil";
+import CrudUtil from "../util/CrudUtil";
 
 export interface CurdFormFieldsProps<T> {
   onDeleteFile?: (e) => void;

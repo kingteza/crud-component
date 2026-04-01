@@ -71,7 +71,6 @@ export const CrudComponentProvider: React.FC<CrudComponentProviderProps> = ({
     if (isInitialized.current && i18nOptions) {
       setupI18n(i18nOptions);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18nOptions?.language]);
 
   return <Context.Provider value={{}}>{children}</Context.Provider>;

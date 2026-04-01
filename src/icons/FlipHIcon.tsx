@@ -1,5 +1,5 @@
 import { CustomIconComponentProps } from "@ant-design/icons/lib/components/Icon";
-import KIcon from "src/common/icon/KIcon";
+import KIcon from "../common/icon/KIcon";
 
 import type { SVGProps } from "react";
 

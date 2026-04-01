@@ -26,7 +26,7 @@ import { FileDownloadProvider, FileUploadProvider } from "./ImageCrudField";
 import ValidationUtil from "../util/ValidationUtil";
 import { ButtonComponent } from "../common";
 import { VerticalSpace } from "../common";
-import CrudUtil from "src/util/CrudUtil";
+import CrudUtil from "../util/CrudUtil";
 
 export interface FileCrudField<T> extends _FileCrudField<T> {
   type: "file";

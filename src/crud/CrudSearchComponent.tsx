@@ -11,7 +11,7 @@ import { useCallback, useEffect, useMemo } from "react";
 import { ReadonlyCrudFields } from "./CrudComponent";
 import CrudField from "./CrudField";
 import { ButtonComponent } from "../common";
-import CrudUtil from "src/util/CrudUtil";
+import CrudUtil from "../util/CrudUtil";
 
 export type CrudSearchOption<T> = { required?: boolean } & (
   | { type: "text"; name: keyof T }
@@ -122,7 +122,6 @@ export default function CrudSearchComponent<T, FormType>({
       form.setFieldsValue(searchDefaultValues);
       search(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form, searchDefaultValues]);
 
   if (!searchFields?.length) return <></>;

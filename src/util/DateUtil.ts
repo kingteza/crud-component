@@ -4,7 +4,7 @@
 ***************************************************************************** */
 
 import dayjs from 'dayjs';
-import { i18nInstance } from 'src/locale';
+import { i18nInstance } from '../locale';
 
 // moment.locale('si', {
 //   calendar: {

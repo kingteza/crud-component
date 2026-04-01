@@ -1,7 +1,7 @@
 import { CustomIconComponentProps } from "@ant-design/icons/lib/components/Icon";
 
 import type { SVGProps } from "react";
-import KIcon from "src/common/icon/KIcon";
+import KIcon from "../common/icon/KIcon";
 
 function GgEditFlipV(props: Readonly<SVGProps<SVGSVGElement>>) {
   return (

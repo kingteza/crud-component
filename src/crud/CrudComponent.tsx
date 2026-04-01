@@ -28,12 +28,12 @@ import CrudViewer, {
 import { NewButton, PrintButton } from "../common";
 import { SelectTagRenderProps } from "../common/select/SelectComponent";
 import IdProps from "../types/Id";
-import { TextAreaBasedFieldProps } from ".";
+import type { TextAreaBasedFieldProps } from "./CrudTextAreaComponent";
 import { SizeType } from "antd/es/config-provider/SizeContext";
-import { Copyable } from "src/util/CopyUtilComponent";
+import type { Copyable } from "../util/CopyUtilComponent";
 import { ColumnType } from "antd/es/table";
 import { FormItemLayout } from "antd/es/form/Form";
-import { PhoneNumberConfigProps } from "src/common/text-field/PhoneNumberField";
+import type { PhoneNumberConfigProps } from "../common/text-field/PhoneNumberField";
 
 export type SelectFieldItem = {
   key?: string | number;

@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 /* *****************************************************************************
  Copyright (c) 2020-2022 Kingteza and/or its affiliates. All rights reserved.
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
@@ -29,8 +28,8 @@ import { useTranslationLib } from "../../locale";
 
 import ButtonComponent from "../button/Button";
 import ImageUtil from "../../util/ImageUtil";
-import FlipHIcon from "src/icons/FlipHIcon";
-import FlipVIcon from "src/icons/FlipVIcon";
+import FlipHIcon from "../../icons/FlipHIcon";
+import FlipVIcon from "../../icons/FlipVIcon";
 
 const BUTTON_STATE = "crud-component.image-picker.button-state";
 

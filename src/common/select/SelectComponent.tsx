@@ -16,11 +16,10 @@ import { ReactElement, useCallback } from "react";
 import { useTranslationLib } from "../../locale";
 
 import TooltipComponent from "../tooltip/TooltipComponent";
-import { ValidationUtil } from "src/util";
+import { ValidationUtil } from "../../util";
 
 export type SelectTagRenderProps = SelectProps["tagRender"];
 
-// eslint-disable-next-line no-unused-vars
 interface SelectComponentProps<T> extends SelectProps<any>, FormItemProps<any> {
   children?: any[] | null;
   required?: boolean;

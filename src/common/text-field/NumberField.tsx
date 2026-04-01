@@ -25,8 +25,7 @@ interface NumberTextFieldProps extends TextFieldProps {
 const NumberTextField = forwardRef<HTMLInputElement, NumberTextFieldProps>(
   function Input(
     {
-      // eslint-disable-next-line no-unused-vars
-      type,
+      type: _type,
       required,
       label,
       rules = [],

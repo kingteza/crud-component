@@ -33,9 +33,9 @@ import {
   TooltipComponent,
 } from "../common";
 import CrudTextAreaComponent from "./CrudTextAreaComponent";
-import CrudUtil from "src/util/CrudUtil";
+import CrudUtil from "../util/CrudUtil";
 import { Color } from "antd/es/color-picker";
-import PhoneNumberField from "src/common/text-field/PhoneNumberField";
+import PhoneNumberField from "../common/text-field/PhoneNumberField";
 
 export default function CrudField<T = any>(
   props0: Readonly<CrudFieldProps<T>>

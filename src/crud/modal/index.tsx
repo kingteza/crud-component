@@ -22,7 +22,7 @@ import { useTranslationLib } from "../../locale";
 import CrudUtil from "../../util/CrudUtil";
 import IdProps from "../../types/Id";
 import dayjs from "dayjs";
-import { getValueByPath, setValueByPath } from "src/util/ObjectUtil";
+import { getValueByPath, setValueByPath } from "../../util/ObjectUtil";
 
 export interface CrudModalProps<T, FormType> {
   fields: ReadonlyCrudFields<T>;

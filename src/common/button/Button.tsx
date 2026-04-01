@@ -6,7 +6,7 @@ import { Button, ButtonProps, Tooltip } from "antd";
 
 import React, { forwardRef, useCallback, useMemo, useState } from "react";
 import { useTranslationLib } from "../../locale";
-import { useNavigateOptional } from "src/hooks/NavigatorHooks";
+import { useNavigateOptional } from "../../hooks/NavigatorHooks";
 
 export interface ButtonComponentProps extends ButtonProps {
   to?: string | number;

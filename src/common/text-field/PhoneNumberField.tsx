@@ -16,8 +16,8 @@ import PhoneInput, {
 import { TextFieldProps } from "./TextField";
 import { Form, Input } from "antd";
 import { Rule } from "antd/es/form";
-import { ValidationUtil } from "src/util";
-import { useTranslationLib } from "src/locale";
+import { ValidationUtil } from "../../util";
+import { useTranslationLib } from "../../locale";
 
 export type OnChangeProps = (value: Value | undefined) => void;
 export type CountryCode = Country;

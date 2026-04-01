@@ -19,14 +19,14 @@ import DateUtil from "../../util/DateUtil";
 import NumberUtil from "../../util/NumberUtil";
 import { t, tWithOrWithoutNS } from "../../locale";
 import { TextAreaBasedFieldProps } from "../CrudTextAreaComponent";
-import CrudUtil from "src/util/CrudUtil";
-import { ErrorBoundaryComponent } from "src/common/error/ErrorBoundaryComponent";
+import CrudUtil from "../../util/CrudUtil";
+import { ErrorBoundaryComponent } from "../../common/error/ErrorBoundaryComponent";
 import {
   Copyable,
   copyableFn,
   CopyToClipboardButtonWrapper,
-} from "src/util/CopyUtilComponent";
-import { getValueByPath } from "src/util/ObjectUtil";
+} from "../../util/CopyUtilComponent";
+import { getValueByPath } from "../../util/ObjectUtil";
 
 export function getRendererValueCrudViewer<T>({
   type,

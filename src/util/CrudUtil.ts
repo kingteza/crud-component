@@ -1,4 +1,4 @@
-import { InitialCrudField, SelectCrudField } from "src/crud";
+import type { InitialCrudField, SelectCrudField } from "../crud/CrudComponent";
 
 class CrudUtil {
   public static getRealName<T>(

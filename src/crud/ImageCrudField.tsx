@@ -24,7 +24,7 @@ import { v4 as uuidV4 } from "uuid";
 
 import { InitialCrudField } from "./CrudComponent";
 import { ImagePicker } from "../common";
-import { ImageUtil } from "src/util";
+import { ImageUtil } from "../util";
 
 export interface _ImageCrudField<T> extends InitialCrudField<T> {
   provider: FileUploadProvider;

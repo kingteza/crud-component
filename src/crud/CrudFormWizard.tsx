@@ -11,8 +11,8 @@ import { useTranslationLib } from "../locale";
 import { CrudPurpose, CrudWizardProp, ReadonlyCrudFields } from "./CrudComponent";
 import { CrudFormFields } from "./CrudForm";
 import { ButtonComponent, WizardViewForm } from "../common";
-import CrudUtil from "src/util/CrudUtil";
-import { getValueByPath, setValueByPath } from "src/util/ObjectUtil";
+import CrudUtil from "../util/CrudUtil";
+import { getValueByPath, setValueByPath } from "../util/ObjectUtil";
 
 export interface CrudFormWizardProps<T> {
   onDeleteFile?: (e) => void;
@@ -42,9 +42,10 @@ function CrudFormWizard<T>({
   const wizard0 = useMemo(() => {
     return wizard.map((e) => {
       let hidden = true;
-      const fieldThatShouldShowing = fields.filter((x) =>
-        e.fields.includes(CrudUtil.getRealName(x.name)),
-      );
+      const fieldThatShouldShowing = fields.filter((x) => {
+        const real = CrudUtil.getRealName(x.name);
+        return !Array.isArray(real) && e.fields.includes(real);
+      });
       fieldThatShouldShowing.forEach((x) => (hidden &&= x.hidden ?? false));
       return {
         ...e,
