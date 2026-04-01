@@ -35,6 +35,7 @@ export default {
     flipHorizontal: "Flip Horizontal",
     flipVertical: "Flip Vertical",
     skipCrop: "Skip Crop",
+    showFields: "Show Fields",
   },
   err: {
     save: "An error occurred while saving",

@@ -3,8 +3,10 @@ import {
   CrudComponent,
   CrudDecListView,
   CrudField,
+  CrudReportComponent,
   CrudViewer,
   FileUploadProvider,
+  ReportCrudFields,
 } from ".";
 import { useCallback, useEffect, useState } from "react";
 import { UploadFile } from "antd/lib";
@@ -139,13 +141,13 @@ function App() {
     asyncUpload: true,
   } as const;
 
-  const fields = [
-    { type: "text", label: "id", name: "id" },
-    { type: "text", label: "helloId", name: "helloId" },
-    { type: "text", label: "status", name: "status" },
-    { type: "text", label: "test", name: "test" },
-    { type: "text", label: "value", name: "value" },
-    { type: "text", label: "name", name: "name" },
+  const fields: ReportCrudFields<Purchase, Purchase>[] = [
+    { report: {searchable: true, alreadySelected: true, },  type: "text", label: "id", name: "id" },
+    { report: {searchable: true, alreadySelected: true, },  type: "text", label: "helloId", name: "helloId" },
+    { report: {searchable: true, alreadySelected: true, },  type: "text", label: "status", name: "status" },
+    { report: {searchable: true, alreadySelected: true, },  type: "text", label: "test", name: "test" },
+    { report: {searchable: true, alreadySelected: true, },  type: "text", label: "value", name: "value" },
+    { report: {searchable: true, alreadySelected: true, },  type: "text", label: "name", name: "name" },
   ];
   return (
     <div className="mx-2">
@@ -174,10 +176,11 @@ function App() {
         />
         <Button htmlType="submit">Save</Button>
       </Form>
-      <CrudViewer
+      <CrudReportComponent
         viewable
-        fields={[{type: 'checkbox'}]}
+        fields={fields}
         data={data}
+        
         onDelete={async (e: any) => {
           console.log(e);
         }}

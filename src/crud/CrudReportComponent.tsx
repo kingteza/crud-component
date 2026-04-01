@@ -26,6 +26,8 @@ import {
   SelectComponent,
 } from "../common";
 import { getRendererValueCrudViewer } from "./view/CrudViewerUtil";
+import { useTranslationLib } from "../locale";
+import { SelectFieldInReportSelectingMode } from "../common/report/SelectFieldInReport";
 
 export type CrudReportSubmitForm<T> = {
   sortBy: {
@@ -64,6 +66,7 @@ export interface CrudReportComponentProps<T_Data, F_Search> {
   minusHeight?: string;
   extraSearchFields?: (form: FormInstance<any>) => ReactElement;
   searchOnMount?: boolean;
+  showFieldsSelectingMode?: SelectFieldInReportSelectingMode;
 }
 
 const props = { lg: 6, md: 8, sm: 12, xs: 24 };
@@ -84,7 +87,9 @@ function CrudReportComponent<T, F = T>({
   extraSearchFields,
   searchOnMount,
   summary,
+  showFieldsSelectingMode = 'checkbox',
 }: Readonly<CrudReportComponentProps<T, F>>) {
+  const { t } = useTranslationLib();
   const { searchable, selectable, sortable, defaultSort } = useMemo(() => {
     const searchable: ReportCrudFields<T, F>[] = [];
     const sortable: ReportCrudFields<T, F>[] = [];
@@ -234,8 +239,9 @@ function CrudReportComponent<T, F = T>({
                 items={selectable}
                 name="showFields"
                 mode="multiple"
-                label="Show Fields"
+                label={t("str.showFields")}
                 className="mb-0"
+                selectingMode={showFieldsSelectingMode}
               />
             </Col>
           )}
