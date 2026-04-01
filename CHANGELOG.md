@@ -1,3 +1,10 @@
+## [1.32.1](https://github.com/kingteza/crud-component/compare/v1.32.0...v1.32.1) (2026-04-01)
+
+
+### Bug Fixes
+
+* add new fields to App component and enhance SelectFieldInReport ([444f780](https://github.com/kingteza/crud-component/commit/444f780298a428ddec37abb4889f9b2c42bb656e))
+
 # [1.32.0](https://github.com/kingteza/crud-component/compare/v1.31.0...v1.32.0) (2026-04-01)
 
 
