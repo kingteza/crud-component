@@ -48,7 +48,7 @@ export interface InitialCrudField<T> {
   updatingValue?: T;
   render?: (value: any, obj: T, index: number) => any;
   required?: boolean;
-  updatable?: boolean;
+  updatable?: boolean | ((data: T) => boolean);
   fieldTooltip?: string;
   hideInTable?: boolean;
   hideInDescList?: boolean;

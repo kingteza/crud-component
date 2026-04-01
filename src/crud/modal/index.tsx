@@ -8,6 +8,7 @@ import {
   useImperativeHandle,
   forwardRef,
   Ref,
+  useMemo,
 } from "react";
 
 import { CrudForm } from "../CrudForm";
@@ -102,6 +103,7 @@ const CrudModal = <T, FormType = T>(
         await onCreate(field);
       }
       setUpdatingValueForWizard(undefined);
+      setUpdatableValueFields(new Map());
       form.resetFields();
       setOpen(false);
     },
@@ -124,6 +126,25 @@ const CrudModal = <T, FormType = T>(
     setUpdatingField(undefined);
     setUpdatingValueForWizard(undefined);
   }, [form]);
+
+  const [updatableValueFields, setUpdatableValueFields] = useState<
+    Map<keyof T | (string | number)[], boolean>
+  >(new Map());
+
+  const fieldsWithUpdatableValue = useMemo(() => {
+    if (updatableValueFields.size === 0) return fields;
+    return fields.map((e) => {
+      if (typeof e.updatable === "function") {
+        return {
+          ...e,
+          updatable:
+            updatableValueFields.get(CrudUtil.getRealName(e.name, "name")) ??
+            e.updatable,
+        };
+      }
+      return e;
+    });
+  }, [fields, updatableValueFields]);
 
   const update = useCallback(
     async (data: T, shouldSetUpdatingField = true, isClone = false) => {
@@ -150,14 +171,21 @@ const CrudModal = <T, FormType = T>(
             }
           }
           if (e.type === "date" || e.type === "time") {
-            if (dataField) setValueByPath(_data, upsertFieldName, dayjs(dataField));
+            if (dataField)
+              setValueByPath(_data, upsertFieldName, dayjs(dataField));
           } else if (e.type === "select") {
             if (e.multiple && Array.isArray(dataField)) {
-              setValueByPath(_data, upsertFieldName, dataField.map(
-                (x) => x[e.innerFieldId ?? "id"]
-              ));
+              setValueByPath(
+                _data,
+                upsertFieldName,
+                dataField.map((x) => x[e.innerFieldId ?? "id"])
+              );
             } else if (dataField && typeof dataField === "object")
-              setValueByPath(_data, upsertFieldName, dataField[e.innerFieldId ?? "id"]);
+              setValueByPath(
+                _data,
+                upsertFieldName,
+                dataField[e.innerFieldId ?? "id"]
+              );
             else if (
               (dataField && typeof dataField === "string") ||
               typeof dataField === "number"
@@ -166,6 +194,16 @@ const CrudModal = <T, FormType = T>(
           } else setValueByPath(_data, upsertFieldName, dataField);
         }
         form.setFieldsValue(_data);
+        const updatableValueFields = new Map();
+        for (const e of fields) {
+          if (typeof e.updatable === "function") {
+            updatableValueFields.set(
+              CrudUtil.getRealName(e.name, "name"),
+              e.updatable(data)
+            );
+          }
+        }
+        setUpdatableValueFields(updatableValueFields);
         setUpdatingValueForWizard(_data);
         if (shouldSetUpdatingField) setUpdatingField(data);
       } finally {
@@ -192,6 +230,7 @@ const CrudModal = <T, FormType = T>(
   }, [open]);
 
   const handleCancel = useCallback(async () => {
+    setUpdatableValueFields(new Map());
     try {
       if (purpose === "clone") {
         const values = !wizard ? form.getFieldsValue() : updatingField;
@@ -239,7 +278,7 @@ const CrudModal = <T, FormType = T>(
         {wizard ? null : (
           <CrudForm
             purpose={purpose}
-            fields={fields}
+            fields={fieldsWithUpdatableValue}
             form={form}
             formBuilder={formBuilder}
             grid={grid}
