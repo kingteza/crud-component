@@ -1,7 +1,7 @@
 {
   "name": "@kingteza/crud-component",
   "private": false,
-  "version": "1.30.0",
+  "version": "1.31.0",
   "description": "React CRUD component library with Ant Design",
   "keywords": [
     "react",

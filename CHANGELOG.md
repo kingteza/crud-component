@@ -1,3 +1,10 @@
+# [1.31.0](https://github.com/kingteza/crud-component/compare/v1.30.0...v1.31.0) (2026-04-01)
+
+
+### Features
+
+* enhance report components with new field selection and localization ([7c5dfcb](https://github.com/kingteza/crud-component/commit/7c5dfcb6a9eee0ce1042c2fdca94ed6d452d6662))
+
 # [1.30.0](https://github.com/kingteza/crud-component/compare/v1.29.1...v1.30.0) (2026-04-01)
 
 
