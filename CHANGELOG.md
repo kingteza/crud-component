@@ -1,3 +1,10 @@
+# [1.30.0](https://github.com/kingteza/crud-component/compare/v1.29.1...v1.30.0) (2026-04-01)
+
+
+### Features
+
+* enhance CrudComponent and CrudModal with dynamic updatable fields ([2b33a0c](https://github.com/kingteza/crud-component/commit/2b33a0c25970527886e9b232b4ef9eb696064b10))
+
 ## [1.29.1](https://github.com/kingteza/crud-component/compare/v1.29.0...v1.29.1) (2026-04-01)
 
 
