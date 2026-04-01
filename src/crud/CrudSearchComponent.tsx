@@ -8,7 +8,7 @@ import { Col, Form, Row } from "antd";
 import { ColProps } from "antd/lib";
 import { useCallback, useEffect, useMemo } from "react";
 
-import { CrudFieldProps } from "./CrudComponent";
+import { ReadonlyCrudFields } from "./CrudComponent";
 import CrudField from "./CrudField";
 import { ButtonComponent } from "../common";
 import CrudUtil from "src/util/CrudUtil";
@@ -20,7 +20,7 @@ export type CrudSearchOption<T> = { required?: boolean } & (
 
 export interface CrudSearchComponentProps<T, FormType> {
   searchFields?: Array<keyof T | CrudSearchOption<T>>;
-  fields: CrudFieldProps<T>[];
+  fields: ReadonlyCrudFields<T>;
   searchOnChange?: boolean;
   searchDefaultValues?: FormType;
   onSearch?: (values: Partial<FormType>) => void;
@@ -35,7 +35,7 @@ export default function CrudSearchComponent<T, FormType>({
   searchDefaultValues,
   searchFieldsCustomColumnProps,
 }: Readonly<CrudSearchComponentProps<T, FormType>>) {
-  const showingFields: CrudFieldProps<T>[] = useMemo(
+  const showingFields: ReadonlyCrudFields<T> = useMemo(
     () =>
       searchFields
         .map((field) => {

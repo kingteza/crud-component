@@ -10,14 +10,14 @@ import { saveAs } from "file-saver";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslationLib } from "../../locale";
 
-import { CrudFieldProps } from "../CrudComponent";
+import { ReadonlyCrudFields } from "../CrudComponent";
 import CrudViewer from "../view/CrudViewer";
 import { DialogProps } from "../../types/DialogComponentProp";
 import DateUtil from "../../util/DateUtil";
 import { ButtonComponent, ImportButton } from "../../common";
 
 export interface CrudImportComponentProps<T> {
-  fields: CrudFieldProps<T>[];
+  fields: ReadonlyCrudFields<T>;
   importProps: CrudImportProps<T>;
 }
 

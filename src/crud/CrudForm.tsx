@@ -7,10 +7,10 @@ import { Col, Form, FormInstance, FormProps, Input, Row } from "antd";
 import React, { useCallback, useMemo } from "react";
 
 import {
-  CrudFieldProps,
   CrudPurpose,
   FormBuilderFunc,
   GetFormFieldOptions,
+  ReadonlyCrudFields,
 } from "./CrudComponent";
 import CrudField from "./CrudField";
 import CrudUtil from "src/util/CrudUtil";
@@ -20,7 +20,7 @@ export interface CurdFormFieldsProps<T> {
   onUploadFile?: (e) => void;
   grid?: boolean;
   formBuilder?: FormBuilderFunc<T>;
-  fields: CrudFieldProps<T>[];
+  fields: ReadonlyCrudFields<T>;
   purpose?: CrudPurpose;
   onValuesChange?: FormProps<T>["onValuesChange"];
 }

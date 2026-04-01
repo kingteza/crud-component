@@ -26,6 +26,7 @@ import {
   copyableFn,
   CopyToClipboardButtonWrapper,
 } from "src/util/CopyUtilComponent";
+import { getValueByPath } from "src/util/ObjectUtil";
 
 export function getRendererValueCrudViewer<T>({
   type,
@@ -50,8 +51,7 @@ export function getRendererValueCrudViewer<T>({
             e ||
             (selectProps.items ?? []).find(
               (item) =>
-                item[selectProps.innerFieldId ?? "key"] ===
-                value[CrudUtil.getRealName(props.name, "upsertFieldName")]
+                item[selectProps.innerFieldId ?? "key"] === getValueByPath(value, CrudUtil.getRealName(props.name, "upsertFieldName"))
             );
           const v = selectProps.multiple
             ? Array.isArray(e0)

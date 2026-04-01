@@ -176,7 +176,7 @@ function App() {
       </Form>
       <CrudViewer
         viewable
-        fields={fields}
+        fields={[{type: 'checkbox'}]}
         data={data}
         onDelete={async (e: any) => {
           console.log(e);

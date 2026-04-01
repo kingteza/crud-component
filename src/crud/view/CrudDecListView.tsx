@@ -8,11 +8,12 @@ import { DescList, DescPropsNullable } from "../../common";
 import { useMemo } from "react";
 import { useTranslationLib } from "../../locale";
 
-import { CrudFieldProps } from "../CrudComponent";
+import { ReadonlyCrudFields } from "../CrudComponent";
 import { getRendererValueCrudViewer } from "./CrudViewerUtil";
 import CrudUtil from "src/util/CrudUtil";
 import CrudActions, { CrudActionsProps } from "../actions";
 import { CrudModalProps } from "../modal";
+import { getValueByPath } from "src/util/ObjectUtil";
 
 export type DescListColumn =
   | number
@@ -20,7 +21,7 @@ export type DescListColumn =
   | undefined;
 export interface CrudDecListViewProps<T, FormType = T>
   extends Omit<CrudActionsProps<T, FormType>, "inBuiltModalProps"> {
-  fields: CrudFieldProps<T>[];
+  fields: ReadonlyCrudFields<T>;
   data: T | undefined;
   className?: string;
   descListColumn?: DescListColumn;
@@ -50,7 +51,7 @@ export function CrudDecListView<T, FormType = T>({
           label: e.label,
           noFormatting: true,
           value: getRendererValueCrudViewer(e)(
-            data?.[upsertFieldName],
+            getValueByPath(data as any, upsertFieldName),
             data as any,
             i
           ),

@@ -319,6 +319,9 @@ export type CrudFieldProps<T> = {
   };
 }[keyof CrudFieldTypeMap<T>];
 
+/** Field lists passed into CRUD components; accepts mutable arrays and `as const` tuples. */
+export type ReadonlyCrudFields<T> = readonly CrudFieldProps<T>[];
+
 export type CrudPaginateProps =
   | false
   | ({
@@ -337,7 +340,7 @@ export type CrudWizardProp<T> = {
 };
 
 export type CrudComponentProps<T, FormType = T> = {
-  fields: CrudFieldProps<T>[];
+  fields: ReadonlyCrudFields<T>;
   data: T[] | undefined;
   idField?: string;
   grid?: boolean;

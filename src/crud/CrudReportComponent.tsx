@@ -40,7 +40,7 @@ export type SearchOnlyFields<F> = CrudFieldProps<F> & { hideInTable: true };
 export type ReportCrudFields<T, F> = CrudFieldProps<T> | SearchOnlyFields<F>;
 export interface CrudReportComponentProps<T_Data, F_Search> {
   summary?: React.ReactNode;
-  fields: ReportCrudFields<T_Data, F_Search>[];
+  fields: readonly ReportCrudFields<T_Data, F_Search>[];
   onSubmit: (value: CrudReportSubmitForm<F_Search>) => void;
   data: T_Data[];
   idField?: string;
@@ -48,14 +48,16 @@ export interface CrudReportComponentProps<T_Data, F_Search> {
   size?: SizeType;
   paginateProps?: CrudPaginateProps;
   onClickPrint?: (props: {
-    fields: CrudFieldProps<T_Data>[] &
-      { render: (value: any, obj: T_Data, index: number) => any }[];
+    fields: readonly (CrudFieldProps<T_Data> & {
+      render: (value: any, obj: T_Data, index: number) => any;
+    })[];
     data: T_Data[];
     tableId: string;
   }) => void;
   onClickExcelExport?: (props: {
-    fields: CrudFieldProps<T_Data>[] &
-      { render: (value: any, obj: T_Data, index: number) => any }[];
+    fields: readonly (CrudFieldProps<T_Data> & {
+      render: (value: any, obj: T_Data, index: number) => any;
+    })[];
     data: T_Data[];
     tableId: string;
   }) => void;

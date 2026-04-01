@@ -36,7 +36,7 @@ import React, {
 } from "react";
 import { useTranslationLib } from "../../locale";
 
-import { CrudFieldProps, CrudPaginateProps } from "../CrudComponent";
+import { CrudPaginateProps, ReadonlyCrudFields } from "../CrudComponent";
 import CrudSearchComponent, {
   CrudSearchComponentProps,
 } from "../CrudSearchComponent";
@@ -66,7 +66,7 @@ export type CrudViewableProps<T> =
 
 export type CrudViewerProps<T, FormType> = {
   summary?: TableProps<T>["summary"];
-  fields: CrudFieldProps<T>[];
+  fields: ReadonlyCrudFields<T>;
   decListLayout?: "horizontal" | "vertical";
   viewable?: CrudViewableProps<T>;
   paginateProps?: CrudPaginateProps;

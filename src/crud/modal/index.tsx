@@ -13,18 +13,19 @@ import {
 import { CrudForm } from "../CrudForm";
 import CrudFormWizard from "../CrudFormWizard";
 import {
-  CrudFieldProps,
   CrudWizardProp,
   FormBuilderFunc,
+  ReadonlyCrudFields,
 } from "../CrudComponent";
 import { ImageCrudField } from "../ImageCrudField";
 import { useTranslationLib } from "../../locale";
 import CrudUtil from "../../util/CrudUtil";
 import IdProps from "../../types/Id";
 import dayjs from "dayjs";
+import { getValueByPath, setValueByPath } from "src/util/ObjectUtil";
 
 export interface CrudModalProps<T, FormType> {
-  fields: CrudFieldProps<T>[];
+  fields: ReadonlyCrudFields<T>;
   wizard?: CrudWizardProp<T>[];
   grid?: boolean;
   fullWidthModal?: boolean;
@@ -42,7 +43,7 @@ export interface CrudModalRef<T> {
   update: (
     data: T,
     shouldSetUpdatingField?: boolean,
-    isClone?: boolean,
+    isClone?: boolean
   ) => Promise<void>;
 }
 
@@ -60,7 +61,7 @@ const CrudModal = <T, FormType = T>(
     formBuilder,
     onValuesChange,
   }: CrudModalProps<T, FormType>,
-  ref: Ref<CrudModalRef<T>>,
+  ref: Ref<CrudModalRef<T>>
 ) => {
   const [form] = Form.useForm();
   const { t } = useTranslationLib();
@@ -78,14 +79,17 @@ const CrudModal = <T, FormType = T>(
     async (x?: any) => {
       const field = wizard ? x : await form.validateFields();
       const colorFields = fields.filter((e) => e.type === "color");
-      const colorValues = {};
+      const colorValues: any = {};
       for (const e of colorFields) {
         const upsertFieldName = CrudUtil.getRealName(e.name, "upsertFieldName");
         const color = form.getFieldValue(upsertFieldName);
-        colorValues[upsertFieldName] =
+        setValueByPath(
+          colorValues,
+          upsertFieldName,
           typeof color === "string"
             ? color
-            : (color as Color)?.toHexString()?.toUpperCase();
+            : (color as Color)?.toHexString()?.toUpperCase()
+        );
       }
       Object.assign(field, colorValues);
       if (updatingField && onUpdate) {
@@ -101,7 +105,7 @@ const CrudModal = <T, FormType = T>(
       form.resetFields();
       setOpen(false);
     },
-    [fields, form, idField, onCreate, onUpdate, updatingField, wizard],
+    [fields, form, idField, onCreate, onUpdate, updatingField, wizard]
   );
 
   const onUploading = useCallback(async (p) => {
@@ -128,38 +132,38 @@ const CrudModal = <T, FormType = T>(
         setOpen(true);
         setPurpose(isClone ? "clone" : "update");
 
-        const _data = {};
+        const _data: any = {};
         for (const e of fields) {
           const upsertFieldName = CrudUtil.getRealName(
             e.name,
-            "upsertFieldName",
+            "upsertFieldName"
           );
-          const dataField = data[upsertFieldName];
+          const dataField = getValueByPath(data, upsertFieldName);
           if (isClone && e.type === "image") {
             const filePath = dataField;
             try {
               const clonedFilePath = await e.provider.clone(filePath);
-              _data[upsertFieldName] = clonedFilePath;
+              setValueByPath(_data, upsertFieldName, clonedFilePath);
               continue;
             } catch {
               continue;
             }
           }
           if (e.type === "date" || e.type === "time") {
-            if (dataField) _data[upsertFieldName] = dayjs(dataField);
+            if (dataField) setValueByPath(_data, upsertFieldName, dayjs(dataField));
           } else if (e.type === "select") {
             if (e.multiple && Array.isArray(dataField)) {
-              _data[upsertFieldName] = dataField.map(
-                (x) => x[e.innerFieldId ?? "id"],
-              );
+              setValueByPath(_data, upsertFieldName, dataField.map(
+                (x) => x[e.innerFieldId ?? "id"]
+              ));
             } else if (dataField && typeof dataField === "object")
-              _data[upsertFieldName] = dataField[e.innerFieldId ?? "id"];
+              setValueByPath(_data, upsertFieldName, dataField[e.innerFieldId ?? "id"]);
             else if (
               (dataField && typeof dataField === "string") ||
               typeof dataField === "number"
             )
-              _data[upsertFieldName] = dataField;
-          } else _data[upsertFieldName] = dataField;
+              setValueByPath(_data, upsertFieldName, dataField);
+          } else setValueByPath(_data, upsertFieldName, dataField);
         }
         form.setFieldsValue(_data);
         setUpdatingValueForWizard(_data);
@@ -168,7 +172,7 @@ const CrudModal = <T, FormType = T>(
         setUpdating(false);
       }
     },
-    [fields, form],
+    [fields, form]
   );
 
   useImperativeHandle(
@@ -177,7 +181,7 @@ const CrudModal = <T, FormType = T>(
       create,
       update,
     }),
-    [create, update],
+    [create, update]
   );
 
   useEffect(() => {
@@ -264,5 +268,5 @@ const CrudModal = <T, FormType = T>(
 };
 
 export default forwardRef(CrudModal) as <T, FormType = T>(
-  props: CrudModalProps<T, FormType> & { ref?: Ref<CrudModalRef<T>> },
+  props: CrudModalProps<T, FormType> & { ref?: Ref<CrudModalRef<T>> }
 ) => ReturnType<typeof CrudModal>;

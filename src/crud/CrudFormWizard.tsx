@@ -8,15 +8,16 @@ import { Col, Divider, Form, FormProps, Row } from "antd";
 import { useEffect, useMemo } from "react";
 import { useTranslationLib } from "../locale";
 
-import { CrudFieldProps, CrudPurpose, CrudWizardProp } from "./CrudComponent";
+import { CrudPurpose, CrudWizardProp, ReadonlyCrudFields } from "./CrudComponent";
 import { CrudFormFields } from "./CrudForm";
 import { ButtonComponent, WizardViewForm } from "../common";
 import CrudUtil from "src/util/CrudUtil";
+import { getValueByPath, setValueByPath } from "src/util/ObjectUtil";
 
 export interface CrudFormWizardProps<T> {
   onDeleteFile?: (e) => void;
   onUploadFile?: (e) => void;
-  fields: CrudFieldProps<T>[];
+  fields: ReadonlyCrudFields<T>;
   purpose?: CrudPurpose;
   wizard?: CrudWizardProp<T>[];
   className?: string;
@@ -121,10 +122,11 @@ function SubForm<T>({
 
   useEffect(() => {
     if (updatingValue && (purpose === "update" || purpose === "clone")) {
-      const obj = {};
+      const obj: any = {};
       for (const key of fields) {
-        obj[CrudUtil.getRealName(key.name, "upsertFieldName")] =
-          updatingValue[CrudUtil.getRealName(key.name, "upsertFieldName")];
+        const name = CrudUtil.getRealName(key.name, "upsertFieldName");
+        const value = getValueByPath(updatingValue, name);
+        setValueByPath(obj, name, value);
       }
       form.setFieldsValue(obj);
     } else if (!updatingValue) {

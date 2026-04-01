@@ -5,6 +5,7 @@ export type {
   CrudFieldGrid,
   CrudFieldProps,
   CrudPaginateProps,
+  ReadonlyCrudFields,
   CrudPurpose,
   CrudWizardProp,
   DateBasedFieldProps,
