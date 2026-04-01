@@ -1,3 +1,11 @@
+## [1.29.1](https://github.com/kingteza/crud-component/compare/v1.29.0...v1.29.1) (2026-04-01)
+
+
+### Bug Fixes
+
+* add ESLint configuration and enforce import path restrictions ([fc106ad](https://github.com/kingteza/crud-component/commit/fc106adf4f4d9d5d3ae121e115b3e1a809e76c3e))
+* add ESLint configuration and enforce import path restrictions ([751aa99](https://github.com/kingteza/crud-component/commit/751aa99f57b7cbef452295ed18796c931f457054))
+
 # [1.29.0](https://github.com/kingteza/crud-component/compare/v1.28.0...v1.29.0) (2026-03-31)
 
 
