@@ -131,6 +131,7 @@ export const SelectFieldInReport: FC<{
         onSelect={onSelect}
         items={items}
         showSearch={false}
+        maxTagCount={'responsive'}
         {...(isCheckboxMode
           ? { open: false, onOpenChange: onSelectOpenChange }
           : {})}

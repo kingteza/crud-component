@@ -148,6 +148,11 @@ function App() {
     { report: {searchable: true, alreadySelected: true, },  type: "text", label: "test", name: "test" },
     { report: {searchable: true, alreadySelected: true, },  type: "text", label: "value", name: "value" },
     { report: {searchable: true, alreadySelected: true, },  type: "text", label: "name", name: "name" },
+    { report: {searchable: true, alreadySelected: true, },  type: "text", label: "name2", name: "name2" },
+    { report: {searchable: false, alreadySelected: true, },  type: "text", label: "name3", name: "name3" },
+    { report: {searchable: false, alreadySelected: true, },  type: "text", label: "name4", name: "name4" },
+    { report: {searchable: false, alreadySelected: true, },  type: "text", label: "name5", name: "name5" },
+    { report: {searchable: false, },  type: "text", label: "name6", name: "name6" },
   ];
   return (
     <div className="mx-2">
