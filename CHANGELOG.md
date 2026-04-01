@@ -1,3 +1,10 @@
+# [1.32.0](https://github.com/kingteza/crud-component/compare/v1.31.0...v1.32.0) (2026-04-01)
+
+
+### Features
+
+* sort items in SelectFieldInReport for improved user experience ([c4e8b34](https://github.com/kingteza/crud-component/commit/c4e8b340157c3a8be29c7eca53e7dac50a760b2a))
+
 # [1.31.0](https://github.com/kingteza/crud-component/compare/v1.30.0...v1.31.0) (2026-04-01)
 
 
