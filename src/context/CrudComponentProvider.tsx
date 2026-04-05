@@ -2,8 +2,19 @@
  Copyright (c) 2020-2024 Kingteza and/or its affiliates. All rights reserved.
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
-import React, { useEffect, useRef, ReactNode, createContext } from "react";
+import React, {
+  useEffect,
+  useRef,
+  ReactNode,
+  createContext,
+  useMemo,
+} from "react";
 import { setupI18n, SetupI18nOptions } from "../locale";
+import {
+  CrudNavigateProvider,
+  type CrudNavigateFn,
+} from "./CrudNavigateContext";
+
 export interface CrudComponentProviderProps {
   children: ReactNode;
   /**
@@ -11,6 +22,21 @@ export interface CrudComponentProviderProps {
    * If not provided, defaults will be used
    */
   i18nOptions?: SetupI18nOptions;
+
+  /**
+   * Hints which router you use (docs / future use). Wire navigation with `navigate` and/or optional sync modules:
+   * - `react-router`: `@kingteza/crud-component/react-router` exports `CrudReactRouterNavigateSync`, or pass `navigate` from `useNavigate()`.
+   * - `nextjs`: `@kingteza/crud-component/next` exports `CrudNextNavigateSync`, or pass a `navigate` wrapper around `useRouter()`.
+   *
+   * @default "react-router"
+   */
+  navigatorType?: "react-router" | "nextjs";
+
+  /**
+   * Imperative navigation for `useNavigateOptional` (e.g. `Button` with `to`). If omitted, use the optional
+   * `react-router` or `next` package entry sync components.
+   */
+  navigate?: CrudNavigateFn;
 }
 
 /**
@@ -54,11 +80,13 @@ const Context = createContext<{}>({});
 export const CrudComponentProvider: React.FC<CrudComponentProviderProps> = ({
   children,
   i18nOptions,
+  navigatorType = "react-router",
+  navigate,
 }) => {
   // Initialize i18n synchronously before first render
   // This ensures i18nInstance is set before any hooks are called
   const isInitialized = useRef(false);
-  
+
   React.useMemo(() => {
     if (!isInitialized.current) {
       setupI18n(i18nOptions || {});
@@ -73,7 +101,16 @@ export const CrudComponentProvider: React.FC<CrudComponentProviderProps> = ({
     }
   }, [i18nOptions?.language]);
 
-  return <Context.Provider value={{}}>{children}</Context.Provider>;
+  const contextValue = useMemo(
+    () => ({ navigatorType } as const),
+    [navigatorType]
+  );
+
+  return (
+    <CrudNavigateProvider navigate={navigate}>
+      <Context.Provider value={contextValue}>{children}</Context.Provider>
+    </CrudNavigateProvider>
+  );
 };
 
 export default CrudComponentProvider;

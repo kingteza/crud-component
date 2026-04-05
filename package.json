@@ -56,7 +56,17 @@
       "require": "./dist/util/index.cjs.js"
     },
     "./style.css": "./dist/style.css",
-    "./styles": "./dist/style.css"
+    "./styles": "./dist/style.css",
+    "./react-router": {
+      "types": "./dist/react-router.d.ts",
+      "import": "./dist/react-router.es.js",
+      "require": "./dist/react-router.cjs.js"
+    },
+    "./next": {
+      "types": "./dist/next.d.ts",
+      "import": "./dist/next.es.js",
+      "require": "./dist/next.cjs.js"
+    }
   },
   "publishConfig": {
     "access": "public"
@@ -125,13 +135,20 @@
     "react": ">=18.3.1",
     "react-dom": ">=18.3.1",
     "react-i18next": "^15.2.0",
-    "react-router-dom": ">=6.3.0"
+    "react-router-dom": ">=6.3.0",
+    "next": ">=14.0.0"
   },
   "peerDependenciesMeta": {
     "i18next": {
       "optional": true
     },
     "react-i18next": {
+      "optional": true
+    },
+    "react-router-dom": {
+      "optional": true
+    },
+    "next": {
       "optional": true
     }
   }
