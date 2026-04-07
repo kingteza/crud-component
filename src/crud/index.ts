@@ -39,6 +39,7 @@ export type {
   CrudReportSubmitForm,
   ReportCrudFields,
   SearchOnlyFields,
+  SearchPropsCacheProps,
 } from "./CrudReportComponent";
 export { default as CrudReportComponent } from "./CrudReportComponent";
 export { default as CrudSearchComponent } from "./CrudSearchComponent";

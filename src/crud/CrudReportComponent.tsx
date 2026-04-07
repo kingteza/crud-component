@@ -12,6 +12,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -40,6 +41,16 @@ export type CrudReportSubmitForm<T> = {
 export type SearchOnlyFields<F> = CrudFieldProps<F> & { hideInTable: true };
 
 export type ReportCrudFields<T, F> = CrudFieldProps<T> | SearchOnlyFields<F>;
+
+export interface SearchPropsCacheProps<F_Search> {
+  key: string;
+  saveMode: "local" | "session";
+  /** Called after each successful search, once the payload is written to storage. */
+  onSave?: (value: CrudReportSubmitForm<F_Search>) => void;
+  /** Baseline when there is no cache yet (or keys missing from cache). */
+  defaultValue?: Partial<CrudReportSubmitForm<F_Search>>;
+}
+
 export interface CrudReportComponentProps<T_Data, F_Search> {
   summary?: React.ReactNode;
   fields: readonly ReportCrudFields<T_Data, F_Search>[];
@@ -67,6 +78,7 @@ export interface CrudReportComponentProps<T_Data, F_Search> {
   extraSearchFields?: (form: FormInstance<any>) => ReactElement;
   searchOnMount?: boolean;
   showFieldsSelectingMode?: SelectFieldInReportSelectingMode;
+  cachedSearchProps?: SearchPropsCacheProps<F_Search>;
 }
 
 const props = { lg: 6, md: 8, sm: 12, xs: 24 };
@@ -88,6 +100,7 @@ function CrudReportComponent<T, F = T>({
   searchOnMount,
   summary,
   showFieldsSelectingMode = 'checkbox',
+  cachedSearchProps,
 }: Readonly<CrudReportComponentProps<T, F>>) {
   const { t } = useTranslationLib();
   const { searchable, selectable, sortable, defaultSort } = useMemo(() => {
@@ -122,6 +135,17 @@ function CrudReportComponent<T, F = T>({
     []
   );
 
+  const applyShowFieldsToColumns = useCallback(
+    (showFieldIds: string[]) => {
+      setShowingFields(
+        fields
+          .filter((e) => showFieldIds.includes(e.name as string))
+          .map((e) => ({ ...e, hideInTable: false as any }))
+      );
+    },
+    [fields]
+  );
+
   const _onSubmit = useCallback(
     async ({
       sortBy: sortByField,
@@ -137,17 +161,23 @@ function CrudReportComponent<T, F = T>({
           sort: sortByType ?? "DESC",
         });
       }
-      setShowingFields(
-        fields
-          .filter((e) => showFields.includes(e.name))
-          .map((e) => ({ ...e, hideInTable: false as any }))
-      );
-      onSubmit({ showFields, sortBy, ...e });
+      applyShowFieldsToColumns(showFields);
+      const payload: CrudReportSubmitForm<F> = { showFields, sortBy, ...e };
+      if (cachedSearchProps) {
+        writeReportSearchCache(
+          cachedSearchProps.key,
+          cachedSearchProps.saveMode,
+          payload
+        );
+        cachedSearchProps.onSave?.(payload);
+      }
+      onSubmit(payload);
     },
-    [fields, onSubmit]
+    [applyShowFieldsToColumns, cachedSearchProps, onSubmit]
   );
 
   const [form] = Form.useForm<CrudReportSubmitForm<F> & F & T>();
+  const cacheRestoredRef = useRef(false);
   const [first, setFirst] = useState(false);
 
   const [one, setOne] = useState(true);
@@ -176,6 +206,29 @@ function CrudReportComponent<T, F = T>({
       } as any);
     }
   }, [defaultSort, form]);
+
+  useEffect(() => {
+    if (!cachedSearchProps || cacheRestoredRef.current) {
+      return;
+    }
+    cacheRestoredRef.current = true;
+    const cached = readReportSearchCache<F>(
+      cachedSearchProps.key,
+      cachedSearchProps.saveMode
+    );
+    const merged = {
+      ...(cachedSearchProps.defaultValue ?? {}),
+      ...(cached ?? {}),
+    } as Partial<CrudReportSubmitForm<F>>;
+    if (Object.keys(merged).length === 0) {
+      return;
+    }
+    form.setFieldsValue(submitPayloadToFormValues(merged) as any);
+    const sf = merged.showFields;
+    if (sf?.length) {
+      applyShowFieldsToColumns(sf);
+    }
+  }, [applyShowFieldsToColumns, cachedSearchProps, form]);
 
   useEffect(() => {
     if (first) {
@@ -365,3 +418,74 @@ function CrudReportComponent<T, F = T>({
 }
 
 export default CrudReportComponent;
+
+
+
+function getReportSearchStorage(
+  mode: "local" | "session"
+): Storage | null {
+  if (typeof globalThis.window === "undefined") {
+    return null;
+  }
+  return mode === "local"
+    ? globalThis.window.localStorage
+    : globalThis.window.sessionStorage;
+}
+
+function readReportSearchCache<F>(
+  key: string,
+  mode: "local" | "session"
+): Partial<CrudReportSubmitForm<F>> | null {
+  const storage = getReportSearchStorage(mode);
+  if (!storage) {
+    return null;
+  }
+  try {
+    const raw = storage.getItem(key);
+    if (!raw) {
+      return null;
+    }
+    return JSON.parse(raw) as Partial<CrudReportSubmitForm<F>>;
+  } catch {
+    return null;
+  }
+}
+
+function writeReportSearchCache<F>(
+  key: string,
+  mode: "local" | "session",
+  value: CrudReportSubmitForm<F>
+) {
+  const storage = getReportSearchStorage(mode);
+  if (!storage) {
+    return;
+  }
+  try {
+    storage.setItem(key, JSON.stringify(value));
+  } catch {
+    // ignore quota / private mode
+  }
+}
+
+/** Maps submit payload back to Ant Design form field names (`sortBy` / `sortByType`). */
+function submitPayloadToFormValues<F>(
+  payload: Partial<CrudReportSubmitForm<F>>
+): Record<string, unknown> {
+  const { sortBy, showFields, ...searchRest } = payload as unknown as Record<
+    string,
+    unknown
+  > & {
+    sortBy?: CrudReportSubmitForm<F>["sortBy"];
+    showFields?: string[];
+  };
+  const out: Record<string, unknown> = { ...searchRest };
+  if (showFields !== undefined) {
+    out.showFields = showFields;
+  }
+  if (sortBy?.length) {
+    const first = sortBy[0];
+    out.sortBy = first.field;
+    out.sortByType = first.sort;
+  }
+  return out;
+}
