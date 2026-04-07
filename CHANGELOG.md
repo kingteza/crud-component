@@ -1,3 +1,11 @@
+# [1.33.0](https://github.com/kingteza/crud-component/compare/v1.32.1...v1.33.0) (2026-04-07)
+
+
+### Features
+
+* add caching support for search properties in CrudReportComponent ([daba708](https://github.com/kingteza/crud-component/commit/daba70892c9c1645e6e06df55ab0b2226668da70))
+* enhance navigation support with new router integrations ([42f2f31](https://github.com/kingteza/crud-component/commit/42f2f313b3eb3f885ffee29e2650e7e83c4844df))
+
 ## [1.32.1](https://github.com/kingteza/crud-component/compare/v1.32.0...v1.32.1) (2026-04-01)
 
 
