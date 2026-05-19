@@ -81,11 +81,12 @@ export default function CrudField<T = any>(
     case "email":
     case "password": {
       // case 'object': // Show the text field even if the type is object
-      const { onChange, placeholder, addonAfter, addonBefore } =
+      const { maxLength, onChange, placeholder, addonAfter, addonBefore } =
         props as TextBasedFieldProps<T>;
       return (
         <TextField
           {...formLayoutProps}
+          maxLength={maxLength}
           placeholder={placeholder}
           disabled={!updatable}
           rules={rules}

@@ -203,6 +203,7 @@ export interface TextBasedFieldProps<T>
   extends InitialCrudField<T>, AddonFieldProps, Copyable<false> {
   placeholder?: string;
   type: "text" | "time" | "email" | "password";
+  maxLength?: number;
   onChange?: (value: string, form: FormInstance<T>) => void;
 }
 

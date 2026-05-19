@@ -8,6 +8,7 @@ import { Copyable } from "../util/CopyUtilComponent";
 
 interface InitialTextAreaProps<T> extends InitialCrudField<T> {
   type: "textarea";
+  maxLength?: number;
   onChange?: (value: string, form: FormInstance<T>) => void;
   /**
    * number of lines to show. If false will not show truncated
@@ -38,6 +39,7 @@ const CrudTextAreaComponent = <T,>({
   name,
   updatable = true,
   formLayoutProps,
+  maxLength,
   ...props
 }: TextAreaBasedFieldProps<T>) => {
   const form = Form.useFormInstance();
@@ -60,6 +62,7 @@ const CrudTextAreaComponent = <T,>({
     return (
       <TextAreaComponent
         {...formLayoutProps}
+        maxLength={maxLength}
         rules={rules}
         placeholder={placeholder}
         onChange={
