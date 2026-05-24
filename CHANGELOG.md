@@ -1,3 +1,18 @@
+# [1.34.0](https://github.com/kingteza/crud-component/compare/v1.33.0...v1.34.0) (2026-05-24)
+
+
+### Bug Fixes
+
+* downgrade package manager version in package.json ([5ec290b](https://github.com/kingteza/crud-component/commit/5ec290b679db9bbb7866c6054d8986b4b5f7084b))
+* remove eslint directive for explicit any in Quill block configuration ([d8417ae](https://github.com/kingteza/crud-component/commit/d8417ae2cd5e5941242aa30cac6077fd0ddb220b))
+* update package manager and add workspace configuration ([26fea85](https://github.com/kingteza/crud-component/commit/26fea85fdf67504e7addc7c9d22c749e19d24432))
+
+
+### Features
+
+* add maxLength prop to text-based fields ([5690ad3](https://github.com/kingteza/crud-component/commit/5690ad3e5663dc11cd69d2df2e4feec5af3565b4))
+* replace react-quill with react-quill-new ([a46591b](https://github.com/kingteza/crud-component/commit/a46591b94d8b5f0ac4ea5dbab56a51f93ccec5e6))
+
 # [1.33.0](https://github.com/kingteza/crud-component/compare/v1.32.1...v1.33.0) (2026-04-07)
 
 
