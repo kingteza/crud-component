@@ -30,7 +30,6 @@ export interface RichTextEditorProps {
 
 const configureQuillBlock = async () => {
   const { Quill } = await import("react-quill-new");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const Block = Quill.import("blots/block") as any;
   Block.tagName = "div";
   Quill.register(Block);
