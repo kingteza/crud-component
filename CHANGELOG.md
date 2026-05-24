@@ -1,3 +1,10 @@
+## [1.34.1](https://github.com/kingteza/crud-component/compare/v1.34.0...v1.34.1) (2026-05-24)
+
+
+### Bug Fixes
+
+* enhance RichTextEditor and CrudTextAreaComponent with rows and cols props ([ff8b2ce](https://github.com/kingteza/crud-component/commit/ff8b2ce2ff3fc735b141c3dd2731f45356cb8ae9))
+
 # [1.34.0](https://github.com/kingteza/crud-component/compare/v1.33.0...v1.34.0) (2026-05-24)
 
 
