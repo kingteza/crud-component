@@ -6,16 +6,16 @@ import { Form } from "antd";
 import { Rule } from "antd/es/form";
 import type { NamePath } from "antd/es/form/interface";
 import { FormItemProps } from "antd/lib";
-import React, {
+import {
   FC,
   ReactNode,
-  Suspense,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
+import type ReactQuillType from "react-quill-new";
 import { ValidationUtil } from "../../util";
 
 export interface RichTextEditorProps {
@@ -25,19 +25,16 @@ export interface RichTextEditorProps {
   required?: boolean;
   rules?: Rule[];
   disabled?: boolean;
-  formLayoutProps?: Pick<FormItemProps, "layout" | 'labelCol' | 'wrapperCol'>;
+  formLayoutProps?: Pick<FormItemProps, "layout" | "labelCol" | "wrapperCol">;
 }
 
-// Dynamically import ReactQuill for Vite
-const ReactQuill = React.lazy(async () => {
-  const { default: RQ } = await import("react-quill");
-  const { Quill } = RQ;
-  const Block = Quill.import("blots/block"); 
-  Block.tagName = "div"; 
+const configureQuillBlock = async () => {
+  const { Quill } = await import("react-quill-new");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const Block = Quill.import("blots/block") as any;
+  Block.tagName = "div";
   Quill.register(Block);
-  
-  return { default: (props: any) => <RQ {...props} /> };
-});
+};
 
 export const RichTextEditor: FC<RichTextEditorProps> = ({
   formLayoutProps,
@@ -50,9 +47,36 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
 }) => {
   const form = Form.useFormInstance();
   const [editorValue, setEditorValue] = useState("");
+  const [mounted, setMounted] = useState(false);
+  const [ReactQuill, setReactQuill] = useState<typeof ReactQuillType | null>(
+    null
+  );
   const isUpdatingRef = useRef(false);
 
   const indentChar = "\u00A0\u00A0\u00A0\u00A0"; // 4 non-breaking spaces
+
+  // Client-only mount: react-quill requires DOM (SSR/Next.js) and react-quill-new for React 19
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    let cancelled = false;
+
+    void (async () => {
+      await configureQuillBlock();
+      const { default: RQ } = await import("react-quill-new");
+      if (!cancelled) {
+        setReactQuill(() => RQ);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [mounted]);
 
   // Helper to safely convert value to string
   const safeStringValue = (value: any): string => {
@@ -74,20 +98,20 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
       if (range) {
         const start = range.index;
         const end = range.index + range.length;
-        
+
         // Get the text and find line breaks
         const text = quill.getText();
         const lines: number[] = [];
-        
+
         // Find all line start positions in the selection
         for (let i = start; i <= end; i++) {
           if (i === 0 || text[i - 1] === "\n") {
             lines.push(i);
           }
         }
-        
+
         if (lines.length === 0) lines.push(start);
-        
+
         if (value > 0) {
           // Indent: Insert spaces at the beginning of each line
           let offset = 0;
@@ -95,7 +119,10 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
             quill.insertText(lineStart + offset, indentChar);
             offset += indentChar.length;
           });
-          quill.setSelection(start + indentChar.length, end + (lines.length * indentChar.length));
+          quill.setSelection(
+            start + indentChar.length,
+            end + lines.length * indentChar.length
+          );
         } else {
           // Outdent: Remove spaces from the beginning of each line
           let removedChars = 0;
@@ -133,9 +160,15 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
       const quill = this.quill;
       const range = quill.getSelection(true);
       if (range && range.index >= indentChar.length) {
-        const text = quill.getText(range.index - indentChar.length, indentChar.length);
+        const text = quill.getText(
+          range.index - indentChar.length,
+          indentChar.length
+        );
         if (text === indentChar) {
-          quill.deleteText(range.index - indentChar.length, indentChar.length);
+          quill.deleteText(
+            range.index - indentChar.length,
+            indentChar.length
+          );
           quill.setSelection(range.index - indentChar.length);
           return false; // Prevent default behavior
         }
@@ -178,16 +211,19 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
     };
   }, []);
 
-  const formats = useMemo(() => [
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "blockquote",
-    "list",
-    "bullet",
-    "link",
-  ], []);
+  const formats = useMemo(
+    () => [
+      "bold",
+      "italic",
+      "underline",
+      "strike",
+      "blockquote",
+      "list",
+      "bullet",
+      "link",
+    ],
+    []
+  );
 
   // Sync editor value with form when component mounts
   useEffect(() => {
@@ -228,33 +264,36 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
     }
   }, [watchedValue]);
 
-  const handleChange = useCallback((value: string) => {
-    // Ensure value is a string
-    const stringValue = safeStringValue(value);
-    
-    // Prevent circular updates
-    isUpdatingRef.current = true;
-    setEditorValue(stringValue);
+  const handleChange = useCallback(
+    (value: string) => {
+      // Ensure value is a string
+      const stringValue = safeStringValue(value);
 
-    const cleanedValue =
-      !stringValue || 
-      stringValue === "<p></p>" || 
-      stringValue.trim() === "<p><br></p>" ||
-      stringValue === "<div></div>" ||
-      stringValue.trim() === "<div></div>"
-        ? undefined
-        : stringValue;
+      // Prevent circular updates
+      isUpdatingRef.current = true;
+      setEditorValue(stringValue);
 
-    form.setFieldValue(name, cleanedValue);
+      const cleanedValue =
+        !stringValue ||
+        stringValue === "<p></p>" ||
+        stringValue.trim() === "<p><br></p>" ||
+        stringValue === "<div></div>" ||
+        stringValue.trim() === "<div></div>"
+          ? undefined
+          : stringValue;
 
-    // Reset the flag after a short delay
-    setTimeout(() => {
-      isUpdatingRef.current = false;
-    }, 0);
+      form.setFieldValue(name, cleanedValue);
 
-    // Trigger validation for this field
-    form.validateFields([name]).catch(() => {});
-  }, [form, name]);
+      // Reset the flag after a short delay
+      setTimeout(() => {
+        isUpdatingRef.current = false;
+      }, 0);
+
+      // Trigger validation for this field
+      form.validateFields([name]).catch(() => {});
+    },
+    [form, name]
+  );
 
   const rules0 = useMemo(
     () =>
@@ -269,21 +308,34 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
   }, [editorValue]);
 
   // Create a stable props object to prevent circular reference warnings
-  const quillProps = useMemo(() => ({
-    readOnly: Boolean(disabled),
-    value: String(cleanEditorValue || ""),
-    onChange: handleChange,
-    theme: "snow" as const,
-    className: "rich-text-editor",
-    modules: modules as any,
-    formats: formats as any,
-  }), [disabled, cleanEditorValue, handleChange, modules, formats]);
+  const quillProps = useMemo(
+    () => ({
+      readOnly: Boolean(disabled),
+      value: String(cleanEditorValue || ""),
+      onChange: handleChange,
+      theme: "snow" as const,
+      className: "rich-text-editor",
+      modules: modules as any,
+      formats: formats as any,
+    }),
+    [disabled, cleanEditorValue, handleChange, modules, formats]
+  );
 
   return (
-    <Form.Item help={help} name={name} label={label} rules={rules0} {...formLayoutProps}>
-      <Suspense fallback={<div>Loading editor...</div>}>
+    <Form.Item
+      help={help}
+      name={name}
+      label={label}
+      rules={rules0}
+      {...formLayoutProps}
+    >
+      {mounted && ReactQuill ? (
         <ReactQuill {...quillProps} />
-      </Suspense>
+      ) : (
+        <div className="rich-text-editor rich-text-editor--loading">
+          Loading editor...
+        </div>
+      )}
     </Form.Item>
   );
 };
