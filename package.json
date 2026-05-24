@@ -71,6 +71,7 @@
   "publishConfig": {
     "access": "public"
   },
+  "packageManager": "pnpm@11.3.0",
   "engines": {
     "node": ">=22.14.0"
   },
