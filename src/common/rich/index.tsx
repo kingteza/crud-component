@@ -7,6 +7,7 @@ import { Rule } from "antd/es/form";
 import type { NamePath } from "antd/es/form/interface";
 import { FormItemProps } from "antd/lib";
 import {
+  CSSProperties,
   FC,
   ReactNode,
   useCallback,
@@ -26,6 +27,8 @@ export interface RichTextEditorProps {
   rules?: Rule[];
   disabled?: boolean;
   formLayoutProps?: Pick<FormItemProps, "layout" | "labelCol" | "wrapperCol">;
+  rows?: number;
+  cols?: number;
 }
 
 const configureQuillBlock = async () => {
@@ -33,6 +36,28 @@ const configureQuillBlock = async () => {
   const Block = Quill.import("blots/block") as any;
   Block.tagName = "div";
   Quill.register(Block);
+};
+
+/** Matches Ant Design TextArea line height (~22px at 14px font-size). */
+const TEXTAREA_LINE_HEIGHT_PX = 22;
+const TEXTAREA_VERTICAL_PADDING_PX = 8;
+
+const getEditorSizeStyle = (
+  rows?: number,
+  cols?: number
+): CSSProperties => {
+  const style: CSSProperties = {};
+
+  if (rows != null && rows > 0) {
+    style["--rich-editor-min-height" as string] =
+      `${rows * TEXTAREA_LINE_HEIGHT_PX + TEXTAREA_VERTICAL_PADDING_PX}px`;
+  }
+
+  if (cols != null && cols > 0) {
+    style.width = `min(100%, ${cols}ch)`;
+  }
+
+  return style;
 };
 
 export const RichTextEditor: FC<RichTextEditorProps> = ({
@@ -43,6 +68,8 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
   rules = [],
   disabled,
   help,
+  rows,
+  cols,
 }) => {
   const form = Form.useFormInstance();
   const [editorValue, setEditorValue] = useState("");
@@ -306,6 +333,11 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
     return value || "";
   }, [editorValue]);
 
+  const editorSizeStyle = useMemo(
+    () => getEditorSizeStyle(rows, cols),
+    [rows, cols]
+  );
+
   // Create a stable props object to prevent circular reference warnings
   const quillProps = useMemo(
     () => ({
@@ -314,10 +346,11 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
       onChange: handleChange,
       theme: "snow" as const,
       className: "rich-text-editor",
+      style: editorSizeStyle,
       modules: modules as any,
       formats: formats as any,
     }),
-    [disabled, cleanEditorValue, handleChange, modules, formats]
+    [disabled, cleanEditorValue, handleChange, modules, formats, editorSizeStyle]
   );
 
   return (
@@ -331,7 +364,10 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
       {mounted && ReactQuill ? (
         <ReactQuill {...quillProps} />
       ) : (
-        <div className="rich-text-editor rich-text-editor--loading">
+        <div
+          className="rich-text-editor rich-text-editor--loading"
+          style={editorSizeStyle}
+        >
           Loading editor...
         </div>
       )}

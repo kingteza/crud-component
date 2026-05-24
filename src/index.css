@@ -8,3 +8,7 @@
 input:focus {
   outline: none !important;
 }
+
+.ant-form-item-label {
+  padding-bottom: 0px !important;
+}

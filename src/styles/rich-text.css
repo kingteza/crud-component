@@ -48,8 +48,12 @@ body.dark .rich-text-editor svg {
   background-color: white;
 }
 
+.rich-text-editor .ql-editor {
+  min-height: var(--rich-editor-min-height, 10em);
+}
+
 .rich-text-editor--loading {
-  min-height: 120px;
+  min-height: var(--rich-editor-min-height, 120px);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -40,6 +40,8 @@ const CrudTextAreaComponent = <T,>({
   updatable = true,
   formLayoutProps,
   maxLength,
+  rows,
+  cols,
   ...props
 }: TextAreaBasedFieldProps<T>) => {
   const form = Form.useFormInstance();
@@ -54,6 +56,8 @@ const CrudTextAreaComponent = <T,>({
         disabled={!updatable}
         help={props.fieldHelper}
         formLayoutProps={formLayoutProps}
+        rows={rows}
+        cols={cols}
       />
     );
   } else {

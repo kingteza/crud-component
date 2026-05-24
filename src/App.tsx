@@ -167,7 +167,7 @@ function App() {
           checkbox
           checkboxGrid={{ xs: 24 }}
         />
-        <CrudField type="textarea" rich name="appendix2" label="Appendix 2" />
+        <CrudField type="textarea" rich name="appendix2" label="Appendix 2" rows={5} />
         <CrudField type="color" name="color" label="Color" />
         <CrudField
           type="select"
