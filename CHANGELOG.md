@@ -1,3 +1,10 @@
+# [1.35.0](https://github.com/kingteza/crud-component/compare/v1.34.1...v1.35.0) (2026-06-01)
+
+
+### Features
+
+* enhance CRUD functionality with new overview fields and action handling ([33c06a0](https://github.com/kingteza/crud-component/commit/33c06a0f755d76c68b9422c403cc2c15c2cdef56))
+
 ## [1.34.1](https://github.com/kingteza/crud-component/compare/v1.34.0...v1.34.1) (2026-05-24)
 
 
