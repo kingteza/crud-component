@@ -11,9 +11,10 @@ import { useTranslationLib } from "../../locale";
 import { ReadonlyCrudFields } from "../CrudComponent";
 import { getRendererValueCrudViewer } from "./CrudViewerUtil";
 import CrudUtil from "../../util/CrudUtil";
-import CrudActions, { CrudActionsProps } from "../actions";
+import { CrudActionsInternal, CrudActionsProps } from "../actions";
 import { CrudModalProps } from "../modal";
 import { getValueByPath } from "../../util/ObjectUtil";
+import { hasCrudActions } from "../../util/crud/crud-action.util";
 
 export type DescListColumn =
   | number
@@ -58,17 +59,19 @@ export function CrudDecListView<T, FormType = T>({
         };
       });
 
-    // Add actions if data exists and any action props are provided
-    const actionComponent = data ? (
-      <CrudActions<T, FormType>
-        data={data}
+    const shouldShowActions = hasCrudActions<T, FormType>(
+      crudActionsProps,
+      data!
+    );
+    const actionComponent = shouldShowActions ? (
+      <CrudActionsInternal
+        data={data!}
         {...crudActionsProps}
         inBuiltModalProps={
           inBuiltModalProps ? { ...inBuiltModalProps, fields } : undefined
         }
       />
     ) : undefined;
-    
     if (actionComponent) {
       list.push({
         label: t("str.action"),

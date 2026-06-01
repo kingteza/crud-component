@@ -9,6 +9,7 @@ import {
 import IdProps from "../../types/Id";
 import { CrudModalProps, CrudModalRef } from "../modal";
 import { CrudModal } from "..";
+import { hasCrudActions } from "../../util/crud/crud-action.util";
 
 export interface CrudActionsProps<T, FormType> {
   idField?: string;
@@ -33,7 +34,8 @@ export interface CrudActionsProps<T, FormType> {
   inBuiltModalProps?: CrudModalProps<T, FormType>;
 }
 
-function CrudActions<T, FormType>({
+
+export function CrudActionsInternal<T, FormType>({
   data,
   idField = "id",
   extraAction,
@@ -57,9 +59,11 @@ function CrudActions<T, FormType>({
 }: CrudActionsProps<T, FormType> & { data: T }) {
   const extra = extraAction?.(data);
   const modalRef = useRef<CrudModalRef<T>>(null);
+
   const onClickUpdate0 = useCallback(
     (e: T, shouldSetUpdatingField = true, isClone = false) => {
       setRecentUpdateOrDeleteId?.(e[idField]);
+
       if (inBuiltModalProps) {
         modalRef.current?.update(e, shouldSetUpdatingField, isClone);
       } else if (isClone) {
@@ -67,40 +71,57 @@ function CrudActions<T, FormType>({
       } else {
         onClickUpdate?.(e);
       }
-      if (closeViewOnClickUpdate) setOpenView?.(undefined);
-    },
-    [inBuiltModalProps, onClickUpdate]
-  );
-  const canUpdate = useMemo(() => Boolean(updatable ? updatable?.(data) : true), [updatable, data]);
-  const canDelete = useMemo(() => Boolean(deletable ? deletable?.(data) : true), [deletable, data]);
 
-  return (Array.isArray(extra) ? extra?.filter(Boolean)?.length : extra) ||
-    onUpdate ||
-    (canUpdate && onClickUpdate) ||
-    inBuiltModalProps?.onUpdate ||
-    onClickClone ||
-    inBuiltModalProps?.onCreate ||
-    (canDelete && onDelete) ||
-    onExport ||
-    onHide ? (
+      if (closeViewOnClickUpdate) {
+        setOpenView?.(undefined);
+      }
+    },
+    [
+      idField,
+      inBuiltModalProps,
+      onClickClone,
+      onClickUpdate,
+      closeViewOnClickUpdate,
+      setOpenView,
+      setRecentUpdateOrDeleteId,
+    ]
+  );
+
+  const canUpdate = useMemo(
+    () => Boolean(updatable ? updatable(data) : true),
+    [updatable, data]
+  );
+
+  const canDelete = useMemo(
+    () => Boolean(deletable ? deletable(data) : true),
+    [deletable, data]
+  );
+
+  return (
     <>
       {inBuiltModalProps && <CrudModal ref={modalRef} {...inBuiltModalProps} />}
+
       {extra}
-      {(onUpdate || onClickUpdate || inBuiltModalProps?.onUpdate) && canUpdate && (
-        <UpdateButtonTable value={data} onClick={(e) => onClickUpdate0(e)} />
-      )}
+
+      {(onUpdate || onClickUpdate || inBuiltModalProps?.onUpdate) &&
+        canUpdate && (
+          <UpdateButtonTable value={data} onClick={(e) => onClickUpdate0(e)} />
+        )}
+
       {(onClickClone || inBuiltModalProps?.onCreate) && (
         <CloneButtonTable
           value={data}
           onClick={(e) => onClickUpdate0(e, false, true)}
         />
       )}
+
       {onExport && (
         <ExportButton
           value={data}
           onClick={async (data) => await onExport(data)}
         />
       )}
+
       {onHide && (
         <HideButtonTable
           value={data}
@@ -113,6 +134,7 @@ function CrudActions<T, FormType>({
           }}
         />
       )}
+
       {onDelete && canDelete && (
         <DeleteButtonTable
           value={data}
@@ -123,10 +145,18 @@ function CrudActions<T, FormType>({
             setRecentUpdateOrDeleteId?.(e[idField]);
             await onDelete({ [idField]: e[idField] });
           }}
-        ></DeleteButtonTable>
+        />
       )}
     </>
-  ) : undefined;
+  );
+}
+function CrudActions<T, FormType>(
+  props: CrudActionsProps<T, FormType> & { data: T }
+) {
+  if (!hasCrudActions(props, props.data)) {
+    return undefined;
+  }
+  return <CrudActionsInternal {...props} />;
 }
 
 export default CrudActions;
