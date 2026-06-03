@@ -1,3 +1,10 @@
+# [1.36.0](https://github.com/kingteza/crud-component/compare/v1.35.0...v1.36.0) (2026-06-03)
+
+
+### Features
+
+* update property listing form structure and enhance wizard functionality ([cc0543b](https://github.com/kingteza/crud-component/commit/cc0543b2a32cbfdcb40fc86db8c8596c5648f397))
+
 # [1.35.0](https://github.com/kingteza/crud-component/compare/v1.34.1...v1.35.0) (2026-06-01)
 
 
