@@ -3,8 +3,10 @@
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
 
-import { Steps } from "antd";
+import { Steps } from 'antd';
+import { StepsProps } from 'antd/lib';
 import React, {
+  FC,
   forwardRef,
   ReactElement,
   useCallback,
@@ -12,13 +14,14 @@ import React, {
   useImperativeHandle,
   useMemo,
   useState,
-} from "react";
+} from 'react';
 
-import Hider from "../appearance/Hider";
+import Hider from '../appearance/Hider';
 
 interface WizardViewFormProps {
   pages: {
     hidden?: boolean;
+    disabled?: boolean;
     icon?: React.ReactNode;
     title: string;
     component: (
@@ -27,19 +30,19 @@ interface WizardViewFormProps {
         backward: () => void;
       },
       formSubmissionData: any[],
-      isActive: boolean
+      isActive: boolean,
     ) => ReactElement;
   }[];
-  labelPlacement?: "vertical" | "horizontal";
+  labelPlacement?: 'vertical' | 'horizontal';
   initPosition?: number;
   onSubmit?: (val: (any | undefined)[], combinedValue: any) => void;
-  type?: "default" | "navigation" | "inline";
+  type?: StepsProps['type'];
   className?: string;
-  progressDot?: boolean;
   pageStyle?: React.CSSProperties;
+  showSteps?: boolean;
+  freeNavigation?: boolean;
 }
 
-const { Step } = Steps;
 
 export interface WizardViewFormRef {
   gotTo: (index: number) => void;
@@ -51,19 +54,18 @@ const WizardViewForm = forwardRef<WizardViewFormRef, WizardViewFormProps>(
       pages,
       onSubmit,
       initPosition = 0,
-      progressDot,
       type,
       labelPlacement,
       className,
       pageStyle,
+      showSteps = true,
+      freeNavigation,
     },
-    ref
+    ref,
   ) => {
     const [current, setCurrent] = useState(0);
 
-    const [formSubmissions, setFormSubmissions] = useState<(any | undefined)[]>(
-      []
-    );
+    const [formSubmissions, setFormSubmissions] = useState<(any | undefined)[]>([]);
 
     useEffect(() => {
       setCurrent(initPosition);
@@ -74,7 +76,7 @@ const WizardViewForm = forwardRef<WizardViewFormRef, WizardViewFormProps>(
       () => ({
         gotTo: (index: number) => setCurrent(index),
       }),
-      []
+      [],
     );
 
     const forward = useCallback(
@@ -86,7 +88,7 @@ const WizardViewForm = forwardRef<WizardViewFormRef, WizardViewFormProps>(
         }
         if (!isRetry) setCurrent(current + 1);
         if (submit && onSubmit) {
-          const value = {} as any;
+          let value = {} as any;
           for (const values of newS) {
             for (const key in values) {
               value[key] = values[key];
@@ -95,7 +97,7 @@ const WizardViewForm = forwardRef<WizardViewFormRef, WizardViewFormProps>(
           onSubmit(newS, value);
         }
       },
-      [current, formSubmissions, onSubmit]
+      [current, formSubmissions, onSubmit],
     );
 
     const backward = useCallback(() => {
@@ -106,17 +108,21 @@ const WizardViewForm = forwardRef<WizardViewFormRef, WizardViewFormProps>(
     }, [current, formSubmissions]);
 
     const components = useMemo(() => {
-      const steps: ReactElement[] = [];
-      const _pages: ReactElement[] = [];
+      let steps: StepsProps['items'] = [];
+      let _pages: ReactElement[] = [];
       const list = pages.filter((e) => !e.hidden);
       for (let i = 0; i < list.length; i++) {
         const p = list[i];
         _pages.push(
           <Hider hide={current !== i} key={`${p.title}${i}`}>
             {p.component({ forward, backward }, formSubmissions, current === i)}
-          </Hider>
+          </Hider>,
         );
-        steps.push(<Step icon={p.icon} title={p.title} key={p.title} />);
+        steps.push({
+          icon: p.icon,
+          title: p.title,
+          disabled: p.disabled,
+        })
       }
       return {
         _pages,
@@ -124,21 +130,27 @@ const WizardViewForm = forwardRef<WizardViewFormRef, WizardViewFormProps>(
       };
     }, [backward, current, formSubmissions, forward, pages]);
 
+    const onChange = useCallback((current: number) => {
+      setCurrent(current);
+    }, []);
     return (
       <>
-        <Steps
-          labelPlacement={labelPlacement}
-          progressDot={progressDot}
-          className={[className, "pb-3"].join(" ")}
-          current={current}
-          type={type}
-        >
-          {components.steps}
-        </Steps>
+        {showSteps && (
+          <Steps
+            labelPlacement={labelPlacement}
+            titlePlacement={labelPlacement}
+            className={[className, 'pb-3'].join(' ')}
+            current={current}
+            type={type}
+            items={components.steps}
+            onChange={freeNavigation ? onChange : undefined}
+          >
+          </Steps>
+        )}
         <div style={pageStyle}>{components._pages}</div>
       </>
     );
-  }
+  },
 );
 
 export default WizardViewForm;
