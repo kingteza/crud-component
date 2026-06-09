@@ -1,3 +1,10 @@
+## [1.36.1](https://github.com/kingteza/crud-component/compare/v1.36.0...v1.36.1) (2026-06-09)
+
+
+### Bug Fixes
+
+* update property listing form by replacing address field with purpose enum ([3e1d222](https://github.com/kingteza/crud-component/commit/3e1d2227bb5e6f1e32f0d96d44beef02cb4c8691))
+
 # [1.36.0](https://github.com/kingteza/crud-component/compare/v1.35.0...v1.36.0) (2026-06-03)
 
 
