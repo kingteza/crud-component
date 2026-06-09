@@ -221,10 +221,11 @@ function App() {
               grid: { xs: 24 },
             },
             {
-              type: "text",
-              name: "address",
-              label: "Address",
-              grid: { xs: 24 },
+              type: "enum",
+              name: "purpose",
+              label: "Listing Mode",
+              enum: { SALE: "For Sale", RENT: "For Rent" },
+              translation: { SALE: "For Sale", RENT: "For Rent" },
             },
             {
               type: "textarea",
@@ -233,13 +234,6 @@ function App() {
               grid: { xs: 24 },
               rich: true,
               hideInTable: true,
-            },
-            {
-              type: "enum",
-              name: "purpose",
-              label: "Listing Mode",
-              enum: { SALE: "For Sale", RENT: "For Rent" },
-              translation: { SALE: "For Sale", RENT: "For Rent" },
             },
             { type: "number", name: "price", label: "Price (LKR)", min: 0 },
             {

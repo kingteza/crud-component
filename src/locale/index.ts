@@ -95,7 +95,8 @@ export const t = (key: string, options?: any) => {
 
 
 export const tWithOrWithoutNS = (key: string, options?: any, fallback?: string) => {
-  const value = t(key, options);
+  const value = i18nInstance?.t(key, options);
+
   if (value && key && value !== key) {
     return value;
   }
