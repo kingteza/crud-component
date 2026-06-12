@@ -14,8 +14,21 @@ import { ButtonComponent } from "../common";
 import CrudUtil from "../util/CrudUtil";
 
 export type CrudSearchOption<T> = { required?: boolean } & (
-  | { type: "text"; name: keyof T }
-  | { type: "select"; name: keyof T; multiple?: boolean }
+  | {
+      type: "text";
+      name: keyof T;
+      label?: string;
+      placeholder?: string;
+      fieldClassName?: string;
+    }
+  | {
+      type: "select";
+      name: keyof T;
+      multiple?: boolean;
+      label?: string;
+      placeholder?: string;
+      fieldClassName?: string;
+    }
 );
 
 export interface CrudSearchComponentProps<T, FormType> {
