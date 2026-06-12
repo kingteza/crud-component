@@ -1,3 +1,10 @@
+# [1.37.0](https://github.com/kingteza/crud-component/compare/v1.36.1...v1.37.0) (2026-06-12)
+
+
+### Features
+
+* enhance CrudSearchOption type with additional properties ([c6627ea](https://github.com/kingteza/crud-component/commit/c6627ea9e7437c240ae7462c6a02b28aa8cd5ec6))
+
 ## [1.36.1](https://github.com/kingteza/crud-component/compare/v1.36.0...v1.36.1) (2026-06-09)
 
 
