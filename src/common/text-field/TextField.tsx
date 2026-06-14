@@ -31,6 +31,7 @@ export interface TextFieldProps extends FormItemProps<any> {
   loading?: boolean;
   inputRef?: any;
   onBlur?: any;
+  maxLength?: number;
   onChange?: (val: any) => void;
 }
 
@@ -71,6 +72,7 @@ const TextField: React.FC<TextFieldProps> = ({
   autoFocus,
   onChange,
   tooltip,
+  maxLength,
   ...props
 }) => {
   const { t } = useTranslationLib();
@@ -110,6 +112,8 @@ const TextField: React.FC<TextFieldProps> = ({
     onPressEnter: (e) => onEnterInternalTextField(e, nextFocus, form, onEnter),
     type: type as any,
     placeholder: placeholder ? placeholder : (label as any),
+    maxLength: maxLength,
+    showCount: maxLength && maxLength > 0,
   };
   const Component = type == "password" ? Input.Password : Input;
   return (

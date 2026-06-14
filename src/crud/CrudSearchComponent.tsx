@@ -12,6 +12,7 @@ import { ReadonlyCrudFields } from "./CrudComponent";
 import CrudField from "./CrudField";
 import { ButtonComponent } from "../common";
 import CrudUtil from "../util/CrudUtil";
+import { CrudSearchContextProvider } from "../context/CrudSearchContext";
 
 export type CrudSearchOption<T> = { required?: boolean } & (
   | {
@@ -28,6 +29,18 @@ export type CrudSearchOption<T> = { required?: boolean } & (
       label?: string;
       placeholder?: string;
       fieldClassName?: string;
+    }
+  | {
+      type: "date";
+      name: keyof T;
+      label?: string;
+      placeholder?: string;
+      fieldClassName?: string;
+      range?: boolean;
+      format?: string;
+      disabledFutureDays?: boolean;
+      disabledPastDays?: boolean;
+      disableToday?: boolean;
     }
 );
 
@@ -119,7 +132,7 @@ export default function CrudSearchComponent<T, FormType>({
   );
   const [form] = Form.useForm();
   const search = useCallback(
-    async (ignore) => {
+    async (ignore: boolean) => {
       if (ignore || searchOnChange) {
         if (onSearch) {
           const fields = await form.validateFields();
@@ -147,39 +160,41 @@ export default function CrudSearchComponent<T, FormType>({
       className="mb-2"
       onChange={() => search(false)}
     >
-      <Row gutter={[4, 8]} className="w-100">
-        {showingFields.map((field, i) => {
-          const props = searchFieldsCustomColumnProps?.[i] ?? {
-            md: md.field,
-            sm: sm.field,
-            xs: xs.field,
-          };
-          const realName = CrudUtil.getRealName(field.name);
-          return (
-            <Col
-              {...props}
-              key={`search_field_${String(realName)}`}
-              className="align-self-end"
-            >
-              <CrudField {...field} readonly={false} fieldClassName="mb-0" />
-            </Col>
-          );
-        })}
+      <CrudSearchContextProvider search={() => search(false)}>
+        <Row gutter={[4, 8]} className="w-100">
+          {showingFields.map((field, i) => {
+            const props = searchFieldsCustomColumnProps?.[i] ?? {
+              md: md.field,
+              sm: sm.field,
+              xs: xs.field,
+            };
+            const realName = CrudUtil.getRealName(field.name);
+            return (
+              <Col
+                {...props}
+                key={`search_field_${String(realName)}`}
+                className="align-self-end"
+              >
+                <CrudField {...field} readonly={false} fieldClassName="mb-0" />
+              </Col>
+            );
+          })}
 
-        <Col
-          md={md.button}
-          sm={sm.button}
-          xs={xs.button}
-          style={{ alignSelf: "end" }}
-        >
-          <ButtonComponent
-            type="primary"
-            htmlType="submit"
-            block
-            icon={<SearchOutlined />}
-          ></ButtonComponent>
-        </Col>
-      </Row>
+          <Col
+            md={md.button}
+            sm={sm.button}
+            xs={xs.button}
+            style={{ alignSelf: "end" }}
+          >
+            <ButtonComponent
+              type="primary"
+              htmlType="submit"
+              block
+              icon={<SearchOutlined />}
+            ></ButtonComponent>
+          </Col>
+        </Row>
+      </CrudSearchContextProvider>
     </Form>
   );
 }

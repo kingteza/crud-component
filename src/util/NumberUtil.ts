@@ -39,7 +39,8 @@ function round(num: number = 0, pow = 2) {
   }
 }
 
-function toInt(num: number = 0, formatted = false) {
+function toInt(num: number, formatted = false) {
+  if(isNaN(num) || num === null) return '';
   const val = Math.floor(num);
   if (!formatted) return val.toString();
   return val.toLocaleString("en", integerOptions);

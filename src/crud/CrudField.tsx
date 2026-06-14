@@ -13,7 +13,6 @@ import {
   CrudFieldProps,
   DateBasedFieldProps,
   EnumCrudField,
-  InitialCrudField,
   NumberBasedFieldProps,
   PhoneNumberFieldProps,
   SelectCrudField,
@@ -36,6 +35,8 @@ import CrudTextAreaComponent from "./CrudTextAreaComponent";
 import CrudUtil from "../util/CrudUtil";
 import { Color } from "antd/es/color-picker";
 import PhoneNumberField from "../common/text-field/PhoneNumberField";
+import { useCrudSearchContext } from "../context/CrudSearchContext";
+import { FormInstance } from "antd/lib";
 
 export default function CrudField<T = any>(
   props0: Readonly<CrudFieldProps<T>>
@@ -71,7 +72,16 @@ export default function CrudField<T = any>(
     }
   }, [form, props, type, props?.updatingValue]);
 
-  const { t } = useTranslationLibNoNS();
+  const searchContext = useCrudSearchContext();
+  const handleChange = useCallback((value: any, handleChangeFn?: (value: any, form: FormInstance<T>) => void) => {
+    if (searchContext) {
+      searchContext.search();
+    }
+    if (!readonly && handleChangeFn) {
+      handleChangeFn(value, form);
+    }
+  }, [searchContext, readonly, form]);
+
   if (readonly || hidden) return <></>;
   if (customFormFieldRender) {
     return customFormFieldRender(form, props0 as any);
@@ -137,6 +147,7 @@ export default function CrudField<T = any>(
         max,
         addonAfter,
         addonBefore,
+        int,
       } = props as NumberBasedFieldProps<T>;
       return (
         <NumberTextField
@@ -158,6 +169,7 @@ export default function CrudField<T = any>(
           name={name as any}
           label={label}
           help={help}
+          isInt={int}
         />
       );
     }
@@ -183,9 +195,7 @@ export default function CrudField<T = any>(
           range={range}
           name={name as any}
           label={label}
-          onChange={
-            onChange ? (val: any) => onChange(val as any, form) : undefined
-          }
+          onChange={handleChange}
           className={fieldClassName}
           disableToday={disableToday}
           disabledFutureDays={disabledFutureDays}
@@ -218,7 +228,7 @@ export default function CrudField<T = any>(
           use12Hours={use12Hours}
           name={name as any}
           label={label}
-          onChange={onChange ? (val) => onChange(val, form) : undefined}
+          onChange={handleChange}
           className={fieldClassName}
           disableCurrent={disableCurrent}
           disabledFuture={disabledFuture}
@@ -279,112 +289,7 @@ export default function CrudField<T = any>(
       );
     }
     case "enum": {
-      const {
-        enum: enumList,
-        translation,
-        onChange,
-        onSearch,
-        multiple,
-        tagRender,
-      } = props as EnumCrudField<T>;
-      const list = Array.isArray(enumList) ? enumList : Object.keys(enumList);
-
-      if ("radio" in props && props.radio) {
-        return (
-          <Form.Item
-            {...props}
-            {...formLayoutProps}
-            name={name as any}
-            required={required}
-            tooltip={fieldTooltip}
-            rules={rules}
-            label={label}
-            className={["w-100", fieldClassName].join(" ")}
-            help={help}
-          >
-            <Radio.Group
-              {...props}
-              onChange={
-                onChange
-                  ? (val) => onChange(val?.target?.value, form)
-                  : undefined
-              }
-            >
-              {list.map((e) => (
-                <Radio disabled={!updatable} key={e} value={e}>
-                  {translation ? t(translation[e]) : e}
-                </Radio>
-              ))}
-            </Radio.Group>
-          </Form.Item>
-        );
-      } else if ("checkbox" in props && props.checkbox) {
-        return (
-          <Form.Item
-            {...props}
-            {...formLayoutProps}
-            name={name as any}
-            required={required}
-            tooltip={fieldTooltip}
-            rules={rules}
-            label={label}
-            className={["w-100", fieldClassName].join(" ")}
-            help={help}
-          >
-            <Checkbox.Group className="w-100">
-              {list.map((e) => {
-                const checkbox = (
-                  <Checkbox disabled={!updatable} key={e} value={e}>
-                    {translation ? t(translation[e]) : e}
-                  </Checkbox>
-                );
-                return ('checkboxGrid' in props && props.checkboxGrid) ? (
-                  <Col {...props.checkboxGrid}>{checkbox}</Col>
-                ) : checkbox;
-              })}
-            </Checkbox.Group>
-          </Form.Item>
-        );
-      }
-      return (
-        <SelectComponent
-          {...props}
-          {...formLayoutProps}
-          tagRender={
-            typeof tagRender === "function"
-              ? tagRender
-              : tagRender
-              ? (props) => {
-                  const { value, label } = props;
-                  const tagProps = tagRender[value];
-                  if (tagProps) {
-                    return <Tag color={tagProps.color}>{label}</Tag>;
-                  }
-                  return <Tag>{label}</Tag>;
-                }
-              : undefined
-          }
-          onChange={onChange ? (val) => onChange(val, form) : undefined}
-          className={["w-100", fieldClassName].join(" ")}
-          name={name as any}
-          items={list}
-          required={required}
-          tooltip={fieldTooltip}
-          rules={rules}
-          label={label}
-          help={help}
-          disabled={!updatable}
-          onSearch={onSearch ? (val) => onSearch(val, form) : undefined}
-          allowClear
-          mode={multiple ? "multiple" : undefined}
-          showLoadingInEmptyIndicator
-          itemBuilder={(e) => (
-            <Select.Option key={e} value={e}>
-              {translation ? t(translation[e]) : e}
-            </Select.Option>
-          )}
-        />
-      );
+      return <EnumCrudFieldComponent {...props0} />;
     }
     case "checkbox": {
       const { onChange, switch: asASwitch } =
@@ -394,7 +299,7 @@ export default function CrudField<T = any>(
           {...formLayoutProps}
           className={fieldClassName}
           rules={rules}
-          onChange={onChange ? (val) => onChange(val, form) : undefined}
+          onChange={handleChange}
           label={label}
           tooltip={fieldTooltip}
           disabled={!updatable}
@@ -424,6 +329,147 @@ export default function CrudField<T = any>(
     default:
       return <>{`${type} Not Implemented`}</>;
   }
+}
+
+export function EnumCrudFieldComponent<T>(props0: Readonly<EnumCrudField<T>>) {
+  const form = Form.useFormInstance();
+  const {
+    label,
+    name,
+    type,
+    required,
+    hidden,
+    rules = [],
+    updatable = true,
+    readonly = false,
+    fieldClassName,
+    customFormFieldRender,
+    fieldTooltip,
+    fieldHelper: help,
+    formLayoutProps,
+    ...props
+  } = props0;
+
+  const { t } = useTranslationLibNoNS();
+  const {
+    enum: enumList,
+    translation,
+    onChange,
+    onSearch,
+    multiple,
+    tagRender,
+  } = props as EnumCrudField<T>;
+  const list = Array.isArray(enumList) ? enumList : Object.keys(enumList);
+
+  const searchContext = useCrudSearchContext();
+  const handleChange = useCallback(
+    (value: any) => {
+      if (searchContext) {
+        searchContext.search();
+      }
+      if (!readonly && onChange) {
+        onChange(value, form);
+      }
+    },
+    [searchContext, readonly, onChange, form]
+  );
+
+  if ("radio" in props && props.radio) {
+    return (
+      <Form.Item
+        {...props}
+        {...formLayoutProps}
+        name={name as any}
+        required={required}
+        tooltip={fieldTooltip}
+        rules={rules}
+        label={label}
+        className={["w-100", fieldClassName].join(" ")}
+        help={help}
+      >
+        <Radio.Group
+          {...props}
+          onChange={(val) => handleChange(val?.target?.value)}
+        >
+          {list.map((e) => (
+            <Radio disabled={!updatable} key={e} value={e}>
+              {translation ? t(translation[e]) : e}
+            </Radio>
+          ))}
+        </Radio.Group>
+      </Form.Item>
+    );
+  } else if ("checkbox" in props && props.checkbox) {
+    return (
+      <Form.Item
+        {...props}
+        {...formLayoutProps}
+        name={name as any}
+        required={required}
+        tooltip={fieldTooltip}
+        rules={rules}
+        label={label}
+        className={["w-100", fieldClassName].join(" ")}
+        help={help}
+      >
+        <Checkbox.Group className="w-100" onChange={handleChange}>
+          {list.map((e) => {
+            const checkbox = (
+              <Checkbox disabled={!updatable} key={e} value={e}>
+                {translation ? t(translation[e]) : e}
+              </Checkbox>
+            );
+            return "checkboxGrid" in props && props.checkboxGrid ? (
+              <Col {...props.checkboxGrid}>{checkbox}</Col>
+            ) : (
+              checkbox
+            );
+          })}
+        </Checkbox.Group>
+      </Form.Item>
+    );
+  }
+
+  return (
+    <SelectComponent
+      {...props}
+      {...formLayoutProps}
+      notSearch
+      tagRender={
+        typeof tagRender === "function"
+          ? tagRender
+          : tagRender
+          ? (props) => {
+              const { value, label } = props;
+              const tagProps = tagRender[value];
+              if (tagProps) {
+                return <Tag color={tagProps.color}>{label}</Tag>;
+              }
+              return <Tag>{label}</Tag>;
+            }
+          : undefined
+      }
+      onChange={handleChange}
+      className={["w-100", fieldClassName].join(" ")}
+      name={name as any}
+      items={list}
+      required={required}
+      tooltip={fieldTooltip}
+      rules={rules}
+      label={label}
+      help={help}
+      disabled={!updatable}
+      onSearch={onSearch ? (val) => onSearch(val, form) : undefined}
+      allowClear
+      mode={multiple ? "multiple" : undefined}
+      showLoadingInEmptyIndicator
+      itemBuilder={(e) => (
+        <Select.Option key={e} value={e}>
+          {translation ? t(translation[e]) : e}
+        </Select.Option>
+      )}
+    />
+  );
 }
 
 export function SelectCrudFieldComponent<T>(
@@ -489,7 +535,19 @@ export function SelectCrudFieldComponent<T>(
     },
     [selectOptionRender]
   );
-
+  const searchContext = useCrudSearchContext();
+  const handleChange = useCallback(
+    (value: any) => {
+      if (searchContext) {
+        searchContext.search();
+      }
+      if (onChange) {
+        setTyping("");
+        onChange(value, form);
+      }
+    },
+    [searchContext, onChange, form]
+  );
   return (
     <SelectComponent
       {...props}
@@ -517,14 +575,7 @@ export function SelectCrudFieldComponent<T>(
       onSelect={(value) => {
         onSet?.(value?.key, items, form);
       }}
-      onChange={
-        onChange
-          ? (val) => {
-              setTyping("");
-              onChange(val, form);
-            }
-          : undefined
-      }
+      onChange={handleChange}
       mode={multiple ? "multiple" : undefined}
       className={["w-100", fieldClassName].join(" ")}
       name={upsertFieldName}

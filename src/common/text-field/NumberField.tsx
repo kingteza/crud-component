@@ -4,14 +4,25 @@
 ***************************************************************************** */
 
 import { Form, InputNumber } from "antd";
-import { forwardRef, ReactNode, useMemo } from "react";
+import {
+  ElementRef,
+  forwardRef,
+  KeyboardEvent,
+  ReactNode,
+  useCallback,
+  useMemo,
+} from "react";
 import { useTranslationLib } from "../../locale";
-
 
 import TooltipComponent from "../tooltip/TooltipComponent";
 import { onEnterInternalTextField, TextFieldProps } from "./TextField";
 
-interface NumberTextFieldProps extends TextFieldProps {
+const POSITIVE_INT_REPLACE_LOGIC = /\D/g;
+const THOUSAND_SEPARATOR = /\B(?=(\d{3})+(?!\d))/g;
+const MONEY_PARSER = /\$\s?|(,*)/g;
+const BLOCKED_INT_KEYS = new Set(["e", "E", "."]);
+
+export interface NumberTextFieldProps extends TextFieldProps {
   moneyField?: boolean;
   addonAfter?: ReactNode;
   minLength?: number;
@@ -21,9 +32,50 @@ interface NumberTextFieldProps extends TextFieldProps {
   min?: number | null;
 }
 
+function getRequiredMessage(
+  label: TextFieldProps["label"],
+  placeholder: string | undefined,
+  requiredMessage: string
+) {
+  const fieldLabel = label ?? placeholder ?? "";
+  return `${fieldLabel} ${requiredMessage}`.trim();
+}
 
-const NumberTextField = forwardRef<HTMLInputElement, NumberTextFieldProps>(
-  function Input(
+function formatMoney(value: number | string | null | undefined): string {
+  if (value == null) return "";
+
+  const str = String(value);
+  if (!str.includes(".")) {
+    return str.replace(THOUSAND_SEPARATOR, ",");
+  }
+
+  const [integer, ...fraction] = str.split(".");
+  return [integer.replace(THOUSAND_SEPARATOR, ","), ...fraction].join(".");
+}
+
+function parseMoney(value: string | undefined): string {
+  return value?.replace(MONEY_PARSER, "") ?? "";
+}
+
+function formatInt(
+  value: number | string | null | undefined,
+  replaceLogic: RegExp
+): string {
+  return value == null ? "" : String(value).replace(replaceLogic, "");
+}
+
+function parseIntValue(
+  value: string | undefined,
+  replaceLogic: RegExp
+): string {
+  return value == null ? "" : value.replace(replaceLogic, "");
+}
+
+const NumberTextField = forwardRef<
+  ElementRef<typeof InputNumber>,
+  NumberTextFieldProps
+>(
+  function NumberTextField(
     {
       type: _type,
       required,
@@ -54,23 +106,77 @@ const NumberTextField = forwardRef<HTMLInputElement, NumberTextFieldProps>(
     ref
   ) {
     const { t } = useTranslationLib();
+    const allowNegative = min === null;
+    const usePositiveIntFormat = isInt && !allowNegative;
+    const resolvedPlaceholder = placeholder ?? (label as string);
 
-    const r = useMemo(
-      () => [
+    const formRules = useMemo(() => {
+      const ruleList = [
         ...rules,
         {
           required,
-          message: `${label ? label : placeholder ? placeholder : ""} ${t(
-            'err.validation.required'
-          )}`,
+          message: getRequiredMessage(
+            label,
+            placeholder,
+            t("err.validation.required")
+          ),
         },
-      ],
-      [rules, label, placeholder, t, required]
+      ];
+
+      if (isInt) {
+        ruleList.push({
+          type: "number",
+          validator: async (_: unknown, fieldValue: number | null) => {
+            if (fieldValue == null || Number.isInteger(fieldValue)) return;
+            throw new Error(t("err.validation.integer"));
+          },
+        });
+      }
+
+      return ruleList;
+    }, [rules, label, placeholder, t, required, isInt]);
+
+    const formatter = useMemo(() => {
+      if (moneyField) return formatMoney;
+      if (usePositiveIntFormat) {
+        return (fieldValue: number | string | null | undefined) =>
+          formatInt(fieldValue, POSITIVE_INT_REPLACE_LOGIC);
+      }
+      return undefined;
+    }, [moneyField, usePositiveIntFormat]);
+
+    const parser = useMemo(() => {
+      if (moneyField) return parseMoney;
+      if (usePositiveIntFormat) {
+        return (fieldValue: string | undefined) =>
+          parseIntValue(fieldValue, POSITIVE_INT_REPLACE_LOGIC);
+      }
+      return undefined;
+    }, [moneyField, usePositiveIntFormat]);
+
+    const handlePressEnter = useCallback(
+      (e: KeyboardEvent<HTMLInputElement>) =>
+        onEnterInternalTextField(e, nextFocus, form, onEnter),
+      [nextFocus, form, onEnter]
+    );
+
+    const handleIntKeyDown = useCallback(
+      (e: KeyboardEvent<HTMLInputElement>) => {
+        if (!allowNegative && e.key === "-") {
+          e.preventDefault();
+          return;
+        }
+
+        if (BLOCKED_INT_KEYS.has(e.key)) {
+          e.preventDefault();
+        }
+      },
+      [allowNegative]
     );
 
     return (
       <TooltipComponent title={tooltip as any}>
-        <Form.Item {...props} label={label} rules={r}>
+        <Form.Item {...props} label={label} rules={formRules} help={help}>
           <InputNumber
             ref={ref}
             disabled={disabled}
@@ -81,35 +187,22 @@ const NumberTextField = forwardRef<HTMLInputElement, NumberTextFieldProps>(
             minLength={minLength}
             addonAfter={addonAfter}
             step={isInt ? 1 : undefined}
-            pattern={isInt ? "d*" : pattern}
-            onChange={onChange}
-            onPressEnter={(e) =>
-              onEnterInternalTextField(e, nextFocus, form, onEnter)
+            inputMode={isInt ? "numeric" : undefined}
+            pattern={
+              isInt ? (allowNegative ? "-?[0-9]*" : "[0-9]*") : pattern
             }
+            precision={isInt ? 0 : undefined}
+            onChange={onChange}
+            onPressEnter={handlePressEnter}
             className="max-width"
-            min={min === null ? undefined : min ?? 0}
+            min={allowNegative ? undefined : min ?? 0}
             max={max}
             type={moneyField ? undefined : "number"}
             size={size}
-            formatter={
-              moneyField
-                ? (value) => {
-                    if (value.includes(".")) {
-                      const parts = `${value}`.split(".");
-                      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                      return parts.join(".");
-                    } else {
-                      return `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    }
-                  }
-                : undefined
-            }
-            parser={
-              moneyField
-                ? (value) => value?.replace(/\$\s?|(,*)/g, "")
-                : undefined
-            }
-            placeholder={placeholder ? placeholder : (label as any)}
+            formatter={formatter}
+            parser={parser}
+            onKeyDown={isInt ? handleIntKeyDown : undefined}
+            placeholder={resolvedPlaceholder}
           />
         </Form.Item>
       </TooltipComponent>

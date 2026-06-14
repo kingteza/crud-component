@@ -67,6 +67,7 @@ const CrudTextAreaComponent = <T,>({
       <TextAreaComponent
         {...formLayoutProps}
         maxLength={maxLength}
+        showCount={Boolean(maxLength && maxLength > 0)}
         rules={rules}
         placeholder={placeholder}
         onChange={

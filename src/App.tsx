@@ -211,166 +211,183 @@ function App() {
   ];
   return (
     <div className="mx-2">
-      <Form layout="vertical" form={form} onFinish={save}>
-        <CrudComponent
-          fields={[
-            {
-              type: "text",
-              name: "title",
-              label: "Property Title",
-              grid: { xs: 24 },
+      <CrudComponent
+        onSearch={console.log}
+        searchOnChange
+        searchFields={["numberOfBeds", "purpose", {
+          name: 'createdAt',
+          type: 'date',
+          range: true,
+          disabledPastDays: true,
+        }]}
+        fields={[
+          {
+            type: "text",
+            name: "title",
+            label: "Property Title",
+            grid: { xs: 24 },
+            maxLength: 100,
+            required: true,
+          },
+          {
+            type: "date",
+            name: "createdAt",
+            label: "Created At",
+            format: "YYYY-MM-DD",
+            grid: { xs: 24 },
+          },
+          {
+            report: { searchable: true, alreadySelected: true },
+            type: "number",
+            label: "Number of Beds",
+            name: "numberOfBeds",
+            int: true,
+            allowMinus: true,
+          },
+          {
+            type: "enum",
+            name: "purpose",
+            label: "Listing Mode",
+            enum: { SALE: "For Sale", RENT: "For Rent" },
+            translation: { SALE: "For Sale", RENT: "For Rent" },
+          },
+          {
+            type: "textarea",
+            name: "description",
+            label: "Property Description",
+            grid: { xs: 24 },
+            // rich: true,
+            hideInTable: true,
+            maxLength: 100,
+          },
+          { type: "number", name: "price", label: "Price (LKR)", min: 0 },
+          {
+            type: "checkbox",
+            name: "priceNegotiable",
+            label: "Price Negotiable",
+          },
+          {
+            type: "enum",
+            name: "status",
+            label: "Status",
+            enum: {
+              ACTIVE: "Active",
+              PENDING: "Pending",
+              DRAFT: "Draft",
+              REJECTED: "Rejected",
+              SOLD: "Sold",
             },
-            {
-              type: "enum",
-              name: "purpose",
-              label: "Listing Mode",
-              enum: { SALE: "For Sale", RENT: "For Rent" },
-              translation: { SALE: "For Sale", RENT: "For Rent" },
+            translation: {
+              ACTIVE: "Active",
+              PENDING: "Pending",
+              DRAFT: "Draft",
+              REJECTED: "Rejected",
+              SOLD: "Sold",
             },
-            {
-              type: "textarea",
-              name: "description",
-              label: "Property Description",
-              grid: { xs: 24 },
-              rich: true,
-              hideInTable: true,
+          },
+          {
+            type: "enum",
+            name: "listingPlan",
+            label: "Listing Plan",
+            enum: {
+              BASIC: "Basic",
+              FEATURED: "Featured",
+              SUPERCHARGED: "Supercharged",
             },
-            { type: "number", name: "price", label: "Price (LKR)", min: 0 },
-            {
-              type: "checkbox",
-              name: "priceNegotiable",
-              label: "Price Negotiable",
+            translation: {
+              BASIC: "Basic",
+              FEATURED: "Featured",
+              SUPERCHARGED: "Supercharged",
             },
-            {
-              type: "enum",
-              name: "status",
-              label: "Status",
-              enum: {
-                ACTIVE: "Active",
-                PENDING: "Pending",
-                DRAFT: "Draft",
-                REJECTED: "Rejected",
-                SOLD: "Sold",
-              },
-              translation: {
-                ACTIVE: "Active",
-                PENDING: "Pending",
-                DRAFT: "Draft",
-                REJECTED: "Rejected",
-                SOLD: "Sold",
-              },
+          },
+        ]}
+        data={[
+          {
+            id: "cmpv685j40001rn1xzfj6de6x",
+            userId: "4hjOdvhYWwdS3CfVlg093lOiBGmmthtv",
+            orgId: null,
+            agentId: null,
+            propertyTypeId: "cmpgnfbcx0000gi1xcw2fmv9z",
+            // numberOfBeds: 4,
+            propertyType: {
+              id: "cmpgnfbcx0000gi1xcw2fmv9z",
+              name: "House",
+              baseType: "HOUSE",
+              category: "RESIDENTIAL",
+              hasBeds: true,
+              hasBaths: true,
+              hasArea: true,
+              enabled: true,
+              createdAt: "2026-05-22T08:19:33.056Z",
+              updatedAt: "2026-05-22T08:19:33.056Z",
             },
-            {
-              type: "enum",
-              name: "listingPlan",
-              label: "Listing Plan",
-              enum: {
-                BASIC: "Basic",
-                FEATURED: "Featured",
-                SUPERCHARGED: "Supercharged",
-              },
-              translation: {
-                BASIC: "Basic",
-                FEATURED: "Featured",
-                SUPERCHARGED: "Supercharged",
-              },
-            },
-          ]}
-          data={[
-            {
-              id: "cmpv685j40001rn1xzfj6de6x",
-              userId: "4hjOdvhYWwdS3CfVlg093lOiBGmmthtv",
-              orgId: null,
-              agentId: null,
-              propertyTypeId: "cmpgnfbcx0000gi1xcw2fmv9z",
-              propertyType: {
-                id: "cmpgnfbcx0000gi1xcw2fmv9z",
-                name: "House",
-                baseType: "HOUSE",
-                category: "RESIDENTIAL",
-                hasBeds: true,
-                hasBaths: true,
-                hasArea: true,
-                enabled: true,
-                createdAt: "2026-05-22T08:19:33.056Z",
-                updatedAt: "2026-05-22T08:19:33.056Z",
-              },
-              title: "Luxury 4 Bedroom House for Sale in Malabe – Modern",
-              images: [
-                "https://content.srilankarealestate.lk/public/properties/1780316043359-km7m3m7o2ms.png",
-                "https://content.srilankarealestate.lk/public/properties/1780316056464-tqyubgva43.png",
-                "https://content.srilankarealestate.lk/public/properties/1780316056464-g3q0qlyrn6v.png",
-                "https://content.srilankarealestate.lk/public/properties/1780316056464-ilytihivyq.png",
-                "https://content.srilankarealestate.lk/public/properties/1780316056464-klhkr5039og.png",
-              ],
-              description:
-                "<div><strong>Beautiful&nbsp;Family&nbsp;Home&nbsp;in&nbsp;a&nbsp;Prime&nbsp;Residential&nbsp;Area</strong></div><div>Own&nbsp;this&nbsp;stunning&nbsp;<strong>4-bedroom&nbsp;luxury&nbsp;house</strong>&nbsp;located&nbsp;in&nbsp;the&nbsp;highly&nbsp;sought-after&nbsp;area&nbsp;of&nbsp;<strong>Malabe,&nbsp;Sri&nbsp;Lanka</strong>.&nbsp;Designed&nbsp;for&nbsp;modern&nbsp;family&nbsp;living,&nbsp;this&nbsp;property&nbsp;offers&nbsp;spacious&nbsp;interiors,&nbsp;premium&nbsp;finishes,&nbsp;and&nbsp;a&nbsp;peaceful&nbsp;environment&nbsp;while&nbsp;being&nbsp;just&nbsp;minutes&nbsp;away&nbsp;from&nbsp;schools,&nbsp;supermarkets,&nbsp;hospitals,&nbsp;and&nbsp;the&nbsp;Colombo&nbsp;Expressway.</div><div>Property&nbsp;Highlights</div><ul><li><strong>Land&nbsp;Extent:</strong>&nbsp;12&nbsp;Perches</li><li><strong>Floor&nbsp;Area:</strong>&nbsp;3,200&nbsp;Sq.ft</li><li><strong>Bedrooms:</strong>&nbsp;4&nbsp;Spacious&nbsp;Bedrooms</li><li><strong>Bathrooms:</strong>&nbsp;3&nbsp;Modern&nbsp;Bathrooms</li><li><strong>Parking:</strong>&nbsp;Covered&nbsp;parking&nbsp;for&nbsp;3&nbsp;vehicles</li><li><strong>Ownership:</strong>&nbsp;Clear&nbsp;deeds&nbsp;and&nbsp;approved&nbsp;plans</li></ul><div>Features&nbsp;&amp;&nbsp;Amenities</div><ul><li>Elegant&nbsp;living&nbsp;and&nbsp;dining&nbsp;areas&nbsp;with&nbsp;natural&nbsp;lighting</li><li>Modern&nbsp;pantry&nbsp;kitchen&nbsp;with&nbsp;granite&nbsp;countertops</li><li>Master&nbsp;bedroom&nbsp;with&nbsp;attached&nbsp;bathroom&nbsp;and&nbsp;walk-in&nbsp;closet</li><li>Large&nbsp;landscaped&nbsp;garden&nbsp;ideal&nbsp;for&nbsp;family&nbsp;gatherings</li><li>Hot&nbsp;water&nbsp;system&nbsp;and&nbsp;air-conditioned&nbsp;bedrooms</li><li>CCTV&nbsp;security&nbsp;system&nbsp;and&nbsp;automated&nbsp;gate</li><li>Servant&nbsp;room&nbsp;and&nbsp;separate&nbsp;washroom</li><li>Rooftop&nbsp;terrace&nbsp;with&nbsp;scenic&nbsp;views</li></ul><div>Excellent&nbsp;Location</div><div>Conveniently&nbsp;situated&nbsp;within:</div><ul><li>5&nbsp;minutes&nbsp;to&nbsp;Malabe&nbsp;Town</li><li>10&nbsp;minutes&nbsp;to&nbsp;IT&nbsp;Parks&nbsp;and&nbsp;International&nbsp;Schools</li><li>15&nbsp;minutes&nbsp;to&nbsp;Kaduwela&nbsp;Expressway&nbsp;Entrance</li><li>Nearby&nbsp;supermarkets,&nbsp;banks,&nbsp;restaurants,&nbsp;and&nbsp;healthcare&nbsp;facilities</li></ul><div>Investment&nbsp;Opportunity</div><div>Whether&nbsp;you&nbsp;are&nbsp;looking&nbsp;for&nbsp;your&nbsp;dream&nbsp;family&nbsp;residence&nbsp;or&nbsp;a&nbsp;valuable&nbsp;real&nbsp;estate&nbsp;investment,&nbsp;this&nbsp;property&nbsp;offers&nbsp;exceptional&nbsp;value&nbsp;in&nbsp;one&nbsp;of&nbsp;Sri&nbsp;Lanka&#39;s&nbsp;fastest-growing&nbsp;residential&nbsp;areas.</div><div><strong>Price:</strong>&nbsp;LKR&nbsp;58,000,000&nbsp;(Negotiable)</div><div>📞&nbsp;Contact&nbsp;today&nbsp;to&nbsp;arrange&nbsp;a&nbsp;viewing&nbsp;and&nbsp;experience&nbsp;this&nbsp;beautiful&nbsp;property&nbsp;firsthand.</div>",
-              purpose: "SALE",
-              address: "Malambe",
-              district: "Colombo",
-              city: "Malambe",
-              latitude: 6.907557240383485,
-              longitude: 79.9695643229036,
-              price: 40000000,
-              priceNegotiable: true,
-              bedrooms: 4,
-              bathrooms: 2,
-              landPerches: 2000,
-              floorAreaSqft: 2000,
-              videoUrl: null,
-              status: "ACTIVE",
-              listingPlan: "BASIC",
-              planExpiresAt: null,
-              viewsCount: 0,
-              leadsCount: 0,
-              slug: "luxury-4-bedroom-house-for-sale-in-malabe-modern-mpv685g0",
-              createdAt: "2026-06-01T12:14:38.072Z",
-              updatedAt: "2026-06-01T12:14:38.072Z",
-              propertyFeatures: [
-                {
-                  id: "cmpv685j60003rn1xb6dh5vk7",
-                  featureId: "cmpgngznp0001gi1xf457gkrs",
-                  propertyId: "cmpv685j40001rn1xzfj6de6x",
-                  value: null,
-                  values: [],
-                  feature: {
-                    id: "cmpgngznp0001gi1xf457gkrs",
-                    name: "AC",
-                    label: "AC",
-                    label_si: "AC",
-                    svg: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMjQgMjQiPgoJPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIgLz4KCTxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMS41Ij4KCQk8cGF0aCBkPSJNMTguMzQ2IDQuNUg1LjY1NGMtLjYyOSAwLTEuMTU0LjUyNS0xLjE1NCAxLjE1NHY1Ljc3YzAgLjYyOC41MjUgMS4xNTMgMS4xNTQgMS4xNTNoMTIuNjkyYy42MjkgMCAxLjE1NC0uNTI1IDEuMTU0LTEuMTU0di01Ljc3YzAtLjYyOC0uNTI1LTEuMTUzLTEuMTU0LTEuMTUzIiAvPgoJCTxwYXRoIGQ9Ik0xNi42MTUgMTIuNTc3di0yLjMwOGMwLS42MjgtLjUyNS0xLjE1NC0xLjE1My0xLjE1NEg4LjUzN2MtLjYyOCAwLTEuMTUzLjUyNi0xLjE1MyAxLjE1NHYyLjMwOG0tLjU3NyA1Ljc3YzEuNjQgMCAxLjczLTEuNjA0IDEuNzMtMi44ODZtOC42NTQgMi44ODVjLTEuNjQgMC0xLjczLTEuNjAzLTEuNzMtMi44ODVNMTIgMTkuNXYtNC4wMzkiIC8+Cgk8L2c+Cjwvc3ZnPgo=",
-                    baseTypes: ["HOUSE"],
-                    inputType: "CHECKBOX",
-                    options: [],
-                    createdAt: "2026-05-22T08:20:51.203Z",
-                    updatedAt: "2026-05-22T08:20:51.203Z",
-                  },
+            title: "Luxury 4 Bedroom House for Sale in Malabe – Modern",
+            images: [
+              "https://content.srilankarealestate.lk/public/properties/1780316043359-km7m3m7o2ms.png",
+              "https://content.srilankarealestate.lk/public/properties/1780316056464-tqyubgva43.png",
+              "https://content.srilankarealestate.lk/public/properties/1780316056464-g3q0qlyrn6v.png",
+              "https://content.srilankarealestate.lk/public/properties/1780316056464-ilytihivyq.png",
+              "https://content.srilankarealestate.lk/public/properties/1780316056464-klhkr5039og.png",
+            ],
+            description:
+              "<div><strong>Beautiful&nbsp;Family&nbsp;Home&nbsp;in&nbsp;a&nbsp;Prime&nbsp;Residential&nbsp;Area</strong></div><div>Own&nbsp;this&nbsp;stunning&nbsp;<strong>4-bedroom&nbsp;luxury&nbsp;house</strong>&nbsp;located&nbsp;in&nbsp;the&nbsp;highly&nbsp;sought-after&nbsp;area&nbsp;of&nbsp;<strong>Malabe,&nbsp;Sri&nbsp;Lanka</strong>.&nbsp;Designed&nbsp;for&nbsp;modern&nbsp;family&nbsp;living,&nbsp;this&nbsp;property&nbsp;offers&nbsp;spacious&nbsp;interiors,&nbsp;premium&nbsp;finishes,&nbsp;and&nbsp;a&nbsp;peaceful&nbsp;environment&nbsp;while&nbsp;being&nbsp;just&nbsp;minutes&nbsp;away&nbsp;from&nbsp;schools,&nbsp;supermarkets,&nbsp;hospitals,&nbsp;and&nbsp;the&nbsp;Colombo&nbsp;Expressway.</div><div>Property&nbsp;Highlights</div><ul><li><strong>Land&nbsp;Extent:</strong>&nbsp;12&nbsp;Perches</li><li><strong>Floor&nbsp;Area:</strong>&nbsp;3,200&nbsp;Sq.ft</li><li><strong>Bedrooms:</strong>&nbsp;4&nbsp;Spacious&nbsp;Bedrooms</li><li><strong>Bathrooms:</strong>&nbsp;3&nbsp;Modern&nbsp;Bathrooms</li><li><strong>Parking:</strong>&nbsp;Covered&nbsp;parking&nbsp;for&nbsp;3&nbsp;vehicles</li><li><strong>Ownership:</strong>&nbsp;Clear&nbsp;deeds&nbsp;and&nbsp;approved&nbsp;plans</li></ul><div>Features&nbsp;&amp;&nbsp;Amenities</div><ul><li>Elegant&nbsp;living&nbsp;and&nbsp;dining&nbsp;areas&nbsp;with&nbsp;natural&nbsp;lighting</li><li>Modern&nbsp;pantry&nbsp;kitchen&nbsp;with&nbsp;granite&nbsp;countertops</li><li>Master&nbsp;bedroom&nbsp;with&nbsp;attached&nbsp;bathroom&nbsp;and&nbsp;walk-in&nbsp;closet</li><li>Large&nbsp;landscaped&nbsp;garden&nbsp;ideal&nbsp;for&nbsp;family&nbsp;gatherings</li><li>Hot&nbsp;water&nbsp;system&nbsp;and&nbsp;air-conditioned&nbsp;bedrooms</li><li>CCTV&nbsp;security&nbsp;system&nbsp;and&nbsp;automated&nbsp;gate</li><li>Servant&nbsp;room&nbsp;and&nbsp;separate&nbsp;washroom</li><li>Rooftop&nbsp;terrace&nbsp;with&nbsp;scenic&nbsp;views</li></ul><div>Excellent&nbsp;Location</div><div>Conveniently&nbsp;situated&nbsp;within:</div><ul><li>5&nbsp;minutes&nbsp;to&nbsp;Malabe&nbsp;Town</li><li>10&nbsp;minutes&nbsp;to&nbsp;IT&nbsp;Parks&nbsp;and&nbsp;International&nbsp;Schools</li><li>15&nbsp;minutes&nbsp;to&nbsp;Kaduwela&nbsp;Expressway&nbsp;Entrance</li><li>Nearby&nbsp;supermarkets,&nbsp;banks,&nbsp;restaurants,&nbsp;and&nbsp;healthcare&nbsp;facilities</li></ul><div>Investment&nbsp;Opportunity</div><div>Whether&nbsp;you&nbsp;are&nbsp;looking&nbsp;for&nbsp;your&nbsp;dream&nbsp;family&nbsp;residence&nbsp;or&nbsp;a&nbsp;valuable&nbsp;real&nbsp;estate&nbsp;investment,&nbsp;this&nbsp;property&nbsp;offers&nbsp;exceptional&nbsp;value&nbsp;in&nbsp;one&nbsp;of&nbsp;Sri&nbsp;Lanka&#39;s&nbsp;fastest-growing&nbsp;residential&nbsp;areas.</div><div><strong>Price:</strong>&nbsp;LKR&nbsp;58,000,000&nbsp;(Negotiable)</div><div>📞&nbsp;Contact&nbsp;today&nbsp;to&nbsp;arrange&nbsp;a&nbsp;viewing&nbsp;and&nbsp;experience&nbsp;this&nbsp;beautiful&nbsp;property&nbsp;firsthand.</div>",
+            purpose: "SALE",
+            address: "Malambe",
+            district: "Colombo",
+            city: "Malambe",
+            latitude: 6.907557240383485,
+            longitude: 79.9695643229036,
+            price: 40000000,
+            priceNegotiable: true,
+            bedrooms: 4,
+            bathrooms: 2,
+            landPerches: 2000,
+            floorAreaSqft: 2000,
+            videoUrl: null,
+            status: "ACTIVE",
+            listingPlan: "BASIC",
+            planExpiresAt: null,
+            viewsCount: 0,
+            leadsCount: 0,
+            slug: "luxury-4-bedroom-house-for-sale-in-malabe-modern-mpv685g0",
+            createdAt: "2026-06-01T12:14:38.072Z",
+            updatedAt: "2026-06-01T12:14:38.072Z",
+            propertyFeatures: [
+              {
+                id: "cmpv685j60003rn1xb6dh5vk7",
+                featureId: "cmpgngznp0001gi1xf457gkrs",
+                propertyId: "cmpv685j40001rn1xzfj6de6x",
+                value: null,
+                values: [],
+                feature: {
+                  id: "cmpgngznp0001gi1xf457gkrs",
+                  name: "AC",
+                  label: "AC",
+                  label_si: "AC",
+                  svg: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxZW0iIGhlaWdodD0iMWVtIiB2aWV3Qm94PSIwIDAgMjQgMjQiPgoJPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIgLz4KCTxnIGZpbGw9Im5vbmUiIHN0cm9rZT0iY3VycmVudENvbG9yIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMS41Ij4KCQk8cGF0aCBkPSJNMTguMzQ2IDQuNUg1LjY1NGMtLjYyOSAwLTEuMTU0LjUyNS0xLjE1NCAxLjE1NHY1Ljc3YzAgLjYyOC41MjUgMS4xNTMgMS4xNTQgMS4xNTNoMTIuNjkyYy42MjkgMCAxLjE1NC0uNTI1IDEuMTU0LTEuMTU0di01Ljc3YzAtLjYyOC0uNTI1LTEuMTUzLTEuMTU0LTEuMTUzIiAvPgoJCTxwYXRoIGQ9Ik0xNi42MTUgMTIuNTc3di0yLjMwOGMwLS42MjgtLjUyNS0xLjE1NC0xLjE1My0xLjE1NEg4LjUzN2MtLjYyOCAwLTEuMTUzLjUyNi0xLjE1MyAxLjE1NHYyLjMwOG0tLjU3NyA1Ljc3YzEuNjQgMCAxLjczLTEuNjA0IDEuNzMtMi44ODZtOC42NTQgMi44ODVjLTEuNjQgMC0xLjczLTEuNjAzLTEuNzMtMi44ODVNMTIgMTkuNXYtNC4wMzkiIC8+Cgk8L2c+Cjwvc3ZnPgo=",
+                  baseTypes: ["HOUSE"],
+                  inputType: "CHECKBOX",
+                  options: [],
+                  createdAt: "2026-05-22T08:20:51.203Z",
+                  updatedAt: "2026-05-22T08:20:51.203Z",
                 },
-              ],
-              owner: {
-                id: "4hjOdvhYWwdS3CfVlg093lOiBGmmthtv",
-                name: "Panduka Nandara",
-                email: "pandukanandara@gmail.com",
-                image:
-                  "https://lh3.googleusercontent.com/a/ACg8ocIV3Ww0Ijj4QcmNgBUrMVXb81f7dH0ccmKzOhGgxXGvC509QabLZA=s96-c",
-                role: "user",
-                saleCount: 1,
-                rentCount: 0,
-                activeProperties: 1,
               },
+            ],
+            owner: {
+              id: "4hjOdvhYWwdS3CfVlg093lOiBGmmthtv",
+              name: "Panduka Nandara",
+              email: "pandukanandara@gmail.com",
+              image:
+                "https://lh3.googleusercontent.com/a/ACg8ocIV3Ww0Ijj4QcmNgBUrMVXb81f7dH0ccmKzOhGgxXGvC509QabLZA=s96-c",
+              role: "user",
+              saleCount: 1,
+              rentCount: 0,
+              activeProperties: 1,
             },
-          ]}
-          wizard={[
-            {
-              title: "Property Details",
-              fields: ["title", "description"],
-            },
-            {
-              title: "Media",
-              fields: ["address"],
-            },
-          ]}
-        />
+          },
+        ]}
+      />
+      <Form layout="vertical" form={form} onFinish={save}>
         <CrudField {...imageProps} />
         <CrudField
           type="enum"
