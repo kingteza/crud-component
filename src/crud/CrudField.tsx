@@ -148,10 +148,12 @@ export default function CrudField<T = any>(
         addonAfter,
         addonBefore,
         int,
+        step,
       } = props as NumberBasedFieldProps<T>;
       return (
         <NumberTextField
           {...formLayoutProps}
+          step={step}
           placeholder={placeholder}
           disabled={!updatable}
           moneyField={Boolean((props as NumberBasedFieldProps<T>).formatted)}

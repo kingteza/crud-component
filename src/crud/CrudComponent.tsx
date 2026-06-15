@@ -236,6 +236,7 @@ export interface NumberBasedFieldProps<T>
    */
   formatted?: boolean;
   int?: boolean;
+  step?: number;
   onChange?: (value: number, form: FormInstance<T>) => void;
 }
 

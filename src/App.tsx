@@ -5,6 +5,7 @@ import {
   CrudField,
   CrudReportComponent,
   CrudViewer,
+  FileCrudDragNDropField,
   FileUploadProvider,
   ReportCrudFields,
 } from ".";
@@ -214,12 +215,16 @@ function App() {
       <CrudComponent
         onSearch={console.log}
         searchOnChange
-        searchFields={["numberOfBeds", "purpose", {
-          name: 'createdAt',
-          type: 'date',
-          range: true,
-          disabledPastDays: true,
-        }]}
+        searchFields={[
+          "numberOfBeds",
+          "purpose",
+          {
+            name: "createdAt",
+            type: "date",
+            range: true,
+            disabledPastDays: true,
+          },
+        ]}
         fields={[
           {
             type: "text",
@@ -387,6 +392,7 @@ function App() {
           },
         ]}
       />
+
       <Form layout="vertical" form={form} onFinish={save}>
         <CrudField {...imageProps} />
         <CrudField
@@ -415,6 +421,13 @@ function App() {
             { key: "1", value: "1" },
             { key: "2", value: "2" },
           ]}
+        />
+        <FileCrudDragNDropField
+          label="Image Provider"
+          name="file"
+          required
+          maxCount={1}
+          provider={new TestUploadProvider()}
         />
         <Button htmlType="submit">Save</Button>
       </Form>

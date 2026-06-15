@@ -27,6 +27,7 @@ export interface NumberTextFieldProps extends TextFieldProps {
   addonAfter?: ReactNode;
   minLength?: number;
   isInt?: boolean;
+  step?: number;
   max?: number;
   pattern?: string;
   min?: number | null;
@@ -101,6 +102,7 @@ const NumberTextField = forwardRef<
       isInt = false,
       tooltip,
       help,
+      step,
       ...props
     },
     ref
@@ -186,7 +188,7 @@ const NumberTextField = forwardRef<
             addonBefore={addonBefore}
             minLength={minLength}
             addonAfter={addonAfter}
-            step={isInt ? 1 : undefined}
+            step={isInt ? 1 : step}
             inputMode={isInt ? "numeric" : undefined}
             pattern={
               isInt ? (allowNegative ? "-?[0-9]*" : "[0-9]*") : pattern
