@@ -1,3 +1,10 @@
+# [1.39.0](https://github.com/kingteza/crud-component/compare/v1.38.0...v1.39.0) (2026-06-15)
+
+
+### Features
+
+* add FileCrudDragNDropField and enhance NumberField with step property ([c887c95](https://github.com/kingteza/crud-component/commit/c887c95b082418891780b7a11385866bd3d3f3e3))
+
 # [1.38.0](https://github.com/kingteza/crud-component/compare/v1.37.0...v1.38.0) (2026-06-14)
 
 
