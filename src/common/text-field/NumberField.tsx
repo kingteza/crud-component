@@ -24,6 +24,7 @@ const BLOCKED_INT_KEYS = new Set(["e", "E", "."]);
 
 export interface NumberTextFieldProps extends TextFieldProps {
   moneyField?: boolean;
+  changeOnWheel?: boolean;
   addonAfter?: ReactNode;
   minLength?: number;
   isInt?: boolean;
@@ -78,6 +79,7 @@ const NumberTextField = forwardRef<
 >(
   function NumberTextField(
     {
+      changeOnWheel,
       type: _type,
       required,
       label,
@@ -181,6 +183,7 @@ const NumberTextField = forwardRef<
         <Form.Item {...props} label={label} rules={formRules} help={help}>
           <InputNumber
             ref={ref}
+            changeOnWheel={changeOnWheel}
             disabled={disabled}
             defaultValue={defaultValue}
             value={value}

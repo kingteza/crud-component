@@ -154,6 +154,7 @@ export default function CrudField<T = any>(
         <NumberTextField
           {...formLayoutProps}
           step={step}
+          changeOnWheel={false}
           placeholder={placeholder}
           disabled={!updatable}
           moneyField={Boolean((props as NumberBasedFieldProps<T>).formatted)}
