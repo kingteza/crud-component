@@ -1,3 +1,11 @@
+# [1.40.0](https://github.com/kingteza/crud-component/compare/v1.39.0...v1.40.0) (2026-07-03)
+
+
+### Features
+
+* add changeOnWheel prop to NumberBasedFieldProps for improved number input handling ([47e7c4e](https://github.com/kingteza/crud-component/commit/47e7c4eaca0864ef5053cbefcc5567d5fb6b69f7))
+* add changeOnWheel prop to NumberTextField for enhanced user experience ([e3d507f](https://github.com/kingteza/crud-component/commit/e3d507fa43a29ea511100976430217e28a66620b))
+
 # [1.39.0](https://github.com/kingteza/crud-component/compare/v1.38.0...v1.39.0) (2026-06-15)
 
 
