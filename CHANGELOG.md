@@ -1,3 +1,10 @@
+## [1.40.1](https://github.com/kingteza/crud-component/compare/v1.40.0...v1.40.1) (2026-07-08)
+
+
+### Bug Fixes
+
+* add invalidEmail translation key for improved user feedback ([600489e](https://github.com/kingteza/crud-component/commit/600489ef0a7b665790141ebd58e64ab5cad3099a))
+
 # [1.40.0](https://github.com/kingteza/crud-component/compare/v1.39.0...v1.40.0) (2026-07-03)
 
 
