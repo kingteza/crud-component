@@ -6,46 +6,47 @@
 import { SearchOutlined } from "@ant-design/icons";
 import { Col, Form, Row } from "antd";
 import { ColProps } from "antd/lib";
-import { useCallback, useEffect, useMemo } from "react";
+import { ReactElement, isValidElement, useCallback, useEffect, useMemo } from "react";
 
-import { ReadonlyCrudFields } from "./CrudComponent";
+import { CrudFieldProps, ReadonlyCrudFields } from "./CrudComponent";
 import CrudField from "./CrudField";
 import { ButtonComponent } from "../common";
 import CrudUtil from "../util/CrudUtil";
 import { CrudSearchContextProvider } from "../context/CrudSearchContext";
 
-export type CrudSearchOption<T> = { required?: boolean } & (
-  | {
-      type: "text";
-      name: keyof T;
-      label?: string;
-      placeholder?: string;
-      fieldClassName?: string;
-    }
-  | {
-      type: "select";
-      name: keyof T;
-      multiple?: boolean;
-      label?: string;
-      placeholder?: string;
-      fieldClassName?: string;
-    }
-  | {
-      type: "date";
-      name: keyof T;
-      label?: string;
-      placeholder?: string;
-      fieldClassName?: string;
-      range?: boolean;
-      format?: string;
-      disabledFutureDays?: boolean;
-      disabledPastDays?: boolean;
-      disableToday?: boolean;
-    }
-);
+export type CrudSearchOption<T> =
+  | { required?: boolean } & (
+      | {
+          type: "text";
+          name: keyof T;
+          label?: string;
+          placeholder?: string;
+          fieldClassName?: string;
+        }
+      | {
+          type: "select";
+          name: keyof T;
+          multiple?: boolean;
+          label?: string;
+          placeholder?: string;
+          fieldClassName?: string;
+        }
+      | {
+          type: "date";
+          name: keyof T;
+          label?: string;
+          placeholder?: string;
+          fieldClassName?: string;
+          range?: boolean;
+          format?: string;
+          disabledFutureDays?: boolean;
+          disabledPastDays?: boolean;
+          disableToday?: boolean;
+        }
+    );
 
 export interface CrudSearchComponentProps<T, FormType> {
-  searchFields?: Array<keyof T | CrudSearchOption<T>>;
+  searchFields?: Array<keyof T | CrudSearchOption<T> | ReactElement>;
   fields: ReadonlyCrudFields<T>;
   searchOnChange?: boolean;
   searchDefaultValues?: FormType;
@@ -61,12 +62,18 @@ export default function CrudSearchComponent<T, FormType>({
   searchDefaultValues,
   searchFieldsCustomColumnProps,
 }: Readonly<CrudSearchComponentProps<T, FormType>>) {
-  const showingFields: ReadonlyCrudFields<T> = useMemo(
+  const showingFields = useMemo(
     () =>
       searchFields
         .map((field) => {
+          if (isValidElement(field)) {
+            return field;
+          }
           if (typeof field === "string") {
             const field0 = fields.find((e) => field === e.name);
+            if (!field0) {
+              return null;
+            }
             return {
               ...field0,
               required: false,
@@ -75,12 +82,17 @@ export default function CrudSearchComponent<T, FormType>({
           const f = fields.find(
             (e) => (field as CrudSearchOption<T>)?.name === e.name
           );
+          if (!f) {
+            return null;
+          }
           return {
             ...f,
             ...(field as any),
           };
         })
-        .filter((e) => e && !e?.hidden),
+        .filter((e) => isValidElement(e) || (e && !(e as CrudFieldProps<T>)?.hidden)) as Array<
+        CrudFieldProps<T> | ReactElement
+      >,
     [searchFields, fields]
   );
   const md = useMemo(
@@ -168,14 +180,30 @@ export default function CrudSearchComponent<T, FormType>({
               sm: sm.field,
               xs: xs.field,
             };
-            const realName = CrudUtil.getRealName(field.name);
+            if (isValidElement(field)) {
+              return (
+                <Col
+                  {...props}
+                  key={`search_field_element_${i}`}
+                  className="align-self-end"
+                >
+                  {field}
+                </Col>
+              );
+            }
+            const fieldProps = field as CrudFieldProps<T>;
+            const realName = CrudUtil.getRealName(fieldProps.name);
             return (
               <Col
                 {...props}
                 key={`search_field_${String(realName)}`}
                 className="align-self-end"
               >
-                <CrudField {...field} readonly={false} fieldClassName="mb-0" />
+                <CrudField
+                  {...fieldProps}
+                  readonly={false}
+                  fieldClassName="mb-0"
+                />
               </Col>
             );
           })}
