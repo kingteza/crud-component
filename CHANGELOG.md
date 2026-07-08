@@ -1,3 +1,10 @@
+# [1.41.0](https://github.com/kingteza/crud-component/compare/v1.40.1...v1.41.0) (2026-07-08)
+
+
+### Features
+
+* enhance CrudSearchComponent to support React elements in searchFields ([adb8143](https://github.com/kingteza/crud-component/commit/adb814314d23c581b8bfb732bbb86319fda94d5f))
+
 ## [1.40.1](https://github.com/kingteza/crud-component/compare/v1.40.0...v1.40.1) (2026-07-08)
 
 
