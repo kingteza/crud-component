@@ -46,6 +46,7 @@ export default {
       maximumValueExceeded: "must be less than %maxValue%",
       invalidNic: "must be a valid NIC",
       invalid: "must be a valid",
+      invalidEmail: "Invalid email address",
       integer: "must be an integer",
     },
     notFound: "Not Found",
