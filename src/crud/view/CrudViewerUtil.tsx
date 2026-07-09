@@ -1,7 +1,5 @@
-import { ErrorBoundary } from "react-error-boundary";
-
 import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
-import { Tooltip, Avatar, Tag, Space, Typography } from "antd";
+import { Tooltip, Avatar, Typography } from "antd";
 import {
   ColorPickerFieldProps,
   CrudFieldProps,
@@ -17,16 +15,15 @@ import { ImageCrudCellValue, ImageCrudField } from "../ImageCrudField";
 
 import DateUtil from "../../util/DateUtil";
 import NumberUtil from "../../util/NumberUtil";
-import { t, tWithOrWithoutNS } from "../../locale";
 import { TextAreaBasedFieldProps } from "../CrudTextAreaComponent";
 import CrudUtil from "../../util/CrudUtil";
 import { ErrorBoundaryComponent } from "../../common/error/ErrorBoundaryComponent";
 import {
-  Copyable,
   copyableFn,
   CopyToClipboardButtonWrapper,
 } from "../../util/CopyUtilComponent";
 import { getValueByPath } from "../../util/ObjectUtil";
+import { CrudEnumCell } from "./CrudEnumCell";
 
 export function getRendererValueCrudViewer<T>({
   type,
@@ -83,9 +80,9 @@ export function getRendererValueCrudViewer<T>({
         }
       : type === "enum"
       ? (e, value, i) => {
-          if (!e) return "-";
           const propsEnum = props as any as EnumCrudField<{}>;
           if (typeof render === "function") {
+            if (!e) return "-";
             return (
               <CopyToClipboardButtonWrapper
                 copyable={propsEnum.copyable}
@@ -95,105 +92,7 @@ export function getRendererValueCrudViewer<T>({
               </CopyToClipboardButtonWrapper>
             );
           }
-          if (propsEnum.multiple) {
-            const ar = (Array.isArray(e) ? e : e ? [e] : []).map((item) => {
-              const tagProps = propsEnum.tagRender?.[item];
-              const translatedValue = tWithOrWithoutNS(
-                propsEnum?.translation?.[item ?? ""] ?? item,
-                undefined,
-                item
-              ) as any;
-              return {
-                tagProps,
-                translatedValue,
-                item,
-              };
-            });
-            if (typeof propsEnum.tagRender === "object") {
-              return (
-                <CopyToClipboardButtonWrapper
-                  copyable={propsEnum.copyable}
-                  value={() => {
-                    return ar
-                      .map(
-                        ({ translatedValue, item }) => translatedValue ?? item
-                      )
-                      .join(", ");
-                  }}
-                >
-                  <ErrorBoundaryComponent>
-                    <Space wrap>
-                      {ar.map(({ tagProps, translatedValue, item }, index) => {
-                        return tagProps ? (
-                          <Tag key={index + item} color={tagProps.color}>
-                            {translatedValue}
-                          </Tag>
-                        ) : (
-                          translatedValue
-                        );
-                      })}
-                    </Space>
-                  </ErrorBoundaryComponent>
-                </CopyToClipboardButtonWrapper>
-              );
-            } else if (propsEnum?.translation) {
-              return (
-                <CopyToClipboardButtonWrapper
-                  copyable={propsEnum.copyable}
-                  value={() => {
-                    return ar
-                      .map(
-                        ({ translatedValue, item }) => translatedValue ?? item
-                      )
-                      .join(", ");
-                  }}
-                >
-                  <ErrorBoundaryComponent>
-                    {ar
-                      ?.map(
-                        ({ translatedValue, item }) =>
-                          translatedValue ?? (item as string)
-                      )
-                      .join(", ")}
-                  </ErrorBoundaryComponent>
-                </CopyToClipboardButtonWrapper>
-              );
-            } else {
-              const text = ar
-                .map(({ translatedValue, item }) => translatedValue ?? item)
-                .join(", ");
-              return (
-                <Typography.Text
-                  copyable={copyableFn(propsEnum.copyable, text)}
-                >
-                  {text}
-                </Typography.Text>
-              );
-            }
-          }
-
-          const val = propsEnum?.translation?.[e ?? ""] ?? e;
-          const v = tWithOrWithoutNS(val, undefined, e) as string;
-
-          if (typeof propsEnum.tagRender === "object") {
-            const tagProps = propsEnum.tagRender[e];
-            if (tagProps) {
-              return (
-                <CopyToClipboardButtonWrapper
-                  copyable={propsEnum.copyable}
-                  value={v}
-                >
-                  <Tag color={tagProps.color}>{v as any}</Tag>
-                </CopyToClipboardButtonWrapper>
-              );
-            }
-          }
-
-          return (
-            <Typography.Text copyable={copyableFn(propsEnum.copyable, v)}>
-              {v}
-            </Typography.Text>
-          );
+          return <CrudEnumCell field={propsEnum} value={e} />;
         }
       : type === "date"
       ? (e, value, i) => {
