@@ -1,3 +1,10 @@
+# [1.42.0](https://github.com/kingteza/crud-component/compare/v1.41.0...v1.42.0) (2026-07-09)
+
+
+### Features
+
+* introduce CrudEnumCell component for enhanced enum field rendering ([6ec6768](https://github.com/kingteza/crud-component/commit/6ec6768f740899aad1c9982d163f917f6e88bbb2))
+
 # [1.41.0](https://github.com/kingteza/crud-component/compare/v1.40.1...v1.41.0) (2026-07-08)
 
 
