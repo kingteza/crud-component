@@ -34,16 +34,9 @@
       }
     ],
     [
-      "@anolilab/semantic-release-pnpm",
+      "@semantic-release/exec",
       {
-        "pnpmPublish": true,
-        "pnpmPublishArgs": [
-          "--access",
-          "public",
-          "--no-git-checks",
-          "--registry",
-          "https://npm.pkg.github.com"
-        ]
+        "publishCmd": "pnpm publish --no-git-checks --access public --registry https://npm.pkg.github.com"
       }
     ]
   ]

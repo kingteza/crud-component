@@ -109,7 +109,7 @@ The semantic-release configuration is in `.releaserc.json` / `release.config.cjs
 - **Changelog**: Updates CHANGELOG.md
 - **Git**: Commits changes and creates tags
 - **pnpm Publisher (npmjs)**: Publishes to npm using pnpm
-- **pnpm Publisher (GitHub Packages)**: Publishes the same version to `https://npm.pkg.github.com`
+- **exec (GitHub Packages)**: Mirrors the same version to `https://npm.pkg.github.com` (via `@semantic-release/exec`)
 
 ### Consuming from GitHub Packages
 

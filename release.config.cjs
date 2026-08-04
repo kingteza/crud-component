@@ -34,17 +34,13 @@ module.exports = {
       },
     ],
     // 2) Mirror the same version to GitHub Packages
+    // NOTE: @anolilab/semantic-release-pnpm always forces registry.npmjs.org and
+    // ignores --registry in pnpmPublishArgs, so use exec for the GitHub mirror.
     [
-      '@anolilab/semantic-release-pnpm',
+      '@semantic-release/exec',
       {
-        pnpmPublish: true,
-        pnpmPublishArgs: [
-          '--access',
-          'public',
-          '--no-git-checks',
-          '--registry',
-          'https://npm.pkg.github.com',
-        ],
+        publishCmd:
+          'pnpm publish --no-git-checks --access public --registry https://npm.pkg.github.com',
       },
     ],
   ],
