@@ -1,3 +1,10 @@
+## [1.43.1](https://github.com/kingteza/crud-component/compare/v1.43.0...v1.43.1) (2026-08-04)
+
+
+### Bug Fixes
+
+* publish GitHub Packages mirror via semantic-release exec ([7629110](https://github.com/kingteza/crud-component/commit/7629110323cae6a3bfcda6d3d34f2e3e38f77956))
+
 # [1.43.0](https://github.com/kingteza/crud-component/compare/v1.42.0...v1.43.0) (2026-08-04)
 
 
