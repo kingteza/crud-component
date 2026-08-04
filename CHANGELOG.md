@@ -1,3 +1,10 @@
+# [1.43.0](https://github.com/kingteza/crud-component/compare/v1.42.0...v1.43.0) (2026-08-04)
+
+
+### Features
+
+* update release configuration and add GitHub Packages support ([0b3604b](https://github.com/kingteza/crud-component/commit/0b3604ba082b34335e4894bf4dc98b6ce7bbc512))
+
 # [1.42.0](https://github.com/kingteza/crud-component/compare/v1.41.0...v1.42.0) (2026-07-09)
 
 
