@@ -1,5 +1,6 @@
 {
   "branches": ["main"],
+  "tagFormat": "v${version}",
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
@@ -31,7 +32,19 @@
         "pnpmPublish": true,
         "pnpmPublishArgs": ["--access", "public"]
       }
+    ],
+    [
+      "@anolilab/semantic-release-pnpm",
+      {
+        "pnpmPublish": true,
+        "pnpmPublishArgs": [
+          "--access",
+          "public",
+          "--no-git-checks",
+          "--registry",
+          "https://npm.pkg.github.com"
+        ]
+      }
     ]
-  ],
-  "tagFormat": "v${version}"
+  ]
 }

@@ -24,6 +24,11 @@ jobs:
   release:
     if: github.event_name == 'push'
     runs-on: blacksmith-4vcpu-ubuntu-2404
+    permissions:
+      contents: write
+      packages: write
+      issues: write
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -47,15 +52,29 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Configure registry auth
+        run: |
+          {
+            echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}"
+            echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}"
+          } > .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: pnpm run release
 
   force-publish:
     if: github.event_name == 'workflow_dispatch'
     runs-on: blacksmith-4vcpu-ubuntu-2404
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -88,3 +107,10 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish --access public --tag ${{ inputs.npm_tag }}
+
+      - name: Publish to GitHub Packages (manual force)
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc.github
+          npm publish --access public --tag ${{ inputs.npm_tag }} --registry https://npm.pkg.github.com --userconfig .npmrc.github

@@ -11,6 +11,7 @@ Semantic-release analyzes your commit messages to determine the type of changes 
 3. **Updates the CHANGELOG.md** file
 4. **Creates a Git tag** for the release
 5. **Publishes to npm** using pnpm
+6. **Mirrors the same version to GitHub Packages**
 
 ## Commit Message Format
 
@@ -73,6 +74,7 @@ The release process is automated via GitHub Actions when you push to the `main` 
 5. Update CHANGELOG.md
 6. Create a Git tag
 7. Publish to npm
+8. Mirror the same version to GitHub Packages
 
 ## Prerequisites
 
@@ -96,17 +98,31 @@ For the GitHub Actions workflow to work, you need to set up:
    - Go to npmjs.com → Access Tokens → Generate New Token
    - Add it as a GitHub secret named `NPM_TOKEN`
 
-2. **GITHUB_TOKEN**: Automatically provided by GitHub Actions
+2. **GITHUB_TOKEN**: Automatically provided by GitHub Actions (also used to publish to GitHub Packages; the workflow needs `packages: write`)
 
 ## Configuration
 
-The semantic-release configuration is in `.releaserc.json` and includes:
+The semantic-release configuration is in `.releaserc.json` / `release.config.cjs` (kept in sync) and includes:
 
 - **Commit Analyzer**: Analyzes commit messages
 - **Release Notes Generator**: Creates release notes
 - **Changelog**: Updates CHANGELOG.md
 - **Git**: Commits changes and creates tags
-- **pnpm Publisher**: Publishes to npm using pnpm
+- **pnpm Publisher (npmjs)**: Publishes to npm using pnpm
+- **pnpm Publisher (GitHub Packages)**: Publishes the same version to `https://npm.pkg.github.com`
+
+### Consuming from GitHub Packages
+
+npmjs consumers are unchanged (`npm i @kingteza/crud-component`).
+
+To install from GitHub Packages instead, configure the `@kingteza` scope (for example in `.npmrc`):
+
+```
+@kingteza:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=YOUR_GITHUB_TOKEN
+```
+
+Do **not** commit a repo-wide `@kingteza:registry` override if you still want default installs from npmjs.
 
 ## Migration from Manual Versioning
 
