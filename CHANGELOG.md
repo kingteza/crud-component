@@ -1,3 +1,10 @@
+## [1.44.2](https://github.com/kingteza/crud-component/compare/v1.44.1...v1.44.2) (2026-08-05)
+
+
+### Bug Fixes
+
+* enhance ImagePicker and ImageCrudField components for improved file handling ([83d19fe](https://github.com/kingteza/crud-component/commit/83d19fe2dace1c8478e74b9ca1e50676886a1a58))
+
 ## [1.44.1](https://github.com/kingteza/crud-component/compare/v1.44.0...v1.44.1) (2026-08-05)
 
 
