@@ -1,3 +1,10 @@
+# [1.44.0](https://github.com/kingteza/crud-component/compare/v1.43.1...v1.44.0) (2026-08-05)
+
+
+### Features
+
+* add preprocessing options for file uploads in FileCrudField ([921bde6](https://github.com/kingteza/crud-component/commit/921bde6f536463d2524d0467e753ee5ce9b87b23))
+
 ## [1.43.1](https://github.com/kingteza/crud-component/compare/v1.43.0...v1.43.1) (2026-08-04)
 
 
