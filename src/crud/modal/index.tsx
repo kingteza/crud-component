@@ -163,8 +163,15 @@ const CrudModal = <T, FormType = T>(
           if (isClone && e.type === "image") {
             const filePath = dataField;
             try {
-              const clonedFilePath = await e.provider.clone(filePath);
-              setValueByPath(_data, upsertFieldName, clonedFilePath);
+              if (Array.isArray(filePath)) {
+                const clonedFilePaths = await Promise.all(
+                  filePath.map((p) => e.provider.clone(p))
+                );
+                setValueByPath(_data, upsertFieldName, clonedFilePaths);
+              } else if (filePath) {
+                const clonedFilePath = await e.provider.clone(filePath);
+                setValueByPath(_data, upsertFieldName, clonedFilePath);
+              }
               continue;
             } catch {
               continue;
@@ -237,7 +244,12 @@ const CrudModal = <T, FormType = T>(
         const imageFields = fields.filter((e) => e.type === "image");
         for (const field of imageFields) {
           if (values[field.name]) {
-            (field as ImageCrudField<T>).provider.delete(values[field.name]);
+            const paths = Array.isArray(values[field.name])
+              ? values[field.name]
+              : [values[field.name]];
+            for (const path of paths) {
+              (field as ImageCrudField<T>).provider.delete(path);
+            }
           }
         }
       }

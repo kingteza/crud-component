@@ -61,7 +61,9 @@ export interface UploadFileExtended<T = any> extends UploadFile<T> {
 }
 
 interface Props extends FormItemProps {
-  values?: string[] | string;
+  values?: string | string[];
+  /** Resolve a stored path to a displayable URL. When omitted, `values` are treated as URLs. */
+  getRealUrl?: (path: string) => Promise<string>;
   maxCount?: number;
   onChange?: (file?: UploadFile, allFiles?: UploadFile[]) => void;
   buttonTitle?: string;
@@ -74,7 +76,7 @@ interface Props extends FormItemProps {
   icon?: ReactElement;
   loading?: boolean;
   buttonType?: string;
-  onAdd?: (file?: UploadFileExtended) => Promise<void>;
+  onAdd?: (file?: UploadFileExtended) => Promise<string | void>;
   onRemove?: (file?: UploadFileExtended) => void;
   showSkipCropButton?: boolean;
   skipResize?: boolean;
@@ -95,6 +97,7 @@ interface Props extends FormItemProps {
  */
 const ImagePicker: FC<Props> = ({
   values = [],
+  getRealUrl,
   required,
   buttonType,
   label,
@@ -123,7 +126,7 @@ const ImagePicker: FC<Props> = ({
   const fileRef = useRef<RcFile>();
   const cropperRef = useRef<CropperRef>(null);
 
-  const [fileList, setFileList] = useState<UploadFileExtended<RcFile>[]>([]);
+  const [fileList, setFileList] = useState<UploadFileExtended<string>[]>([]);
   const [preview, setPreview] = useState<string>();
   const beforeUploadRef = useRef<UploadProps["beforeUpload"]>();
 
@@ -167,6 +170,46 @@ const ImagePicker: FC<Props> = ({
       setuploadingButton(skipCrop ? "skip-crop" : "crop");
       setShowLoadingIndicator(true);
 
+      const appendFile = async (fl: UploadFileExtended<string>) => {
+        if (onAdd) {
+          try {
+            setShowLoadingIndicator(true);
+            if (asyncUpload) {
+              setFileList((prev) =>
+                maxCount <= 1 ? [fl] : [fl, ...prev]
+              );
+              onAdd(fl).then((response) => {
+                setFileList((prev) =>
+                  prev.map((f) =>
+                    f.uid === fl.uid
+                      ? {
+                          ...f,
+                          status: "done" as UploadFileStatus,
+                          response: (response as string | undefined) ?? f.response,
+                        }
+                      : f
+                  )
+                );
+              });
+            } else {
+              const response = await onAdd(fl);
+              const withResponse: UploadFileExtended<string> = {
+                ...fl,
+                response: (response as string | undefined) ?? fl.response,
+                status: "done" as UploadFileStatus,
+              };
+              setFileList((prev) =>
+                maxCount <= 1 ? [withResponse] : [withResponse, ...prev]
+              );
+            }
+          } finally {
+            setShowLoadingIndicator(false);
+          }
+        } else {
+          setFileList((prev) => (maxCount <= 1 ? [fl] : [fl, ...prev]));
+        }
+      };
+
       if (skipCrop) {
         // Use original image data when skipCrop is true
         const originalFile = fileRef.current as RcFile;
@@ -184,23 +227,7 @@ const ImagePicker: FC<Props> = ({
           originFileObj: fileResized,
           status: asyncUpload ? ("uploading" as UploadFileStatus) : undefined,
         };
-        if (onAdd) {
-          try {
-            setShowLoadingIndicator(true);
-            if (asyncUpload) {
-              onAdd(fl).then(() => {
-                setFileList((prev) =>
-                  prev.map((f) =>
-                    f.uid === fl.uid ? { ...f, status: "done" } : f
-                  )
-                );
-              });
-            } else await onAdd(fl);
-          } finally {
-            setShowLoadingIndicator(false);
-          }
-        }
-        setFileList([fl, ...fileList]);
+        await appendFile(fl);
         setShowLoadingIndicator(false);
         setPreview(undefined);
         setuploadingButton(undefined);
@@ -225,26 +252,14 @@ const ImagePicker: FC<Props> = ({
             originFileObj: fileResized,
             status: asyncUpload ? ("uploading" as UploadFileStatus) : undefined,
           };
-          if (onAdd) {
-            if (asyncUpload) {
-              onAdd(fl).then(() => {
-                setFileList((prev) =>
-                  prev.map((f) =>
-                    f.uid === fl.uid ? { ...f, status: "done" } : f
-                  )
-                );
-              });
-            } else await onAdd(fl);
-          }
-          setFileList([fl, ...fileList]);
+          await appendFile(fl);
           setShowLoadingIndicator(false);
-          // if (beforeUploadRef?.current) beforeUploadRef?.current(file, [file]);
+          setPreview(undefined);
+          setuploadingButton(undefined);
         });
-        setPreview(undefined);
-        setuploadingButton(undefined);
       }
     },
-    [asyncUpload]
+    [asyncUpload, maxCount, onAdd, skipResize]
   );
 
   const onClickCancelCrop = () => {
@@ -275,15 +290,38 @@ const ImagePicker: FC<Props> = ({
     }
   }, []);
   useEffect(() => {
-    if (values?.length || typeof values === "string") {
-      const list = Array.isArray(values)
-        ? values.map((url) => {
-            return [{ uid: values, url }];
-          })
-        : [{ uid: values, url: values }];
-      setFileList(list as any);
-    }
-  }, [values]);
+    let cancelled = false;
+
+    const syncFileList = async () => {
+      if (values == null || values === "") {
+        if (!cancelled) setFileList([]);
+        return;
+      }
+      const paths = typeof values === "string" ? [values] : values;
+      if (!paths.length) {
+        if (!cancelled) setFileList([]);
+        return;
+      }
+      const list = await Promise.all(
+        paths.map(async (path) => {
+          const url = getRealUrl ? await getRealUrl(path) : path;
+          return {
+            uid: path,
+            url,
+            thumbUrl: url,
+            response: path,
+            name: path.split("/").pop() ?? path,
+          } as UploadFileExtended<string>;
+        })
+      );
+      if (!cancelled) setFileList(list);
+    };
+
+    syncFileList();
+    return () => {
+      cancelled = true;
+    };
+  }, [values, getRealUrl]);
   const { t } = useTranslationLib();
 
   const validator = useMemo(

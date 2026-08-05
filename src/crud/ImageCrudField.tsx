@@ -16,6 +16,7 @@ import React, {
   useCallback,
   useEffect,
   useImperativeHandle,
+  useMemo,
   useState,
 } from "react";
 import NumberUtil from "../util/NumberUtil";
@@ -113,46 +114,74 @@ function Component<T>(
   ref: ForwardedRef<ImageCrudFieldRef>
 ) {
   const formInstance = Form.useFormInstance();
+  const namePath = name as any;
 
-  const fieldValue = Form.useWatch(name, formInstance);
+  const fieldValue = Form.useWatch(namePath, formInstance);
 
-  const [isUpload, setIsUpload] = useState(false);
-  const onChange = useCallback(
-    async (e: UploadFile<any>, isAdd: boolean) => {
-      if (isAdd) {
-        // We are adding new one
-        onUploading?.(true);
-        const fileName = e.name;
-        const array = fileName.split(".");
-        const extension = array[array.length - 1];
-        const name0 = provider.generateFileName(fileName);
-
-        const filePath = `${await provider.getInitialPath()}/${name0}.${extension}`;
-        const finalPath = await provider.upload(e, filePath);
-        setIsUpload(true);
-        onUploading?.(false);
-        formInstance.setFieldValue(name as any, finalPath);
-      } else {
-        // We are removing
-
-        const form = formInstance.getFieldsValue();
-        const file = await provider.delete(form[name]);
-        onRemoved?.();
-        if (file) formInstance.setFieldsValue({ [name as any]: null });
-      }
-    },
-    [formInstance, name, onRemoved, onUploading, provider]
+  const getRealUrl = useCallback(
+    (filePath: string) => provider.getRealUrl(filePath),
+    [provider]
   );
 
-  const [value, setValue] = useState<string>();
+  const onChange = useCallback(
+    async (e: UploadFile<any>, isAdd: boolean): Promise<string | void> => {
+      if (isAdd) {
+        onUploading?.(true);
+        try {
+          const fileName = e.name;
+          const array = fileName.split(".");
+          const extension = array[array.length - 1];
+          const name0 = provider.generateFileName(fileName);
 
-  useEffect(() => {
-    if (!isUpload && fieldValue) {
-      provider.getRealUrl(fieldValue).then(setValue);
-    } else {
-      setValue(value);
-    }
-  }, [fieldValue, isUpload, provider, value]);
+          const filePath = `${await provider.getInitialPath()}/${name0}.${extension}`;
+          const finalPath = await provider.upload(e, filePath);
+
+          const currentValue = formInstance.getFieldValue(namePath);
+          if (maxCount > 1) {
+            const normalized = Array.isArray(currentValue)
+              ? currentValue
+              : currentValue
+                ? [currentValue]
+                : [];
+            formInstance.setFieldValue(namePath, [
+              ...normalized,
+              finalPath,
+            ].filter(Boolean));
+          } else {
+            formInstance.setFieldValue(namePath, finalPath);
+          }
+          return finalPath;
+        } finally {
+          onUploading?.(false);
+        }
+      } else {
+        const currentValue = formInstance.getFieldValue(namePath);
+        if (maxCount > 1) {
+          const path =
+            (e as any).response ??
+            (typeof e.uid === "string" ? e.uid : undefined);
+          if (!path) return;
+          await provider.delete(path);
+          onRemoved?.();
+          const normalized = Array.isArray(currentValue)
+            ? currentValue
+            : currentValue
+              ? [currentValue]
+              : [];
+          const newValue = normalized.filter((v) => v !== path);
+          formInstance.setFieldValue(
+            namePath,
+            newValue.length ? newValue : null
+          );
+        } else {
+          const deleted = await provider.delete(currentValue);
+          onRemoved?.();
+          if (deleted) formInstance.setFieldValue(namePath, null);
+        }
+      }
+    },
+    [formInstance, maxCount, namePath, onRemoved, onUploading, provider]
+  );
 
   useImperativeHandle(
     ref,
@@ -167,19 +196,26 @@ function Component<T>(
             url: url,
             originFileObj: blob as any,
           };
-          return onChange(file, true);
+          await onChange(file, true);
         },
       };
     },
     [onChange]
   );
 
+  const pickerValues = useMemo(() => {
+    if (!fieldValue) return maxCount > 1 ? [] : undefined;
+    return Array.isArray(fieldValue)
+      ? (fieldValue as string[])
+      : (fieldValue as string);
+  }, [fieldValue, maxCount]);
+
   return (
     <Form.Item
       rules={required ? ValidationUtil.required(label) : []}
       label={hideLabel ? null : label}
       required={required}
-      name={name as any}
+      name={namePath}
       help={help}
       {...formLayoutProps}
       className={fieldClassName}
@@ -189,12 +225,13 @@ function Component<T>(
         asyncUpload={asyncUpload}
         listType={listType}
         aspectRatio={aspectRatio}
-        values={value} 
+        values={pickerValues}
+        getRealUrl={getRealUrl}
         onRemove={(e) => {
           if (e) onChange(e, false);
         }}
         onAdd={async (e) => {
-          if (e) await onChange(e, true);
+          if (e) return onChange(e, true);
         }}
         className={fieldClassName}
         showSkipCropButton={showSkipCropButton}
@@ -213,17 +250,30 @@ const ImageCrudField = React.forwardRef(Component) as <T>(
 export default ImageCrudField;
 
 export const ImageCrudCellValue: FC<{
-  value: string;
+  value: string | string[];
   provider: FileDownloadProvider;
 }> = ({ provider, value }) => {
-  const [url, setUrl] = useState<string>();
+  const [urls, setUrls] = useState<string[]>([]);
   useEffect(() => {
-    if (value) provider.getRealUrl(value).then(setUrl);
+    if (!value) {
+      setUrls([]);
+      return;
+    }
+    const paths = Array.isArray(value) ? value : [value];
+    Promise.all(paths.filter(Boolean).map((p) => provider.getRealUrl(p))).then(
+      setUrls
+    );
   }, [provider, value]);
-  if (!url) {
+  if (!urls.length) {
     return <></>;
   }
-  return <ImageCellValue url={url} />;
+  return (
+    <>
+      {urls.map((url) => (
+        <ImageCellValue key={url} url={url} />
+      ))}
+    </>
+  );
 };
 
 export const ImageCellValue: FC<{ url: string }> = ({ url }) => {
