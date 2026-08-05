@@ -182,6 +182,7 @@ export default function FileCrudFieldComponent<T>({
         onChange={({ fileList }) => {
           setFileList(fileList);
         }}
+        accept={accept}
         style={block ? { width: "100%" } : undefined}
       >
         <ButtonComponent loading={isUploading}>Upload File</ButtonComponent>
