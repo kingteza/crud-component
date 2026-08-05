@@ -17,9 +17,15 @@ import { Form, Modal, Upload, UploadProps } from "antd";
 import { UploadFile } from "antd/lib";
 
 import mime from "mime";
-import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import {
+  FC,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useTranslationLib } from "../locale";
-
 
 import { InitialCrudField } from "./CrudComponent";
 import { FileDownloadProvider, FileUploadProvider } from "./ImageCrudField";
@@ -27,6 +33,8 @@ import ValidationUtil from "../util/ValidationUtil";
 import { ButtonComponent } from "../common";
 import { VerticalSpace } from "../common";
 import CrudUtil from "../util/CrudUtil";
+import { RcFile } from "antd/es/upload";
+import { ImageUtil } from "../util";
 
 export interface FileCrudField<T> extends _FileCrudField<T> {
   type: "file";
@@ -35,6 +43,9 @@ export interface FileCrudField<T> extends _FileCrudField<T> {
 export interface _FileCrudField<T> extends InitialCrudField<T> {
   provider: FileUploadProvider;
   onUploading?: (isUploading: boolean) => void;
+  preprocessBeforeUpload?:
+    | { compressImage?: boolean }
+    | ((file: RcFile) => Promise<RcFile>);
   onRemoved?: () => void;
   fieldClassName?: string;
   accept?: string;
@@ -57,10 +68,11 @@ export default function FileCrudFieldComponent<T>({
   block,
   fieldHelper: help,
   formLayoutProps,
+  preprocessBeforeUpload,
   ...props
 }: Readonly<_FileCrudField<T>>) {
   const form = Form.useFormInstance();
-  const realName = CrudUtil.getRealName(name, 'upsertFieldName');
+  const realName = CrudUtil.getRealName(name, "upsertFieldName");
   const fieldValue = Form.useWatch(realName, form);
 
   const [isUploading, setIsUploading] = useState(false);
@@ -80,8 +92,16 @@ export default function FileCrudFieldComponent<T>({
           const name0 = provider.generateFileName(fileName);
 
           const filePath = `${await provider.getInitialPath()}/${name0}.${extension}`;
+          let processedFile = file;
+          if (preprocessBeforeUpload) {
+            if (typeof preprocessBeforeUpload === "function") {
+              processedFile = await preprocessBeforeUpload(file as RcFile);
+            } else if (preprocessBeforeUpload.compressImage) {
+              processedFile = await ImageUtil.resizeImage(file as RcFile);
+            }
+          }
           const finalPath = await provider.upload(
-            { ...(file as any), originFileObj: file },
+            { ...(file as any), originFileObj: processedFile },
             filePath
           );
 
