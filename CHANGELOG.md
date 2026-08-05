@@ -1,3 +1,10 @@
+## [1.44.1](https://github.com/kingteza/crud-component/compare/v1.44.0...v1.44.1) (2026-08-05)
+
+
+### Bug Fixes
+
+* add file type acceptance to FileCrudField component ([403a82f](https://github.com/kingteza/crud-component/commit/403a82fb5b1e62bfc713f61f587544a3201a2afb))
+
 # [1.44.0](https://github.com/kingteza/crud-component/compare/v1.43.1...v1.44.0) (2026-08-05)
 
 
