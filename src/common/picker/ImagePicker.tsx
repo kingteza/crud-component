@@ -79,6 +79,8 @@ interface Props extends FormItemProps {
   onAdd?: (file?: UploadFileExtended) => Promise<string | void>;
   onRemove?: (file?: UploadFileExtended) => void;
   showSkipCropButton?: boolean;
+  /** When true, skips the crop modal entirely and uploads the original image. */
+  skipCrop?: boolean;
   skipResize?: boolean;
   asyncUpload?: boolean;
 }
@@ -116,6 +118,7 @@ const ImagePicker: FC<Props> = ({
   onRemove,
   listType,
   showSkipCropButton,
+  skipCrop = false,
   skipResize,
   asyncUpload,
   ...props
@@ -267,10 +270,17 @@ const ImagePicker: FC<Props> = ({
     fileRef.current = undefined;
   };
 
-  const onChangeFile = useCallback((f) => {
-    const file = f;
-    if (file) {
+  const onChangeFile = useCallback(
+    (f) => {
+      const file = f;
+      if (!file) return;
+
       fileRef.current = file;
+      if (skipCrop) {
+        onClickConfirmCrop(true);
+        return;
+      }
+
       const reader = new FileReader();
       reader.addEventListener("load", () => {
         if (typeof reader.result === "string") {
@@ -278,7 +288,6 @@ const ImagePicker: FC<Props> = ({
           const b = localStorage.getItem(BUTTON_STATE);
           const box = b ? JSON.parse(b) : undefined;
           if (box) {
-            // cropper?.current?.cropper.
             cropperRef.current?.setState(box);
           }
           setTimeout(() => {
@@ -287,8 +296,9 @@ const ImagePicker: FC<Props> = ({
         }
       });
       reader.readAsDataURL(file);
-    }
-  }, []);
+    },
+    [onClickConfirmCrop, skipCrop]
+  );
   useEffect(() => {
     let cancelled = false;
 

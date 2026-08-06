@@ -35,6 +35,8 @@ export interface _ImageCrudField<T> extends InitialCrudField<T> {
   fieldClassName?: string;
   listType?: UploadListType;
   showSkipCropButton?: boolean;
+  /** When true, skips the crop modal entirely and uploads the original image. */
+  skipCrop?: boolean;
   skipResize?: boolean;
   asyncUpload?: boolean;
   maxCount?: number;
@@ -107,6 +109,7 @@ function Component<T>(
     listType,
     fieldHelper: help,
     showSkipCropButton = false,
+    skipCrop = false,
     skipResize = false,
     asyncUpload = false,
     maxCount = 1,
@@ -235,6 +238,7 @@ function Component<T>(
         }}
         className={fieldClassName}
         showSkipCropButton={showSkipCropButton}
+        skipCrop={skipCrop}
         skipResize={skipResize}
         maxCount={maxCount}
       />
