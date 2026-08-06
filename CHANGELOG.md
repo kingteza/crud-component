@@ -1,3 +1,10 @@
+# [1.45.0](https://github.com/kingteza/crud-component/compare/v1.44.2...v1.45.0) (2026-08-06)
+
+
+### Features
+
+* add skipCrop option to ImagePicker and ImageCrudField components ([4930e29](https://github.com/kingteza/crud-component/commit/4930e2937630281e42e074567565400cc4e3ca5d))
+
 ## [1.44.2](https://github.com/kingteza/crud-component/compare/v1.44.1...v1.44.2) (2026-08-05)
 
 
