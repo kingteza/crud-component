@@ -12,6 +12,7 @@ import {
   FilePptOutlined,
   FileTextOutlined,
   FileWordOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 import { Form, Modal, Upload, UploadProps } from "antd";
 import { UploadFile } from "antd/lib";
@@ -47,6 +48,7 @@ export interface _FileCrudField<T> extends InitialCrudField<T> {
     | { compressImage?: boolean }
     | ((file: RcFile) => Promise<RcFile>);
   onRemoved?: () => void;
+  onUploadComplete?: (finalPath: string) => void;
   fieldClassName?: string;
   accept?: string;
   maxCount?: number;
@@ -61,6 +63,7 @@ export default function FileCrudFieldComponent<T>({
   provider,
   onUploading,
   onRemoved,
+  onUploadComplete,
   fieldClassName,
   accept,
   rules,
@@ -104,6 +107,7 @@ export default function FileCrudFieldComponent<T>({
             { ...(file as any), originFileObj: processedFile },
             filePath
           );
+          onUploadComplete?.(finalPath);
 
           onUploading?.(false);
 
@@ -115,7 +119,7 @@ export default function FileCrudFieldComponent<T>({
           setIsUploading(false);
         }
       },
-      [form, name, onUploading, provider]
+      [form, name, onUploadComplete, onUploading, preprocessBeforeUpload, provider]
     );
 
   const [fileList, setFileList] = useState<any>([]);
@@ -185,7 +189,7 @@ export default function FileCrudFieldComponent<T>({
         accept={accept}
         style={block ? { width: "100%" } : undefined}
       >
-        <ButtonComponent loading={isUploading}>Upload File</ButtonComponent>
+        <ButtonComponent icon={<UploadOutlined />} block size="large" loading={isUploading}>Upload File</ButtonComponent>
       </Upload>
     </Form.Item>
   );

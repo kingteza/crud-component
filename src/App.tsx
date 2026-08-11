@@ -405,8 +405,7 @@ function App() {
           checkboxGrid={{ xs: 24 }}
         />
         <CrudField
-          type="textarea"
-          rich
+          type="file"
           name="appendix2"
           label="Appendix 2"
           rows={5}

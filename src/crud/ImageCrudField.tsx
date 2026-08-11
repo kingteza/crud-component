@@ -31,6 +31,7 @@ export interface _ImageCrudField<T> extends InitialCrudField<T> {
   provider: FileUploadProvider;
   onUploading?: (isUploading: boolean) => void;
   onRemoved?: () => void;
+  onUploadComplete?: (finalPath: string) => void;
   aspectRatio?: number;
   fieldClassName?: string;
   listType?: UploadListType;
@@ -104,6 +105,7 @@ function Component<T>(
     onUploading,
     aspectRatio,
     onRemoved,
+    onUploadComplete,
     fieldClassName,
     hideLabel = false,
     listType,
@@ -138,6 +140,7 @@ function Component<T>(
 
           const filePath = `${await provider.getInitialPath()}/${name0}.${extension}`;
           const finalPath = await provider.upload(e, filePath);
+          onUploadComplete?.(finalPath);
 
           const currentValue = formInstance.getFieldValue(namePath);
           if (maxCount > 1) {
@@ -183,7 +186,15 @@ function Component<T>(
         }
       }
     },
-    [formInstance, maxCount, namePath, onRemoved, onUploading, provider]
+    [
+      formInstance,
+      maxCount,
+      namePath,
+      onRemoved,
+      onUploadComplete,
+      onUploading,
+      provider,
+    ]
   );
 
   useImperativeHandle(

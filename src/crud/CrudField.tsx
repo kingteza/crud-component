@@ -255,6 +255,7 @@ export default function CrudField<T = any>(
           fieldHelper={help}
           fieldClassName={fieldClassName}
           onRemoved={(props as ImageCrudField<T>).onRemoved}
+          onUploadComplete={(props as ImageCrudField<T>).onUploadComplete}
           onUploading={(props as ImageCrudField<T>).onUploading}
           provider={(props as ImageCrudField<T>).provider}
         />
@@ -270,6 +271,7 @@ export default function CrudField<T = any>(
           fieldHelper={help}
           fieldClassName={fieldClassName}
           onRemoved={(props as FileCrudField<T>).onRemoved}
+          onUploadComplete={(props as FileCrudField<T>).onUploadComplete}
           onUploading={(props as FileCrudField<T>).onUploading}
           provider={(props as FileCrudField<T>).provider}
         />
