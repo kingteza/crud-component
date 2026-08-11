@@ -1,3 +1,10 @@
+# [1.46.0](https://github.com/kingteza/crud-component/compare/v1.45.0...v1.46.0) (2026-08-11)
+
+
+### Features
+
+* update CrudField components to support file uploads ([043789e](https://github.com/kingteza/crud-component/commit/043789ea4ef4f3b9f7bc2a974985ce53de38b947))
+
 # [1.45.0](https://github.com/kingteza/crud-component/compare/v1.44.2...v1.45.0) (2026-08-06)
 
 
