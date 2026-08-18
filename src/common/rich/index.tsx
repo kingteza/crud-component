@@ -34,8 +34,22 @@ export interface RichTextEditorProps {
 const configureQuillBlock = async () => {
   const { Quill } = await import("react-quill-new");
   const Block = Quill.import("blots/block") as any;
-  Block.tagName = "div";
+  Block.tagName = "p";  // Change to <p> tags for proper paragraph spacing
   Quill.register(Block);
+
+  // Replace consecutive spaces with `&nbsp; ` instead of making every single space `&nbsp;`
+  const originalGetSemanticHTML = Quill.prototype.getSemanticHTML;
+  Quill.prototype.getSemanticHTML = function (...args: any[]) {
+    // 1. Get the broken HTML from Quill (where ALL spaces are &nbsp;)
+    const html = originalGetSemanticHTML.apply(this, args);
+
+    // 2. Undo their damage: convert ALL &nbsp; back to normal spaces
+    const undone = html.replaceAll('&nbsp;', ' ');
+
+    // 3. Apply our correct logic: replace consecutive spaces only
+    return undone.replaceAll('  ', '&nbsp; ');
+  };
+
 };
 
 /** Matches Ant Design TextArea line height (~22px at 14px font-size). */
@@ -301,10 +315,10 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
 
       const cleanedValue =
         !stringValue ||
-        stringValue === "<p></p>" ||
-        stringValue.trim() === "<p><br></p>" ||
-        stringValue === "<div></div>" ||
-        stringValue.trim() === "<div></div>"
+          stringValue === "<p></p>" ||
+          stringValue.trim() === "<p><br></p>" ||
+          stringValue === "<div></div>" ||
+          stringValue.trim() === "<div></div>"
           ? undefined
           : stringValue;
 
@@ -316,7 +330,7 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
       }, 0);
 
       // Trigger validation for this field
-      form.validateFields([name]).catch(() => {});
+      form.validateFields([name]).catch(() => { });
     },
     [form, name]
   );
