@@ -315,10 +315,10 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
 
       const cleanedValue =
         !stringValue ||
-          stringValue === "<p></p>" ||
-          stringValue.trim() === "<p><br></p>" ||
-          stringValue === "<div></div>" ||
-          stringValue.trim() === "<div></div>"
+        stringValue === "<p></p>" ||
+        stringValue.trim() === "<p><br></p>" ||
+        stringValue === "<div></div>" ||
+        stringValue.trim() === "<div></div>"
           ? undefined
           : stringValue;
 
@@ -330,7 +330,7 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({
       }, 0);
 
       // Trigger validation for this field
-      form.validateFields([name]).catch(() => { });
+      form.validateFields([name]).catch(() => {});
     },
     [form, name]
   );
