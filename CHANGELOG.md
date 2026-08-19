@@ -1,3 +1,10 @@
+## [1.46.1](https://github.com/kingteza/crud-component/compare/v1.46.0...v1.46.1) (2026-08-19)
+
+
+### Bug Fixes
+
+* resolve rich text paragraph spacing and word wrapping bugs ([17d0d0f](https://github.com/kingteza/crud-component/commit/17d0d0ff5035a9806c63992093f5f5d3df8b7d38))
+
 # [1.46.0](https://github.com/kingteza/crud-component/compare/v1.45.0...v1.46.0) (2026-08-11)
 
 
