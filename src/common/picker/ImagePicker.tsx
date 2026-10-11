@@ -33,6 +33,16 @@ import FlipVIcon from "../../icons/FlipVIcon";
 
 const BUTTON_STATE = "crud-component.image-picker.button-state";
 
+const EMPTY_VALUES: string[] = [];
+
+function omitOnChange<T extends { onChange?: unknown }>({
+  onChange,
+  ...rest
+}: T) {
+  void onChange;
+  return rest;
+}
+
 function getBase64(file) {
   return new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
@@ -98,13 +108,12 @@ interface Props extends FormItemProps {
  *
  */
 const ImagePicker: FC<Props> = ({
-  values = [],
+  values,
   getRealUrl,
   required,
   buttonType,
   label,
   name,
-  onChange,
   aspectRatio,
   buttonTitle,
   hidePreview,
@@ -157,10 +166,6 @@ const ImagePicker: FC<Props> = ({
       cropperRef.current?.flipImage(mode === "h", mode === "v");
     }
   }, []);
-
-  useEffect(() => {
-    onChange?.(fileList[0], fileList);
-  }, [fileList, onChange]);
 
   const [uploadingButton, setuploadingButton] = useState<
     "skip-crop" | "crop"
@@ -299,17 +304,26 @@ const ImagePicker: FC<Props> = ({
     },
     [onClickConfirmCrop, skipCrop]
   );
+  const normalizedValues = values ?? EMPTY_VALUES;
+
   useEffect(() => {
     let cancelled = false;
 
     const syncFileList = async () => {
-      if (values == null || values === "") {
-        if (!cancelled) setFileList([]);
+      if (normalizedValues === "") {
+        if (!cancelled) {
+          setFileList((prev) => (prev.length === 0 ? prev : []));
+        }
         return;
       }
-      const paths = typeof values === "string" ? [values] : values;
+      const paths =
+        typeof normalizedValues === "string"
+          ? [normalizedValues]
+          : normalizedValues;
       if (!paths.length) {
-        if (!cancelled) setFileList([]);
+        if (!cancelled) {
+          setFileList((prev) => (prev.length === 0 ? prev : []));
+        }
         return;
       }
       const list = await Promise.all(
@@ -331,7 +345,7 @@ const ImagePicker: FC<Props> = ({
     return () => {
       cancelled = true;
     };
-  }, [values, getRealUrl]);
+  }, [normalizedValues, getRealUrl]);
   const { t } = useTranslationLib();
 
   const validator = useMemo(
@@ -422,14 +436,18 @@ const ImagePicker: FC<Props> = ({
     }
   }, []);
 
+  // A form-injected onChange must not be forwarded. Calling it for an empty
+  // fileList writes undefined back into the field and retriggers this render.
+  const formItemProps = omitOnChange(props);
+
   return (
     <>
       <FormItem
         label={label}
-        {...props}
+        {...formItemProps}
         name={name}
         className="mb-0"
-        rules={[validator, ...(props.rules ?? [])] as any}
+        rules={[validator, ...(formItemProps.rules ?? [])] as any}
       >
         {uploadComponent}
       </FormItem>
@@ -565,7 +583,6 @@ export const UploadComponent: FC<{
       accept="image/x-png,image/gif,image/jpeg"
       key={fileList.length}
       fileList={fileList}
-      defaultFileList={fileList}
       onChange={() => {
         // setFileList(props.fileList);
       }}

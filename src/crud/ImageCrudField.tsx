@@ -27,6 +27,8 @@ import { InitialCrudField } from "./CrudComponent";
 import { ImagePicker } from "../common";
 import { ImageUtil } from "../util";
 
+const EMPTY_VALUES: string[] = [];
+
 export interface _ImageCrudField<T> extends InitialCrudField<T> {
   provider: FileUploadProvider;
   onUploading?: (isUploading: boolean) => void;
@@ -218,11 +220,11 @@ function Component<T>(
   );
 
   const pickerValues = useMemo(() => {
-    if (!fieldValue) return maxCount > 1 ? [] : undefined;
+    if (fieldValue == null || fieldValue === "") return EMPTY_VALUES;
     return Array.isArray(fieldValue)
       ? (fieldValue as string[])
-      : (fieldValue as string);
-  }, [fieldValue, maxCount]);
+      : [fieldValue as string];
+  }, [fieldValue]);
 
   return (
     <Form.Item
