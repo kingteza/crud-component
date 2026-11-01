@@ -105,6 +105,11 @@ export interface SelectCrudField<
         upsertFieldName: keyof T | (string | number)[]; // The field name that will be used in create or update
       };
   type: "select";
+  /**
+   * Whether the search should be enabled
+   * @default true
+   */
+  searchable?: boolean;
   placeholder?: string;
   /**
    * @default true
@@ -157,6 +162,11 @@ export interface SelectCrudField<
 type EnumBaseFieldProps<T> = InitialCrudField<T> & Copyable<false> & {
   type: "enum";
   placeholder?: string;
+  /**
+   * Whether the search should be enabled
+   * @default false
+   */
+  searchable?: boolean;
   // enum: T[keyof T]
   //   | (T[keyof T] extends string | number | symbol
   //       ? Record<string, T[keyof T]>

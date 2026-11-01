@@ -353,6 +353,7 @@ export function EnumCrudFieldComponent<T>(props0: Readonly<EnumCrudField<T>>) {
     fieldTooltip,
     fieldHelper: help,
     formLayoutProps,
+    searchable = false,
     ...props
   } = props0;
 
@@ -440,7 +441,7 @@ export function EnumCrudFieldComponent<T>(props0: Readonly<EnumCrudField<T>>) {
     <SelectComponent
       {...props}
       {...formLayoutProps}
-      notSearch
+      notSearch={!searchable}
       tagRender={
         typeof tagRender === "function"
           ? tagRender
@@ -503,6 +504,7 @@ export function SelectCrudFieldComponent<T>(
     allowClear = true,
     selectOptionRender,
     formLayoutProps,
+    searchable = true,
   } = props;
   const form = (props as any).form;
   const [typing, setTyping] = useState("");
@@ -577,6 +579,7 @@ export function SelectCrudFieldComponent<T>(
           </TooltipComponent>
         );
       }}
+      notSearch={!searchable}
       placeholder={placeholder}
       onSelect={(value) => {
         onSet?.(value?.key, items, form);
