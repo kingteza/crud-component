@@ -146,6 +146,11 @@ export interface SelectCrudField<
    */
   searchOnType?: boolean;
   multiple?: boolean;
+  /**
+   * Open the options in a modal instead of a dropdown.
+   * Multiple fields use checkboxes. Single fields use radio buttons.
+   */
+  modal?: boolean;
   report?: InitialCrudField<T>["report"] & {
     multiple?: boolean;
   };

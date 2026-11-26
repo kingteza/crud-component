@@ -1,5 +1,6 @@
 export default {
   str: {
+    search: "Search",
     delete: "Delete",
     clone: "Clone",
     update: "Update",

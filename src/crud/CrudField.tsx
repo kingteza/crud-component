@@ -2,7 +2,18 @@
  Copyright (c) 2020-2024 Kingteza and/or its affiliates. All rights reserved.
  KINGTEZA PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 ***************************************************************************** */
-import { Checkbox, Col, ColorPicker, Form, Radio, Select, Tag } from "antd";
+import {
+  Checkbox,
+  Col,
+  ColorPicker,
+  Form,
+  Input,
+  List,
+  Modal,
+  Radio,
+  Select,
+  Tag,
+} from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { useTranslationLib, useTranslationLibNoNS } from "../locale";
@@ -479,6 +490,16 @@ export function EnumCrudFieldComponent<T>(props0: Readonly<EnumCrudField<T>>) {
   );
 }
 
+function sameSelection(left: unknown, right: unknown) {
+  if (Array.isArray(left) && Array.isArray(right)) {
+    return (
+      left.length === right.length &&
+      left.every((item, index) => item === right[index])
+    );
+  }
+  return left === right;
+}
+
 export function SelectCrudFieldComponent<T>(
   props: Readonly<SelectCrudField<T>>
 ) {
@@ -488,6 +509,7 @@ export function SelectCrudFieldComponent<T>(
     searchOnType,
     onSearch,
     multiple,
+    modal = false,
     onChange,
     highlightSearch,
     required,
@@ -556,9 +578,139 @@ export function SelectCrudFieldComponent<T>(
     },
     [searchContext, onChange, form]
   );
+
+  const { t } = useTranslationLibNoNS();
+  const [optionModalOpen, setOptionModalOpen] = useState(false);
+  const [beforeValue, setBeforeValue] = useState<any>(undefined);
+  const [keyword, setKeyword] = useState("");
+
+  const onClickOpen = useCallback(() => {
+    setBeforeValue(form?.getFieldValue(upsertFieldName));
+    setKeyword("");
+    setOptionModalOpen(true);
+  }, [form, upsertFieldName]);
+
+  const onCancel = useCallback(() => {
+    setOptionModalOpen(false);
+    setKeyword("");
+    form?.setFieldValue(
+      upsertFieldName,
+      beforeValue === undefined ? null : beforeValue
+    );
+  }, [beforeValue, form, upsertFieldName]);
+
+  const onOk = useCallback(() => {
+    const next = form?.getFieldValue(upsertFieldName);
+    setOptionModalOpen(false);
+    setKeyword("");
+    setBeforeValue(undefined);
+    if (!sameSelection(next, beforeValue)) {
+      handleChange(next);
+      onSet?.(next, items, form);
+    }
+  }, [beforeValue, form, handleChange, items, onSet, upsertFieldName]);
+
+  const onSelectOpenChange = useCallback(
+    (visible: boolean) => {
+      if (modal && visible && updatable !== false) {
+        onClickOpen();
+      }
+    },
+    [modal, onClickOpen, updatable]
+  );
+
+  const onKeywordChange = useCallback(
+    (text: string) => {
+      setKeyword(text);
+      if (searchOnType) _onSearch(text);
+    },
+    [_onSearch, searchOnType]
+  );
+
+  const visibleItems = useMemo(() => {
+    if (searchOnType) return items;
+    const terms = keyword.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    if (!terms.length) return items;
+    return items.filter((item) => {
+      const raw = String(item.value ?? "").toLowerCase();
+      const compact = raw.replace(/\s/g, "");
+      const key = String(item.key ?? "").toLowerCase();
+      return terms.every(
+        (term) =>
+          raw.includes(term) ||
+          key.includes(term) ||
+          compact.includes(term.replace(/\s/g, ""))
+      );
+    });
+  }, [items, keyword, searchOnType]);
+
+  const selectFieldProps = { ...props };
+  delete selectFieldProps.modal;
+
   return (
+    <>
+      {modal && (
+        <Modal
+          open={optionModalOpen}
+          onCancel={onCancel}
+          onOk={onOk}
+          destroyOnHidden
+          title={label}
+        >
+          {searchable && (
+            <Input
+              allowClear
+              className="mb-2"
+              placeholder={placeholder ?? t("str.search")}
+              value={keyword}
+              onChange={(event) => onKeywordChange(event.target.value)}
+            />
+          )}
+          <Form.Item name={upsertFieldName as any} noStyle>
+            {multiple ? (
+              <Checkbox.Group disabled={!updatable} style={{ width: "100%" }}>
+                <List
+                  size="small"
+                  loading={loading}
+                  style={{ maxHeight: 360, overflow: "auto", width: "100%" }}
+                  dataSource={visibleItems}
+                  renderItem={(item, index) => (
+                    <List.Item
+                      key={item.key ?? index}
+                      style={{ width: "100%" }}
+                    >
+                      <Checkbox value={item.key} disabled={item.disabled}>
+                        {_selectOptionRender(item)}
+                      </Checkbox>
+                    </List.Item>
+                  )}
+                />
+              </Checkbox.Group>
+            ) : (
+              <Radio.Group disabled={!updatable} style={{ width: "100%" }}>
+                <List
+                  size="small"
+                  loading={loading}
+                  style={{ maxHeight: 360, overflow: "auto", width: "100%" }}
+                  dataSource={visibleItems}
+                  renderItem={(item, index) => (
+                    <List.Item
+                      key={item.key ?? index}
+                      style={{ width: "100%" }}
+                    >
+                      <Radio value={item.key} disabled={item.disabled}>
+                        {_selectOptionRender(item)}
+                      </Radio>
+                    </List.Item>
+                  )}
+                />
+              </Radio.Group>
+            )}
+          </Form.Item>
+        </Modal>
+      )}
     <SelectComponent
-      {...props}
+      {...selectFieldProps}
       {...formLayoutProps}
       showLoadingInEmptyIndicator
       maxTagCount="responsive"
@@ -579,7 +731,9 @@ export function SelectCrudFieldComponent<T>(
           </TooltipComponent>
         );
       }}
-      notSearch={!searchable}
+      notSearch={modal || !searchable}
+      open={modal ? false : undefined}
+      onOpenChange={modal ? onSelectOpenChange : undefined}
       placeholder={placeholder}
       onSelect={(value) => {
         onSet?.(value?.key, items, form);
@@ -657,6 +811,7 @@ export function SelectCrudFieldComponent<T>(
             }
       }
     ></SelectComponent>
+    </>
   );
 }
 
