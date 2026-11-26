@@ -1,3 +1,16 @@
+# [1.47.0](https://github.com/kingteza/crud-component/compare/v1.46.1...v1.47.0) (2026-11-26)
+
+
+### Bug Fixes
+
+* improve ImagePicker and ImageCrudField components for better file handling ([35bb747](https://github.com/kingteza/crud-component/commit/35bb7478ff56c53b48dfe4fda703d04add2bdd97))
+
+
+### Features
+
+* add modal option to SelectCrudField for enhanced selection experience ([3870552](https://github.com/kingteza/crud-component/commit/38705528356068b79983e48120ae5f6cd432f302))
+* add searchable option to SelectCrudField and EnumCrudField components ([27c58d4](https://github.com/kingteza/crud-component/commit/27c58d4c98d811eed6f5cee4901ca4825c2d8b5d))
+
 ## [1.46.1](https://github.com/kingteza/crud-component/compare/v1.46.0...v1.46.1) (2026-08-19)
 
 
