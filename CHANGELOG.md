@@ -1,3 +1,10 @@
+## [1.47.1](https://github.com/kingteza/crud-component/compare/v1.47.0...v1.47.1) (2026-11-26)
+
+
+### Bug Fixes
+
+* update SelectCrudField interface to use ItemType for item representation ([3313085](https://github.com/kingteza/crud-component/commit/331308588e38f5404e7da82d17354d9173579b05))
+
 # [1.47.0](https://github.com/kingteza/crud-component/compare/v1.46.1...v1.47.0) (2026-11-26)
 
 
