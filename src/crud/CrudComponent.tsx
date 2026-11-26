@@ -157,11 +157,11 @@ export interface SelectCrudField<
   onChange?: (value: any, form: FormInstance<T>) => void;
   onSet?: (
     value: any | any[],
-    items: SelectFieldItem[],
+    items: ItemType[],
     form: FormInstance<T>,
   ) => void;
 
-  selectOptionRender?: (option: SelectFieldItem) => ReactNode;
+  selectOptionRender?: (option: ItemType) => ReactNode;
 }
 
 type EnumBaseFieldProps<T> = InitialCrudField<T> & Copyable<false> & {
